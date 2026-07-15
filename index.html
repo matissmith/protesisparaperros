@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prótesis para perros — Ache Innovation</title>
+<meta name="description" content="Diseñamos prótesis y órtesis caninas a medida con parametrización morfológica y revisión profesional. Devolvele la movilidad a tu perro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  @font-face{
+    font-family:'Conthrax';
+    src:url('assets/fonts/conthrax-sb.ttf') format('truetype');
+    font-weight:400 700;font-display:swap;
+  }
+  :root{
+    --navy-900:#0F1B31;
+    --navy-800:#14243F;
+    --navy:#1A3350;
+    --navy-600:#2B3E6E;
+    --amber:#EFA92C;
+    --amber-2:#F2A020;
+    --amber-dk:#C07D0A;
+    --ink:#101B2E;
+    --txt:#3A4457;
+    --muted:#7A8397;
+    --line:#E6EAF1;
+    --bg:#FFFFFF;
+    --bg-soft:#F4F6FB;
+    --white:#FFFFFF;
+    --maxw:1200px;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:auto}
+  body{font-family:'Barlow',sans-serif;color:var(--txt);background:var(--navy-900);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  h1,h2,h3{color:var(--ink);line-height:1.05}
+  .display{font-family:'Conthrax','Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:-.01em;font-weight:400}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  ::selection{background:var(--amber);color:var(--navy-900)}
+
+  /* grain + reduced motion */
+  body::before{content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* ---------- NAV ---------- */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .35s var(--ease),border-color .35s,padding .35s}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo .mark{width:42px;height:42px;flex:0 0 auto;background:#fff;border-radius:11px;padding:7px;box-shadow:0 6px 18px -6px rgba(0,0,0,.5)}
+  .logo .word{display:flex;flex-direction:column;line-height:1}
+  .logo .w1{font-family:'Conthrax',sans-serif;font-size:17px;letter-spacing:.02em;color:#fff;text-transform:uppercase}
+  .logo .w2{font-family:'Conthrax',sans-serif;font-size:7.5px;letter-spacing:.34em;color:var(--amber);text-transform:uppercase;margin-top:3px;margin-left:1px}
+  .nav.scrolled{background:rgba(15,27,49,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-links a{font-size:14px;font-weight:600;color:rgba(255,255,255,.72);transition:color .2s;position:relative}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--amber);transition:width .3s var(--ease)}
+  .nav-links a:hover{color:#fff}.nav-links a:hover::after{width:100%}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:'Barlow',sans-serif;font-weight:700;cursor:pointer;border:none;border-radius:10px;transition:all .25s var(--ease);font-size:14px;letter-spacing:.2px}
+  .btn-pri{background:var(--amber);color:var(--navy-900);padding:12px 22px}
+  .btn-pri:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(239,169,44,.6)}
+  .btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.2);padding:12px 22px}
+  .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.12)}
+  .btn-lg{padding:16px 32px;font-size:15px}
+  .burger{display:none;background:none;border:none;cursor:pointer;color:#fff;font-size:26px}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;color:#fff;overflow:hidden;
+    background:radial-gradient(120% 90% at 80% -10%,#243a63 0%,var(--navy) 34%,var(--navy-900) 78%)}
+  .hero .glow{position:absolute;width:640px;height:640px;right:-140px;top:-120px;border-radius:50%;
+    background:radial-gradient(circle,rgba(239,169,44,.28),transparent 60%);filter:blur(20px);animation:float 12s ease-in-out infinite}
+  .hero .glow2{position:absolute;width:420px;height:420px;left:-160px;bottom:-140px;border-radius:50%;
+    background:radial-gradient(circle,rgba(43,62,110,.6),transparent 62%);filter:blur(10px);animation:float 16s ease-in-out infinite reverse}
+  .hero .grid-bg{position:absolute;inset:0;opacity:.5;
+    background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:46px 46px;mask-image:radial-gradient(90% 80% at 50% 40%,#000,transparent 85%)}
+  .hero .emblem-wm{position:absolute;right:-4%;bottom:-8%;width:min(46vw,620px);opacity:.06;animation:spin 60s linear infinite}
+  .hero-in{position:relative;z-index:3;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;padding-top:90px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:26px}
+  .eyebrow::before{content:"";width:30px;height:1.5px;background:var(--amber)}
+  .hero h1{color:#fff;font-size:clamp(40px,6vw,74px);line-height:.98;margin-bottom:24px}
+  .hero h1 .ln{display:block;overflow:hidden}
+  .hero h1 .ln > span{display:block;transform:translateY(110%);animation:rise .9s var(--ease) forwards}
+  .hero h1 .ln:nth-child(2) > span{animation-delay:.12s}
+  .hero h1 .ln:nth-child(3) > span{animation-delay:.24s}
+  .hero h1 .accent{color:var(--amber)}
+  .hero .lead{font-size:clamp(16px,1.6vw,19px);color:rgba(255,255,255,.7);font-weight:300;max-width:480px;margin-bottom:34px;opacity:0;animation:fade .8s ease .5s forwards}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fade .8s ease .66s forwards}
+  .hero-stats{display:flex;gap:38px;margin-top:52px;padding-top:26px;border-top:1px solid rgba(255,255,255,.12);opacity:0;animation:fade .8s ease .8s forwards}
+  .stat .n{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:38px;color:#fff;line-height:1}
+  .stat .n b{color:var(--amber);font-weight:900}
+  .stat .l{font-size:12px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1.2px;margin-top:6px}
+
+  /* hero visual: layered floating cards */
+  .hero-visual{position:relative;min-height:520px;display:flex;align-items:center;justify-content:center}
+  .hv-frame{position:relative;width:100%;max-width:400px;aspect-ratio:2/3;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.14);
+    background:linear-gradient(150deg,#23375f,#16253f);box-shadow:0 40px 90px -40px rgba(0,0,0,.7)}
+  .hv-frame::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:30px 30px;opacity:.6}
+  .hv-frame .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:rgba(255,255,255,.4);font-size:12.5px;gap:6px;padding:20px}
+  .hv-frame .ph .emb{width:120px;opacity:.5;margin-bottom:8px}
+  .chip{position:absolute;z-index:4;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border-radius:12px;padding:12px 15px;box-shadow:0 20px 44px -20px rgba(0,0,0,.6);display:flex;align-items:center;gap:11px}
+  .chip .ico{width:34px;height:34px;border-radius:9px;background:rgba(239,169,44,.16);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .chip .ico i{width:12px;height:12px;border-radius:50%;background:var(--amber);display:block}
+  .chip .tx b{display:block;font-size:13px;color:var(--ink);font-weight:800;line-height:1.1}
+  .chip .tx s{display:block;font-size:11px;color:var(--muted);text-decoration:none}
+  .chip.c1{top:8%;right:-2%}
+  .chip.c2{bottom:20%;left:-6%}
+  .chip.c3{bottom:5%;right:8%}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{background:var(--amber);color:var(--navy-900);overflow:hidden;padding:15px 0;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06)}
+  .marquee-track{display:flex;gap:44px;white-space:nowrap;width:max-content;animation:scrollx 26s linear infinite}
+  .marquee span{font-family:'Conthrax',sans-serif;text-transform:uppercase;font-size:15px;letter-spacing:1px;display:inline-flex;align-items:center;gap:44px}
+  .marquee span::after{content:"◆";font-size:9px}
+
+  /* ---------- SECTIONS ---------- */
+  .section{position:relative;scroll-margin-top:82px}
+  .light{background:var(--bg);color:var(--txt);padding:110px 0}
+  .dark{background:var(--navy-900);color:rgba(255,255,255,.7);padding:110px 0}
+  .sec-tag{font-size:12px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:16px;display:block}
+  .light h2,.dark h2{font-size:clamp(30px,4vw,52px)}
+  .dark h2{color:#fff}
+
+  /* cómo funciona: sticky */
+  .como-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:start}
+  .como-left{position:sticky;top:120px}
+  .como-left h2{margin-bottom:20px}
+  .como-left p{color:var(--muted);font-size:17px;max-width:340px}
+  .steps{display:grid;gap:20px}
+  .step{background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;padding:30px 32px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;transition:transform .4s var(--ease),box-shadow .4s,border-color .4s}
+  .step:hover{transform:translateX(8px);border-color:var(--amber);box-shadow:0 24px 50px -30px rgba(26,51,80,.5)}
+  .step .num{font-family:'Conthrax',sans-serif;font-size:20px;color:var(--navy);opacity:.28;line-height:1}
+  .step:hover .num{color:var(--amber);opacity:1}
+  .step h3{font-size:21px;margin-bottom:8px}
+  .step p{font-size:15px;color:var(--muted)}
+
+  /* soluciones: overlapping tilt cards */
+  .sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:60px}
+  .sol{position:relative;border-radius:18px;overflow:hidden;min-height:280px;background:linear-gradient(155deg,var(--navy-600),var(--navy-800));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
+  .sol::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:28px 28px;opacity:.5}
+  .sol .emb-wm{position:absolute;right:-30px;top:-20px;width:190px;opacity:.08;transition:transform .6s var(--ease)}
+  .sol:hover .emb-wm{transform:rotate(12deg) scale(1.08)}
+  .sol .sol-body{position:absolute;inset:auto 0 0 0;padding:30px 32px;z-index:2;text-shadow:0 1px 10px rgba(9,16,32,.7)}
+  .sol .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
+  .sol h3{color:#fff;font-size:24px;margin-bottom:10px}
+  .sol p{color:rgba(255,255,255,.62);font-size:14.5px;max-width:360px}
+  .sol .ph-tag{position:absolute;top:24px;left:28px;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;z-index:2}
+
+  /* tecnología: overlapping frames + parallax emblem */
+  .tech{position:relative;overflow:hidden}
+  .tech-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+  .tech-visual{position:relative;height:480px}
+  .tf{position:absolute;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -44px rgba(26,51,80,.55);background:linear-gradient(150deg,#eef1f7,#dde4f0);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12.5px;text-align:center;padding:18px}
+  .tf.a{width:70%;height:74%;top:0;left:0;z-index:2}
+  .tf.b{width:56%;height:60%;right:0;bottom:0;z-index:3;background:linear-gradient(150deg,var(--navy),var(--navy-800));color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.12)}
+  .tech .emb-parallax{position:absolute;left:38%;top:20%;width:150px;opacity:.1;z-index:1}
+  .feature-list{list-style:none;margin-top:26px;display:grid;gap:16px}
+  .feature-list li{position:relative;padding-left:34px;font-size:15.5px;color:var(--txt)}
+  .feature-list li::before{content:"";position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:7px;background:rgba(239,169,44,.14)}
+  .feature-list li::after{content:"";position:absolute;left:7px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--amber)}
+
+  /* pilares de valor */
+  .band{background:linear-gradient(120deg,var(--navy),var(--navy-900));padding:96px 0}
+  .band-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:34px}
+  .band .pillar{text-align:left}
+  .band .pill-mark{display:block;width:34px;height:3px;background:var(--amber);border-radius:2px;margin-bottom:18px}
+  .band .pillar h4{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.5px;line-height:1.06;margin-bottom:9px}
+  .band .pillar p{font-size:14px;color:rgba(255,255,255,.6)}
+
+  /* CTA / form */
+  .cta{background:radial-gradient(100% 120% at 15% 0%,#243a63,var(--navy) 45%,var(--navy-900));position:relative;overflow:hidden;padding:110px 0}
+  .cta .emb-wm{position:absolute;left:-60px;bottom:-60px;width:340px;opacity:.06}
+  .cta-in{position:relative;z-index:2;display:grid;grid-template-columns:.92fr 1.08fr;gap:56px;align-items:start}
+  .cta-copy h2{color:#fff;margin-bottom:20px}
+  .cta-copy p{color:rgba(255,255,255,.72);font-size:16.5px;margin-bottom:24px}
+  .cta-note{font-size:13px;color:rgba(255,255,255,.5);border-left:2px solid var(--amber);padding-left:15px;margin-top:28px;max-width:400px}
+  .form-card{background:#fff;border-radius:20px;padding:36px;box-shadow:0 40px 90px -40px rgba(0,0,0,.6)}
+  .form-card h3{font-size:22px;margin-bottom:6px}
+  .form-card .sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:7px;letter-spacing:.2px}
+  .field input,.field select,.field textarea{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:14.5px;color:var(--ink);background:#fff;transition:border-color .2s,box-shadow .2s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(43,62,110,.1)}
+  .field textarea{resize:vertical;min-height:84px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin:8px 0 20px}
+  .consent input{margin-top:3px}
+  .form-ok{display:none;background:rgba(239,169,44,.12);border:1px solid var(--amber);border-radius:12px;padding:22px;color:var(--navy);font-size:15px;font-weight:600}
+
+  /* footer */
+  footer{background:#0B1528;color:rgba(255,255,255,.6);padding:80px 0 30px;position:relative;overflow:hidden}
+  .foot-big{font-family:'Conthrax',sans-serif;text-transform:uppercase;font-size:clamp(48px,12vw,150px);color:rgba(255,255,255,.04);line-height:.8;letter-spacing:.02em;pointer-events:none;user-select:none;margin-bottom:-10px}
+  .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.1);position:relative;z-index:2}
+  .foot-brand p{font-size:14px;max-width:320px;margin-top:16px}
+  .foot-col h4{color:#fff;font-size:12.5px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px;font-weight:800}
+  .foot-col a{display:block;font-size:14px;margin-bottom:11px;color:rgba(255,255,255,.6);transition:color .2s,padding-left .2s}
+  .foot-col a:hover{color:var(--amber);padding-left:4px}
+  .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:24px;font-size:12.5px;color:rgba(255,255,255,.4)}
+  .disclaimer{max-width:var(--maxw);margin:20px auto 0;padding:0 26px;font-size:11.5px;color:rgba(255,255,255,.3);line-height:1.6}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+
+  /* animations */
+  @keyframes rise{to{transform:translateY(0)}}
+  @keyframes fade{to{opacity:1}}
+  @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,26px)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes scrollx{to{transform:translateX(-50%)}}
+
+  /* scroll progress */
+  .scroll-prog{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;background:linear-gradient(90deg,var(--amber),#fff);box-shadow:0 0 12px rgba(239,169,44,.6)}
+  [data-parallax]{will-change:transform}
+
+  /* gloss sweep */
+  .tf::after,.sol::after{content:"";position:absolute;top:-60%;left:-40%;width:45%;height:220%;transform:rotate(16deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .7s var(--ease);pointer-events:none;z-index:4}
+  .tech-visual:hover .tf::after,.sol:hover::after{left:150%}
+
+  /* social */
+  .social{display:flex;gap:12px;margin-top:22px}
+  .social a{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:all .25s var(--ease)}
+  .social a:hover{background:var(--amber);border-color:var(--amber);color:var(--navy-900);transform:translateY(-3px)}
+  .social svg{width:18px;height:18px;fill:currentColor}
+
+  /* whatsapp float — paleta Ache */
+  .wa-float{position:fixed;right:22px;bottom:22px;z-index:150;width:58px;height:58px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px -10px rgba(26,51,80,.7);transition:transform .3s var(--ease)}
+  .wa-float svg{width:30px;height:30px;fill:var(--amber)}
+  .wa-float::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--amber);opacity:.4;animation:pulse 2.4s ease-out infinite;z-index:-1}
+  .wa-float:hover{transform:scale(1.08)}
+  .wa-label{position:absolute;right:70px;top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--navy);color:#fff;font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .3s var(--ease);box-shadow:0 12px 26px -12px rgba(0,0,0,.6)}
+  .wa-label::after{content:"";position:absolute;right:-5px;top:50%;transform:translateY(-50%) rotate(45deg);width:10px;height:10px;background:var(--navy)}
+  .wa-float:hover .wa-label{opacity:1}
+  @keyframes pulse{0%{transform:scale(1);opacity:.5}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
+
+  /* custom cursor */
+  .cursor-ring{position:fixed;top:0;left:0;width:26px;height:26px;border:1.5px solid var(--amber);border-radius:50%;pointer-events:none;z-index:300;transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),background .25s,opacity .3s;opacity:0}
+  .cursor-ring.on{opacity:1}
+  .cursor-ring.big{width:56px;height:56px;background:rgba(239,169,44,.12)}
+  @media(hover:none){.cursor-ring{display:none!important}}
+
+  /* scroll cue */
+  .scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:4;width:25px;height:40px;border:2px solid rgba(255,255,255,.32);border-radius:13px;display:flex;justify-content:center;padding-top:7px}
+  .scroll-cue::before{content:"";width:4px;height:8px;border-radius:2px;background:var(--amber);animation:scrolldot 1.6s ease-in-out infinite}
+  @keyframes scrolldot{0%{opacity:0;transform:translateY(-4px)}40%{opacity:1}80%{opacity:0;transform:translateY(11px)}}
+
+  /* heading underline draw */
+  .section h2.display{position:relative;display:inline-block;padding-bottom:16px}
+  .section h2.display::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--amber);transition:width .9s var(--ease) .25s;border-radius:2px}
+  .reveal.in h2.display::after{width:64px}
+
+  /* imágenes: turnkey — si falta el archivo, queda el placeholder */
+  .hv-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;z-index:2}
+  .sol-media{position:absolute;inset:0;z-index:1;overflow:hidden}
+  .sol-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .sol-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,27,49,0) 0%,rgba(15,27,49,.28) 40%,rgba(15,27,49,.9) 78%,rgba(15,27,49,.97) 100%)}
+  .sol.has-img .ph-tag{display:none}
+  .sol.has-img .emb-wm{opacity:.12}
+  .tf-media{position:absolute;inset:0}
+  .tf-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+  /* consultar por producto */
+  .sol-cta{display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-size:13px;font-weight:700;color:var(--amber);letter-spacing:.3px;cursor:pointer}
+  .sol-cta::after{content:"→";transition:transform .25s var(--ease)}
+  .sol:hover .sol-cta::after{transform:translateX(5px)}
+
+  /* responsive */
+  @media(max-width:960px){
+    .hero-in,.como-grid,.tech-grid,.cta-in{grid-template-columns:1fr;gap:44px}
+    .como-left{position:static}
+    .hero-visual{min-height:auto;margin-top:10px}
+    .sol-grid,.row2{grid-template-columns:1fr}
+    .band-grid{grid-template-columns:1fr 1fr;gap:40px 20px}
+    .foot-top{grid-template-columns:1fr 1fr}
+    .nav-links{display:none}.burger{display:block}
+    .nav.open .nav-links{display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;background:rgba(15,27,49,.98);backdrop-filter:blur(14px);padding:20px 26px 26px;gap:20px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .nav.open .nav-links a{font-size:16px}
+  }
+  @media(max-width:520px){
+    .band-grid,.foot-top{grid-template-columns:1fr}
+    .hero-stats{gap:24px;flex-wrap:wrap}
+    .chip.c2{left:0}.chip.c1{right:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- emblema de Ache reutilizable -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ache-emblem" viewBox="0 0 568 470">
+    <path fill="#1A3350" d="M391.87,441.67a19.57,19.57,0,0,0,39,3.11l21.2-123.58a30.87,30.87,0,0,0-61.55-4.91Z"/>
+    <path fill="#1A3350" d="M508,336.44a14.24,14.24,0,0,0-.69,7.44A14,14,0,0,0,535,343.2l-.09.55,8.65-32.8.08-.17a14.58,14.58,0,0,0,1-5.36,14.12,14.12,0,0,0-8.86-13.13l-35.47-18.93L498,272.11a22.71,22.71,0,0,0-32,15.69,22.87,22.87,0,0,0,22.29,27.82l16.48,2.15a6.13,6.13,0,0,1,5.2,7.36l-2.69,12.56"/>
+    <path fill="#EFA92C" d="M160.25,391.05l7.26-25.72a17.88,17.88,0,0,0,.27-8.6L155.5,300c-5.1-23.62,4.66-48.62,25.53-60.8a56.34,56.34,0,0,1,30.83-7.65C240.5,232.67,264.33,256,266,284.61a56.51,56.51,0,0,1-4.85,26.67h0l-51.89,99a9.71,9.71,0,0,0,1.34,11l15.89,17.87a21,21,0,1,1-33.57,24.19h0L163,414.92v0a26.69,26.69,0,0,1-2.8-23.91"/>
+    <path fill="#1A3350" d="M208.9,314.24a30.44,30.44,0,1,1,30.44-30.44A30.47,30.47,0,0,1,208.9,314.24Zm0-56.56A26.12,26.12,0,1,0,235,283.8,26.15,26.15,0,0,0,208.9,257.68Z"/>
+    <path fill="#1A3350" d="M198.93,370.89a20,20,0,1,1,20-20A20,20,0,0,1,198.93,370.89Zm0-35.6a15.64,15.64,0,1,0,15.64,15.64A15.65,15.65,0,0,0,198.93,335.29Z"/>
+    <path fill="#1A3350" d="M184.82,413.84a13.12,13.12,0,1,1,13.11-13.12A13.14,13.14,0,0,1,184.82,413.84Zm0-21.91a8.79,8.79,0,1,0,8.79,8.79A8.81,8.81,0,0,0,184.82,391.93Z"/>
+    <rect fill="#1A3350" x="191.04" y="321.7" width="23.82" height="4.32" transform="translate(-147.15 477.19) rotate(-81.58)"/>
+    <rect fill="#1A3350" x="180.5" y="377.02" width="23.19" height="4.32" transform="translate(-232.47 399.8) rotate(-65.91)"/>
+    <path fill="#1A3350" d="M91.74,92.1a67.21,67.21,0,0,0,40.38,66.72,16.86,16.86,0,0,1-12.57,31.28c-1.07-.46-2.07-1-3.07-1.51a67.15,67.15,0,0,1-30.43-86A64,64,0,0,1,91.74,92.1Z"/>
+    <path fill="#1A3350" d="M466.84,203.24h0q4.1,12.8,6.9,25.94l.12.58c3.67,17.25,4.17,33-11.8,41.74h0a39,39,0,0,1-30.3,2.85,35.64,35.64,0,0,0-39.67,13.82c-12.49,14.55-32.79,20.61-53.47,20.61A68.13,68.13,0,0,1,274,262.31l-.05,0a69,69,0,0,0-65.09-46.11c-31.29,0-53.77,22.31-66.15,49.39l-21.41,46.82-2.74,4h0a22.54,22.54,0,0,1-23.57,9.84c-7.18-1.51-14.32-3.17-21.62-3.88l-2.33-.23a12.25,12.25,0,0,0-10.82,4.63L33.35,361.11l.1-.17a17.8,17.8,0,1,1-31-17.52S21.35,300.34,27,290.76a18.74,18.74,0,0,0,1.66-4.1,22.47,22.47,0,0,1,16.73-15.5,15.73,15.73,0,0,1,8.29.68l17.56,3.81a12.26,12.26,0,0,0,14.17-7.95l18.7-53.79a11.15,11.15,0,0,1,10.35-7.64c19.68,0,35.29-10.8,44.1-27.14a11.4,11.4,0,0,1,10-6.11H356.89A21.06,21.06,0,0,1,370.43,178,93.14,93.14,0,0,0,451.09,197C457.18,195.61,464.43,196.32,466.84,203.24Z"/>
+    <path fill="#1A3350" d="M515.88,83.83a40.11,40.11,0,0,0-24.21-26.39A11.81,11.81,0,0,1,484.39,48l-4.61-32.79A6.54,6.54,0,0,0,467.4,12.6h0L460,29.17h0a6.53,6.53,0,0,1-12.39-2.55l-4.4-21.07h0a6.54,6.54,0,0,0-12.69-1h0l-58.45,146.8a12.1,12.1,0,0,0,4.05,14.36,91.69,91.69,0,0,0,98.74,4.61A25.18,25.18,0,0,1,493,167.37a56.86,56.86,0,0,0,15.17,1.25c26.62-1.33,48.95-20.55,53.2-45.61a3.9,3.9,0,0,0,1.17.11,5.83,5.83,0,1,0,0-11.66,73.11,73.11,0,0,1-7.29.57,41.65,41.65,0,0,1-39.93-29.85"/>
+  </symbol>
+</svg>
+
+<div class="scroll-prog" id="scrollProg"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#" class="logo">
+      <svg class="mark" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
+      <span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#como">Cómo funciona</a>
+      <a href="#soluciones">Soluciones</a>
+      <a href="#tecnologia">Tecnología</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a href="#contacto" class="btn btn-pri">Solicitar evaluación</a>
+    <button class="burger" aria-label="Menú">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow"></div>
+  <div class="glow2"></div>
+  <div class="grid-bg"></div>
+  <svg class="emblem-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <span class="eyebrow">Prótesis y órtesis caninas a medida</span>
+      <h1 class="display">
+        <span class="ln"><span>Potenciamos la</span></span>
+        <span class="ln"><span class="accent">movilidad animal</span></span>
+      </h1>
+      <p class="lead"><b style="color:#fff;font-weight:600">Porque cada paso cuenta.</b> Diseñamos soluciones de rehabilitación a medida, con parametrización morfológica y revisión profesional.</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn btn-pri btn-lg">Solicitar evaluación</a>
+        <a href="#como" class="btn btn-ghost btn-lg">Ver cómo funciona</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="n">4</div><div class="l">Líneas de producto</div></div>
+        <div class="stat"><div class="n"><b>100%</b></div><div class="l">Diseño a medida</div></div>
+        <div class="stat"><div class="n">+120</div><div class="l">Profesionales consultados</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hv-frame" data-parallax="0.05">
+        <div class="ph"><svg class="emb" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>Espacio para foto / render<br>Perro con prótesis Ache</div>
+        <img class="hv-img" src="assets/img/hero.png" alt="Perro con dispositivo de movilidad Ache" onerror="this.style.display='none'">
+      </div>
+    </div>
+  </div>
+  <a href="#como" class="scroll-cue" aria-label="Bajar al contenido"></a>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Prótesis<span></span></span><span>Órtesis</span><span>Carros ortopédicos</span><span>Arneses de rehabilitación</span><span>Biomecánica canina</span><span>Diseño a medida</span>
+    <span>Prótesis</span><span>Órtesis</span><span>Carros ortopédicos</span><span>Arneses de rehabilitación</span><span>Biomecánica canina</span><span>Diseño a medida</span>
+  </div>
+</div>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como" class="section light">
+  <div class="wrap como-grid">
+    <div class="como-left reveal">
+      <span class="sec-tag">Cómo funciona</span>
+      <h2 class="display">Del caso al diseño, paso a paso</h2>
+      <p>Un proceso guiado y acompañado por profesionales en cada etapa, sin que tengas que entender de tecnología.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">01</div><div><h3>Cargás el caso</h3><p>Nos contás la patología y subís fotos del perro y de la extremidad afectada.</p></div></div>
+      <div class="step reveal d1"><div class="num">02</div><div><h3>Medimos la morfología</h3><p>Con referencia visual y mediciones registramos las medidas reales de la zona.</p></div></div>
+      <div class="step reveal d2"><div class="num">03</div><div><h3>Diseñamos a medida</h3><p>Generamos el modelo parametrizado según tamaño, peso y biomecánica del animal.</p></div></div>
+      <div class="step reveal d3"><div class="num">04</div><div><h3>Revisión y fabricación</h3><p>Un profesional valida el diseño antes de pasar a fabricar la pieza.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUCIONES -->
+<section id="soluciones" class="section dark">
+  <div class="wrap">
+    <div class="reveal" style="max-width:640px">
+      <span class="sec-tag">Soluciones</span>
+      <h2 class="display">Rehabilitación para cada caso</h2>
+    </div>
+    <div class="sol-grid">
+      <article class="tilt sol reveal"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis de miembro Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Prótesis de miembro</h3><p>Reemplazo externo para amputaciones parciales, con socket, eje biomecánico y apoyo.</p><a href="#contacto" class="sol-cta" data-producto="Prótesis de miembro">Consultar por este producto</a></div></article>
+      <article class="tilt sol reveal d1"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Órtesis</h3><p>Estabilización de articulaciones para lesiones, post-cirugía o debilidad muscular.</p><a href="#contacto" class="sol-cta" data-producto="Órtesis">Consultar por este producto</a></div></article>
+      <article class="tilt sol reveal d2"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Carros ortopédicos</h3><p>Sillas de ruedas caninas para recuperar el desplazamiento en casos de parálisis.</p><a href="#contacto" class="sol-cta" data-producto="Carros ortopédicos">Consultar por este producto</a></div></article>
+      <article class="tilt sol reveal d3"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Arneses de rehabilitación</h3><p>Asistencia para caminar y ejercicios de recuperación post-lesión o cirugía.</p><a href="#contacto" class="sol-cta" data-producto="Arneses de rehabilitación">Consultar por este producto</a></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- TECNOLOGÍA -->
+<section id="tecnologia" class="section light tech">
+  <svg class="emb-parallax" data-parallax="0.2" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
+  <div class="wrap tech-grid">
+    <div class="tech-visual reveal">
+      <div class="tf a" data-parallax="0.04"><div class="tf-media"><img src="assets/img/software-ui.png" alt="Software Ache Biomechanics Studio"></div></div>
+      <div class="tf b" data-parallax="0.1"><div class="tf-media"><img src="assets/img/protesis.png" alt="Render 3D de la prótesis Ache"></div></div>
+    </div>
+    <div class="reveal d1">
+      <span class="sec-tag">Tecnología</span>
+      <h2 class="display">Parametrización morfológica, no plantillas genéricas</h2>
+      <p style="font-size:16.5px;color:var(--txt);margin-top:18px">Cada perro es distinto. El software toma las medidas y la morfología del caso real y genera un diseño adaptado a esa anatomía, no una talla estándar.</p>
+      <ul class="feature-list">
+        <li>Diseño parametrizado por raza, tamaño y peso.</li>
+        <li>Diferenciación entre miembro anterior y posterior.</li>
+        <li>Modelo orientado a piezas fabricables, no solo visuales.</li>
+        <li>Reporte clínico para revisión profesional.</li>
+      </ul>
+      <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <a href="https://ache-biomechanics-studio-hypeimxbrqxnvqdjhkb4qu.streamlit.app" class="btn btn-pri btn-lg" target="_blank" rel="noopener">Abrir Biomechanics Studio</a>
+        <a href="#contacto" class="btn btn-ghost btn-lg">Solicitar evaluación profesional</a>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:14px">El software se abre en una pantalla dedicada para trabajar el caso completo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BAND STATS -->
+<section class="band">
+  <div class="wrap band-grid">
+    <div class="pillar reveal"><span class="pill-mark"></span><h4>Ajuste anatómico</h4><p>El diseño se adapta a la morfología real del animal, no a una talla estándar.</p></div>
+    <div class="pillar reveal d1"><span class="pill-mark"></span><h4>Revisión veterinaria</h4><p>Un profesional valida cada diseño antes de fabricar.</p></div>
+    <div class="pillar reveal d2"><span class="pill-mark"></span><h4>Reporte clínico</h4><p>Documentación técnica para el seguimiento profesional del caso.</p></div>
+    <div class="pillar reveal d3"><span class="pill-mark"></span><h4>24/7</h4><p>Plataforma online: cargá tu caso cuando quieras.</p></div>
+  </div>
+</section>
+
+<!-- CTA / FORM -->
+<section id="contacto" class="section cta">
+  <svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
+  <div class="wrap cta-in">
+    <div class="cta-copy reveal">
+      <span class="sec-tag">Contanos el caso</span>
+      <h2 class="display">Empecemos por una evaluación</h2>
+      <p>Contanos sobre tu perro y la lesión. Te respondemos con los próximos pasos y una orientación del proceso, sin compromiso.</p>
+      <p class="cta-note">Ache Innovation ofrece asistencia al diseño de dispositivos externos de rehabilitación. No reemplaza el diagnóstico ni el criterio de un profesional veterinario, que valida cada caso.</p>
+    </div>
+    <div class="form-card reveal d1">
+      <h3>Solicitar evaluación</h3>
+      <p class="sub">Completá el formulario y te contactamos.</p>
+      <form id="leadForm">
+        <div class="field"><label>Producto de interés</label><select name="producto" id="productoSel"><option>Consulta general</option><option>Prótesis de miembro</option><option>Órtesis</option><option>Carros ortopédicos</option><option>Arneses de rehabilitación</option></select></div>
+        <div class="row2">
+          <div class="field"><label>Nombre y apellido</label><input type="text" name="nombre" required placeholder="Tu nombre"></div>
+          <div class="field"><label>Email o WhatsApp</label><input type="text" name="contacto" required placeholder="Cómo te contactamos"></div>
+        </div>
+        <div class="field">
+          <label>Raza</label>
+          <input type="text" name="raza" id="razaInput" list="razasList" autocomplete="off" placeholder="Escribí y elegí la raza (o 'Mestizo')">
+          <datalist id="razasList">
+            <option value="Mestizo / Sin raza definida"></option>
+            <option value="Otro / No sé"></option>
+            <option value="Affenpinscher"></option>
+            <option value="Airedale Terrier"></option>
+            <option value="Akita"></option>
+            <option value="Akita Americano"></option>
+            <option value="Alaskan Malamute"></option>
+            <option value="American Bully"></option>
+            <option value="American Staffordshire Terrier"></option>
+            <option value="Basenji"></option>
+            <option value="Basset Hound"></option>
+            <option value="Beagle"></option>
+            <option value="Bichón Frisé"></option>
+            <option value="Bichón Maltés"></option>
+            <option value="Bloodhound (Sabueso)"></option>
+            <option value="Bobtail (Old English Sheepdog)"></option>
+            <option value="Border Collie"></option>
+            <option value="Border Terrier"></option>
+            <option value="Borzoi"></option>
+            <option value="Boston Terrier"></option>
+            <option value="Bóxer"></option>
+            <option value="Boyero de Berna (Bernese)"></option>
+            <option value="Braco Alemán"></option>
+            <option value="Bulldog Francés"></option>
+            <option value="Bulldog Inglés"></option>
+            <option value="Bull Terrier"></option>
+            <option value="Bullmastiff"></option>
+            <option value="Ca de Bou"></option>
+            <option value="Cairn Terrier"></option>
+            <option value="Caniche (Poodle)"></option>
+            <option value="Caniche Toy"></option>
+            <option value="Cavalier King Charles Spaniel"></option>
+            <option value="Chihuahua"></option>
+            <option value="Chow Chow"></option>
+            <option value="Cocker Spaniel Americano"></option>
+            <option value="Cocker Spaniel Inglés"></option>
+            <option value="Collie"></option>
+            <option value="Corgi (Welsh Corgi)"></option>
+            <option value="Dálmata"></option>
+            <option value="Doberman"></option>
+            <option value="Dogo Argentino"></option>
+            <option value="Dogo de Burdeos"></option>
+            <option value="Fox Terrier"></option>
+            <option value="Galgo (Greyhound)"></option>
+            <option value="Galgo Español"></option>
+            <option value="Golden Retriever"></option>
+            <option value="Gran Danés"></option>
+            <option value="Gran Pirineo"></option>
+            <option value="Husky Siberiano"></option>
+            <option value="Jack Russell Terrier"></option>
+            <option value="Kelpie Australiano"></option>
+            <option value="Labrador Retriever"></option>
+            <option value="Lebrel Afgano (Afghan Hound)"></option>
+            <option value="Lhasa Apso"></option>
+            <option value="Maltés"></option>
+            <option value="Mastín del Pirineo"></option>
+            <option value="Mastín Inglés"></option>
+            <option value="Mastín Napolitano"></option>
+            <option value="Mastín Tibetano"></option>
+            <option value="Ovejero Alemán (Pastor Alemán)"></option>
+            <option value="Papillón"></option>
+            <option value="Pastor Australiano"></option>
+            <option value="Pastor Belga (Malinois)"></option>
+            <option value="Pastor Blanco Suizo"></option>
+            <option value="Pastor de Shetland"></option>
+            <option value="Pastor Ganadero Australiano (Blue Heeler)"></option>
+            <option value="Pekinés"></option>
+            <option value="Perro de Agua"></option>
+            <option value="Perro Salchicha (Dachshund)"></option>
+            <option value="Pinscher Miniatura"></option>
+            <option value="Pitbull (American Pit Bull Terrier)"></option>
+            <option value="Pointer"></option>
+            <option value="Pomerania"></option>
+            <option value="Presa Canario"></option>
+            <option value="Pug (Carlino)"></option>
+            <option value="Rhodesian Ridgeback"></option>
+            <option value="Rottweiler"></option>
+            <option value="Samoyedo"></option>
+            <option value="San Bernardo"></option>
+            <option value="Schnauzer Gigante"></option>
+            <option value="Schnauzer Miniatura"></option>
+            <option value="Schnauzer Standard"></option>
+            <option value="Setter Inglés"></option>
+            <option value="Setter Irlandés"></option>
+            <option value="Shar Pei"></option>
+            <option value="Shiba Inu"></option>
+            <option value="Shih Tzu"></option>
+            <option value="Springer Spaniel Inglés"></option>
+            <option value="Staffordshire Bull Terrier"></option>
+            <option value="Teckel (Dachshund)"></option>
+            <option value="Terranova (Newfoundland)"></option>
+            <option value="Vizsla"></option>
+            <option value="Weimaraner"></option>
+            <option value="West Highland White Terrier (Westie)"></option>
+            <option value="Whippet"></option>
+            <option value="Yorkshire Terrier"></option>
+          </datalist>
+        </div>
+        <div class="field" id="razaOtraWrap" style="display:none">
+          <label>Especificá (cruza, mestizo o detalle)</label>
+          <input type="text" name="raza_detalle" placeholder="Ej: cruza de labrador, mestizo mediano...">
+        </div>
+        <div class="row2">
+          <div class="field"><label>Zona afectada</label><select name="zona"><option>Miembro anterior</option><option>Miembro posterior</option><option>Cadera / columna</option><option>Otra / no sé</option></select></div>
+          <div class="field"><label>Tamaño / peso aprox.</label><input type="text" name="tamano" placeholder="Ej: 25 kg"></div>
+        </div>
+        <div class="field"><label>Contanos brevemente el caso</label><textarea name="mensaje" placeholder="Patología, tiempo de evolución, si ya hubo cirugía, etc."></textarea></div>
+        <label class="consent"><input type="checkbox" required> Acepto ser contactado por Ache Innovation y que mis datos se usen para dar seguimiento a esta consulta.</label>
+        <button type="submit" class="btn btn-pri btn-lg" style="width:100%">Enviar consulta</button>
+      </form>
+      <div class="form-ok" id="formOk">Gracias. Recibimos tu consulta y te vamos a contactar a la brevedad.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-big">Ache</div>
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#" class="logo"><svg class="mark" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span></a>
+        <p>Sistemas de movilidad y rehabilitación para animales. Diseño a medida con parametrización morfológica y revisión profesional.</p>
+        <div class="social">
+          <a href="https://www.linkedin.com/company/ache-innovation/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24h-4V8z"/></svg></a>
+          <a href="https://www.instagram.com/ache.innovation/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.8c-3.14 0-3.51.01-4.75.07-.9.04-1.39.19-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.32-.28.81-.32 1.71-.06 1.24-.07 1.61-.07 4.75s.01 3.51.07 4.75c.04.9.19 1.39.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.13.81.28 1.71.32 1.24.06 1.61.07 4.75.07s3.51-.01 4.75-.07c.9-.04 1.39-.19 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.32.28-.81.32-1.71.06-1.24.07-1.61.07-4.75s-.01-3.51-.07-4.75c-.04-.9-.19-1.39-.32-1.71a2.86 2.86 0 0 0-.69-1.06 2.86 2.86 0 0 0-1.06-.69c-.32-.13-.81-.28-1.71-.32-1.24-.06-1.61-.07-4.75-.07zm0 3.06A4.98 4.98 0 1 1 12 17a4.98 4.98 0 0 1 0-9.98zm0 8.22A3.24 3.24 0 1 0 12 8.76a3.24 3.24 0 0 0 0 6.48zM18.4 6.34a1.16 1.16 0 1 1-2.32 0 1.16 1.16 0 0 1 2.32 0z"/></svg></a>
+          <a href="https://wa.me/5491123199500?text=Hola%2C%20estoy%20interesado%20en%20uno%20de%20sus%20productos.%20Te%20comento%20cu%C3%A1l%3A" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12 2a10 10 0 0 0-8.5 15.28L2 22l4.85-1.27A10 10 0 1 0 12 2z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Soluciones</h4>
+        <a href="#soluciones">Prótesis de miembro</a>
+        <a href="#soluciones">Órtesis</a>
+        <a href="#soluciones">Carros ortopédicos</a>
+        <a href="#soluciones">Arneses de rehabilitación</a>
+      </div>
+      <div class="foot-col">
+        <h4>Ache</h4>
+        <a href="#como">Cómo funciona</a>
+        <a href="#tecnologia">Tecnología</a>
+        <a href="#contacto">Solicitar evaluación</a>
+        <a href="https://acheinnovation.com.ar">acheinnovation.com.ar</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Ache Innovation. Todos los derechos reservados.</span>
+      <span>protesisparaperros.com.ar</span>
+    </div>
+  </div>
+  <p class="disclaimer">Aviso: Ache Innovation desarrolla dispositivos externos (prótesis, órtesis, carros y arneses) de asistencia a la movilidad y la rehabilitación. La información y los diseños generados constituyen una ayuda al diseño y no sustituyen el diagnóstico, la prescripción ni el seguimiento de un profesional veterinario, responsable de validar la indicación en cada caso.</p>
+</footer>
+
+<a class="wa-float" href="https://wa.me/5491123199500?text=Hola%2C%20estoy%20interesado%20en%20uno%20de%20sus%20productos.%20Te%20comento%20cu%C3%A1l%3A" aria-label="Escribinos por WhatsApp" target="_blank" rel="noopener">
+  <span class="wa-label">Hablá directo con el CEO</span>
+  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12 2a10 10 0 0 0-8.5 15.28L2 22l4.85-1.27A10 10 0 1 0 12 2z"/></svg>
+</a>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  // nav scrolled
+  const nav = document.getElementById('nav');
+  const onScrollNav = ()=>nav.classList.toggle('scrolled', window.scrollY > 40);
+  onScrollNav(); window.addEventListener('scroll', onScrollNav, {passive:true});
+
+  // reveal
+  const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // count-up
+  const cio = new IntersectionObserver((es)=>{es.forEach(e=>{
+    if(!e.isIntersecting) return; const el=e.target; const end=+el.dataset.count; let s=null;
+    const step=(t)=>{if(!s)s=t;const p=Math.min((t-s)/1100,1);el.textContent=Math.round(p*end);if(p<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step); cio.unobserve(el);
+  })},{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+  // parallax
+  if(!reduce){
+    const items=[...document.querySelectorAll('[data-parallax]')];
+    let ticking=false;
+    const update=()=>{const vh=window.innerHeight;items.forEach(el=>{const r=el.getBoundingClientRect();const c=r.top+r.height/2;const d=(c-vh/2);el.style.transform=`translateY(${d*(-el.dataset.parallax)}px)`;});ticking=false;};
+    window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(update);ticking=true;}},{passive:true});
+    update();
+
+    // tilt on solution cards
+    document.querySelectorAll('.tilt').forEach(card=>{
+      card.addEventListener('mousemove',(ev)=>{const r=card.getBoundingClientRect();const x=(ev.clientX-r.left)/r.width-.5;const y=(ev.clientY-r.top)/r.height-.5;card.style.transform=`perspective(900px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`;});
+      card.addEventListener('mouseleave',()=>{card.style.transform='';});
+    });
+  }
+
+  // scroll progress bar
+  const prog=document.getElementById('scrollProg');
+  const onProg=()=>{const h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?window.scrollY/h*100:0)+'%';};
+  onProg();window.addEventListener('scroll',onProg,{passive:true});
+
+  // smooth anchor scroll con offset del nav (arregla el salto brusco a Contacto)
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',(e)=>{
+      const id=a.getAttribute('href'); if(!id||id.length<2) return;
+      const t=document.querySelector(id); if(!t) return;
+      e.preventDefault();
+      const navH=78, startY=window.scrollY, endY=t.getBoundingClientRect().top+startY-navH, dist=endY-startY;
+      if(reduce){window.scrollTo(0,endY);return;}
+      const dur=Math.min(1100,Math.max(500,Math.abs(dist)*0.55)); let s=null;
+      const ease=x=>1-Math.pow(1-x,3);
+      const step=(ts)=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1);window.scrollTo(0,startY+dist*ease(p));if(p<1)requestAnimationFrame(step);};
+      requestAnimationFrame(step);
+    });
+  });
+
+  // botones magnéticos
+  if(!reduce){
+    document.querySelectorAll('.btn-pri,.btn-ghost').forEach(b=>{
+      b.addEventListener('mousemove',(e)=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*0.18}px,${(e.clientY-r.top-r.height/2)*0.28}px)`;});
+      b.addEventListener('mouseleave',()=>{b.style.transform='';});
+    });
+  }
+
+  // efecto 1+2: cursor ring que sigue el mouse y crece sobre elementos + hero reacciona al cursor
+  if(!reduce && window.matchMedia('(hover:hover)').matches){
+    const ring=document.getElementById('cursorRing');
+    let rx=innerWidth/2, ry=innerHeight/2, cx=rx, cy=ry, moved=false;
+    window.addEventListener('mousemove',(e)=>{rx=e.clientX;ry=e.clientY;if(!moved){moved=true;ring.classList.add('on');}});
+    (function loop(){cx+=(rx-cx)*0.18;cy+=(ry-cy)*0.18;ring.style.left=cx+'px';ring.style.top=cy+'px';requestAnimationFrame(loop);})();
+    document.querySelectorAll('a,button,.tilt,.chip').forEach(el=>{
+      el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+      el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+    });
+    const hero=document.querySelector('.hero'), hv=document.querySelector('.hero-visual');
+    if(hero&&hv){let tx=0,ty=0,hx=0,hy=0;
+      hero.addEventListener('mousemove',(e)=>{const r=hero.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5)*24;ty=((e.clientY-r.top)/r.height-.5)*24;});
+      hero.addEventListener('mouseleave',()=>{tx=0;ty=0;});
+      (function hl(){hx+=(tx-hx)*0.08;hy+=(ty-hy)*0.08;hv.style.transform=`translate(${hx}px,${hy}px)`;requestAnimationFrame(hl);})();
+    }
+  }
+
+  // raza: mostrar campo de detalle si eligen Mestizo / Otro / cruza
+  const razaInput=document.getElementById('razaInput'), razaOtra=document.getElementById('razaOtraWrap');
+  if(razaInput){razaInput.addEventListener('input',()=>{const v=razaInput.value.toLowerCase();razaOtra.style.display=(v.startsWith('otro')||v.startsWith('mestizo')||v.includes('sin raza')||v.includes('cruza'))?'block':'none';});}
+
+  // consultar por producto: precarga el producto en el formulario
+  document.querySelectorAll('[data-producto]').forEach(b=>{
+    b.addEventListener('click',()=>{const s=document.getElementById('productoSel');if(s)s.value=b.dataset.producto;});
+  });
+
+  // form (demo: sin backend todavía)
+  const form=document.getElementById('leadForm');
+  form.addEventListener('submit',(ev)=>{ev.preventDefault();form.style.display='none';document.getElementById('formOk').style.display='block';});
+
+  // menú móvil (botón hamburguesa)
+  const burger=document.querySelector('.burger');
+  if(burger){
+    burger.addEventListener('click',()=>nav.classList.toggle('open'));
+    nav.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+  }
+</script>
+</body>
+</html>
