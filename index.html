@@ -190,6 +190,8 @@
   .consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin:8px 0 20px}
   .consent input{margin-top:3px}
   .form-ok{display:none;background:rgba(239,169,44,.12);border:1px solid var(--amber);border-radius:12px;padding:22px;color:var(--navy);font-size:15px;font-weight:600}
+  .form-err{display:none;background:#FDEDED;border:1px solid #E8B4B4;border-radius:12px;padding:18px 22px;color:var(--navy);font-size:14px;font-weight:600;margin-top:14px}
+  .form-err a{color:var(--amber-dk);text-decoration:underline}
 
   /* footer */
   footer{background:#0B1528;color:rgba(255,255,255,.6);padding:80px 0 30px;position:relative;overflow:hidden}
@@ -287,6 +289,33 @@
     .chip.c2{left:0}.chip.c1{right:0}
   }
 </style>
+
+<!-- =====================================================================
+  TRACKING — completar antes de lanzar la pauta paga.
+  Reemplazar los placeholders (GA_MEASUREMENT_ID / META_PIXEL_ID / AW-XXXXXXXXX)
+  por los IDs reales de Ache Innovation. El evento de conversión se dispara
+  desde trackLeadConversion() al final de un envío exitoso del formulario.
+===================================================================== -->
+<!-- Google tag (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+  // Google Ads: agregar acá el ID de cuenta si es distinto del de GA4, ej:
+  // gtag('config', 'AW-XXXXXXXXX');
+</script>
+<!-- Meta Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'META_PIXEL_ID');
+  fbq('track', 'PageView');
+</script>
 </head>
 <body>
 
@@ -570,8 +599,9 @@
           <div class="field"><label>Tamaño / peso aprox.</label><input type="text" name="tamano" placeholder="Ej: 25 kg"></div>
         </div>
         <div class="field"><label>Contanos brevemente el caso</label><textarea name="mensaje" placeholder="Patología, tiempo de evolución, si ya hubo cirugía, etc."></textarea></div>
-        <label class="consent"><input type="checkbox" required> Acepto ser contactado por Ache Innovation y que mis datos se usen para dar seguimiento a esta consulta.</label>
+        <label class="consent"><input type="checkbox" name="consentimiento" required> Acepto ser contactado por Ache Innovation y que mis datos se usen para dar seguimiento a esta consulta.</label>
         <button type="submit" class="btn btn-pri btn-lg" style="width:100%">Enviar consulta</button>
+        <div class="form-err" id="formErr"></div>
       </form>
       <div class="form-ok" id="formOk">Gracias. Recibimos tu consulta y te vamos a contactar a la brevedad.</div>
     </div>
@@ -621,6 +651,25 @@
 </a>
 
 <script>
+  // ---- Config de integraciones ----
+  // URL del Google Apps Script (Web App) que guarda los leads en el Sheet.
+  // Se completa al desplegar ache-leads-appscript.gs. Ver ese archivo para el paso a paso.
+  const LEADS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyX3crcrD6-OWyv9dnkmu9Yy3BhcOf9Fo8ENdykCEHhEvcTNF1qvwNVM2aRkGqIYCkRaw/exec';
+  // ID de conversión de Google Ads (formato "AW-XXXXXXXXX/XXXXXXXXXXXXXXXXXXXX").
+  const GOOGLE_ADS_CONVERSION_ID = 'REEMPLAZAR_CON_ID_CONVERSION_GOOGLE_ADS';
+
+  function trackLeadConversion(payload) {
+    try {
+      if (window.fbq) fbq('track', 'Lead', {content_name: payload.producto || 'Consulta general'});
+      if (window.gtag) {
+        gtag('event', 'generate_lead', {product: payload.producto || 'Consulta general'});
+        if (GOOGLE_ADS_CONVERSION_ID && GOOGLE_ADS_CONVERSION_ID.startsWith('AW-')) {
+          gtag('event', 'conversion', {send_to: GOOGLE_ADS_CONVERSION_ID});
+        }
+      }
+    } catch (err) { /* el tracking nunca debe romper el envío del lead */ }
+  }
+
   const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   // nav scrolled
@@ -710,9 +759,50 @@
     b.addEventListener('click',()=>{const s=document.getElementById('productoSel');if(s)s.value=b.dataset.producto;});
   });
 
-  // form (demo: sin backend todavía)
+  // form: envía el lead al Google Sheet (Apps Script) + dispara tracking de conversión.
+  // LEADS_ENDPOINT se completa una vez publicado el Apps Script (ver ache-leads-appscript.gs).
   const form=document.getElementById('leadForm');
-  form.addEventListener('submit',(ev)=>{ev.preventDefault();form.style.display='none';document.getElementById('formOk').style.display='block';});
+  const formOk=document.getElementById('formOk');
+  const formErr=document.getElementById('formErr');
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    const btnTxt = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    if (formErr) formErr.style.display = 'none';
+
+    const fd = new FormData(form);
+    const payload = Object.fromEntries(fd.entries());
+    payload.consentimiento = form.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
+    payload.pagina = location.href;
+    const qs = new URLSearchParams(location.search);
+    payload.utm_source = qs.get('utm_source') || '';
+    payload.utm_medium = qs.get('utm_medium') || '';
+    payload.utm_campaign = qs.get('utm_campaign') || '';
+
+    try {
+      if (!LEADS_ENDPOINT || !LEADS_ENDPOINT.startsWith('http')) {
+        throw new Error('LEADS_ENDPOINT sin configurar');
+      }
+      const res = await fetch(LEADS_ENDPOINT, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'}, // evita preflight CORS con Apps Script
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({ok: true}));
+      if (!data.ok) throw new Error(data.error || 'Respuesta inválida del servidor');
+
+      trackLeadConversion(payload);
+      form.style.display = 'none';
+      formOk.style.display = 'block';
+    } catch (err) {
+      btn.disabled = false; btn.textContent = btnTxt;
+      if (formErr) {
+        formErr.innerHTML = 'No pudimos enviar tu consulta desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20un%20producto." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
+        formErr.style.display = 'block';
+      }
+    }
+  });
 
   // menú móvil (botón hamburguesa)
   const burger=document.querySelector('.burger');
