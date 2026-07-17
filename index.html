@@ -306,6 +306,10 @@
     .band-grid{grid-template-columns:1fr 1fr;gap:32px 18px}
     .foot-top{grid-template-columns:1fr 1fr}
     .nav-links{display:none}.burger{display:block}
+    /* El CTA del header choca con el logo en anchos chicos (~360px); el hero
+       ya repite este mismo botón bien grande más abajo, así que en mobile
+       alcanza con el logo + el menú hamburguesa. */
+    .nav-in > a.btn.btn-pri{display:none}
     .nav.open .nav-links{display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;background:rgba(15,27,49,.98);backdrop-filter:blur(14px);padding:20px 26px 26px;gap:20px;border-bottom:1px solid rgba(255,255,255,.1)}
     .nav.open .nav-links a{font-size:16px;color:#fff}
   }
