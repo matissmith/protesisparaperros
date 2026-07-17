@@ -273,22 +273,35 @@
 
   /* responsive */
   @media(max-width:960px){
-    /* Mobile: evitar secciones gigantes vacías y contenido oculto por reveal */
+    /* Mobile estable: no ocultar contenido, pero conservar composición visual original */
     .reveal{opacity:1 !important;transform:none !important;transition:none !important}
-    .hero{min-height:auto;padding:92px 0 42px;align-items:flex-start}
-    .hero-in,.como-grid,.tech-grid,.cta-in{grid-template-columns:1fr;gap:28px;padding-top:0}
-    .hero h1{font-size:clamp(36px,10.5vw,54px);margin-bottom:18px}
+    [data-parallax]{transform:none !important}
+    .hero{min-height:auto;padding:92px 0 52px;align-items:flex-start;overflow:hidden}
+    .hero-in,.como-grid,.tech-grid,.cta-in{grid-template-columns:1fr;gap:30px;padding-top:0}
+    .hero h1{font-size:clamp(32px,8.8vw,46px);line-height:1.04;margin-bottom:18px;max-width:100%;overflow-wrap:normal}
+    .hero h1 .ln{overflow:visible}
+    .hero h1 .ln > span{white-space:normal;word-break:normal}
     .hero .lead{margin-bottom:22px}
-    .hero-stats{margin-top:26px;padding-top:18px;gap:24px;flex-wrap:wrap}
+    .hero-stats{display:none}
     .como-left{position:static}
-    .hero-visual{min-height:0;margin-top:6px;display:block}
-    .hv-frame{width:100%;max-width:520px;margin:0 auto;aspect-ratio:4/3;min-height:0}
+
+    /* Hero: en celular la foto debe verse completa, no recortada */
+    .hero-visual{min-height:auto;margin-top:4px;display:flex;justify-content:center}
+    .hv-frame{width:100%;max-width:430px;margin:0 auto;aspect-ratio:3/4;min-height:0;background:#fff}
+    .hv-img{object-fit:contain;object-position:center center;background:#fff}
     .chip{display:none}
+
     .light,.dark,.cta{padding:62px 0}
     .sol-grid,.row2{grid-template-columns:1fr}
     .sol{min-height:260px}
-    .tech-visual{height:auto;display:grid;gap:16px}
-    .tf,.tf.a,.tf.b{position:relative;inset:auto;width:100%;height:auto;min-height:0;aspect-ratio:16/10}
+
+    /* Tecnología: mantener fotos superpuestas tipo 3D, sin que tapen el texto */
+    .tech-grid{gap:34px}
+    .tech-visual{height:420px;display:block;overflow:visible;margin:8px 0 0}
+    .tf{position:absolute;min-height:0}
+    .tf.a{width:82%;height:72%;top:0;left:0;z-index:2}
+    .tf.b{width:68%;height:58%;right:0;bottom:0;z-index:3}
+
     .band{padding:62px 0}
     .band-grid{grid-template-columns:1fr 1fr;gap:32px 18px}
     .foot-top{grid-template-columns:1fr 1fr}
@@ -301,12 +314,16 @@
     .nav-in{height:62px}
     .logo .mark{width:38px;height:38px}
     .burger{font-size:24px}
-    .hero{padding-top:82px;padding-bottom:34px}
+    .hero{padding-top:82px;padding-bottom:38px}
     .hero-cta .btn{width:100%;justify-content:center}
+    .hv-frame{max-width:min(100%,390px);aspect-ratio:3/4}
+    .tech-visual{height:350px;margin-top:4px}
+    .tf.a{width:86%;height:70%}
+    .tf.b{width:72%;height:56%}
     .band-grid,.foot-top{grid-template-columns:1fr}
     .sol{min-height:235px}
     .sol .sol-body{padding:24px}
-    .section h2.display{padding-bottom:10px}
+    .section h2.display{padding-bottom:10px;font-size:clamp(31px,9.2vw,44px);line-height:1.06;max-width:100%;overflow-wrap:break-word;hyphens:auto}
     .form-card{padding:24px;border-radius:16px}
     .wa-float{right:14px;bottom:14px;width:52px;height:52px}
     .scroll-cue{display:none}
