@@ -291,7 +291,12 @@
        aire alrededor. En desktop el nav sigue exactamente igual que siempre. */
     .nav{transition:background .35s var(--ease),border-color .35s,top .4s var(--ease),left .4s var(--ease),right .4s var(--ease)}
     .nav-in{transition:background .4s var(--ease),border-radius .4s var(--ease),box-shadow .4s var(--ease),padding .4s var(--ease)}
-    .nav.scrolled{background:none;border-bottom:none;top:14px;left:14px;right:14px}
+    /* El .nav de afuera (el rectángulo sin bordes redondeados) heredaba el
+       backdrop-filter:blur(14px) de la regla de desktop (línea ~58) y nunca se
+       había cancelado acá — por eso quedaba el blur pegado en forma de rectángulo
+       detrás de la pastilla redondeada de adentro (.nav-in), que sí estaba bien.
+       Este es el fix real: apagarlo explícitamente en el elemento que lo tenía. */
+    .nav.scrolled{background:none;border-bottom:none;backdrop-filter:none;-webkit-backdrop-filter:none;top:14px;left:14px;right:14px}
     /* Sin backdrop-filter: era la causa más probable del resabio rectangular en
        Safari/iOS (el blur no se recorta bien al border-radius y deja un rastro).
        En vez de parchear ese bug, se saca el blur y se compensa con más opacidad
