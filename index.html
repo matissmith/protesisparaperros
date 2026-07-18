@@ -252,7 +252,7 @@
   @keyframes scrolldot{0%{opacity:0;transform:translateY(-4px)}40%{opacity:1}80%{opacity:0;transform:translateY(11px)}}
 
   /* heading underline draw */
-  .section h2.display{position:relative;display:block;padding-bottom:16px}
+  .section h2.display{position:relative;display:inline-block;padding-bottom:16px}
   .section h2.display::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--amber);transition:width .9s var(--ease) .25s;border-radius:2px}
   .reveal.in h2.display::after{width:64px}
 
@@ -276,6 +276,25 @@
     /* Mobile estable: no ocultar contenido, pero conservar composición visual original */
     .reveal{opacity:1 !important;transform:none !important;transition:none !important}
     [data-parallax]:not(.tf){transform:none !important}
+
+    /* Títulos: en desktop sigue igual (inline-block, tal cual estaba). Acá en mobile
+       pasa a block + text-wrap:balance para que nunca necesite partir una palabra
+       a la mitad y las líneas queden repartidas parejas. */
+    .section h2.display{display:block;text-wrap:balance}
+
+    /* Nav: en mobile se vuelve una cápsula flotante al scrollear en vez de una barra
+       rígida de punta a punta — sigue siendo sticky (mismo menú a mano), pero con
+       aire alrededor. En desktop el nav sigue exactamente igual que siempre. */
+    .nav{transition:background .35s var(--ease),border-color .35s,top .4s var(--ease),left .4s var(--ease),right .4s var(--ease)}
+    .nav-in{transition:background .4s var(--ease),border-radius .4s var(--ease),box-shadow .4s var(--ease),padding .4s var(--ease)}
+    .nav.scrolled{background:none;border-bottom:none;top:14px;left:14px;right:14px}
+    .nav.scrolled .nav-in{background:rgba(15,27,49,.86);backdrop-filter:blur(16px);border-radius:18px;border:1px solid rgba(255,255,255,.1);box-shadow:0 22px 48px -22px rgba(0,0,0,.65),0 0 0 1px rgba(239,169,44,.06);padding:0 22px}
+
+    /* Tecnología: le suma color/profundidad solo en mobile (desktop queda como estaba) */
+    .tech-visual::before{content:"";position:absolute;inset:-10%;background:radial-gradient(60% 60% at 55% 45%,rgba(239,169,44,.16),transparent 70%);filter:blur(24px);z-index:0;pointer-events:none}
+    .tf{box-shadow:0 40px 80px -44px rgba(26,51,80,.55),0 0 0 1px rgba(239,169,44,.1);z-index:2}
+    .tf.b{box-shadow:0 40px 80px -44px rgba(26,51,80,.55),0 0 0 1px rgba(239,169,44,.22)}
+    .tech .emb-parallax{left:36%;top:16%;width:190px;opacity:.16}
     .hero{min-height:auto;padding:92px 0 52px;align-items:flex-start;overflow:hidden}
     .hero-in,.como-grid,.tech-grid,.cta-in{grid-template-columns:1fr;gap:30px;padding-top:0}
     .hero-in>*,.como-grid>*,.tech-grid>*,.cta-in>*{min-width:0}
@@ -286,9 +305,12 @@
     .hero-stats{display:none}
     .como-left{position:static}
 
-    /* Hero: en celular la foto llena el marco cuadrado, sin bordes blancos */
-    .hero-visual{min-height:auto;margin-top:4px;display:flex;justify-content:center}
-    .hv-frame{width:100%;max-width:430px;margin:0 auto;aspect-ratio:1/1;min-height:0}
+    /* Hero: la foto se ve entera, sin recortar ni bordes blancos. El marco usa el
+       aspect-ratio real de la imagen (1000x1502) así cover no tiene nada para recortar.
+       Se le suma un halo cálido detrás para que en celular no quede "plana". */
+    .hero-visual{min-height:auto;margin-top:4px;display:flex;justify-content:center;position:relative}
+    .hero-visual::before{content:"";position:absolute;inset:-8% -12%;background:radial-gradient(58% 58% at 50% 38%,rgba(239,169,44,.24),transparent 72%);filter:blur(26px);z-index:0;pointer-events:none}
+    .hv-frame{position:relative;z-index:1;width:100%;max-width:420px;margin:0 auto;aspect-ratio:500/751;min-height:0;border-radius:26px;box-shadow:0 30px 70px -28px rgba(0,0,0,.65),0 0 0 1px rgba(239,169,44,.16),inset 0 0 0 1px rgba(255,255,255,.14)}
     .chip{display:none}
 
     .light,.dark,.cta{padding:100px 0 62px}
@@ -310,24 +332,27 @@
        ya repite este mismo botón bien grande más abajo, así que en mobile
        alcanza con el logo + el menú hamburguesa. */
     .nav-in > a.btn.btn-pri{display:none}
-    .nav.open .nav-links{display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;background:rgba(15,27,49,.98);backdrop-filter:blur(14px);padding:20px 26px 26px;gap:20px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .nav.open .nav-links{display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;background:rgba(15,27,49,.98);backdrop-filter:blur(14px);padding:20px 26px 26px;gap:20px;border-bottom:1px solid rgba(255,255,255,.1);border-radius:0 0 18px 18px}
     .nav.open .nav-links a{font-size:16px;color:#fff}
   }
   @media(max-width:520px){
     .wrap{padding:0 18px}
     .nav-in{height:62px}
+    .nav.open .nav-links{top:62px}
     .logo .mark{width:38px;height:38px}
     .burger{font-size:24px}
     .hero{padding-top:82px;padding-bottom:38px}
     .hero-cta .btn{width:100%;justify-content:center}
-    .hv-frame{max-width:min(100%,390px);aspect-ratio:1/1}
+    .hv-frame{max-width:min(100%,380px);aspect-ratio:500/751}
     .tech-visual{height:350px;margin-top:4px}
     .tf.a{width:86%;height:70%}
     .tf.b{width:72%;height:56%}
     .band-grid,.foot-top{grid-template-columns:1fr}
     .sol{min-height:235px}
     .sol .sol-body{padding:24px}
-    .section h2.display{padding-bottom:10px;font-size:clamp(31px,9.2vw,44px);line-height:1.06;max-width:100%;overflow-wrap:break-word}
+    /* clamp medido contra la palabra más larga del sitio ("Parametrización", 16
+       caracteres) para que jamás necesite partirse a mitad de palabra en 360-430px */
+    .section h2.display{padding-bottom:10px;font-size:clamp(24px,6.8vw,34px);line-height:1.1;max-width:100%;overflow-wrap:break-word}
     .form-card{padding:24px;border-radius:16px}
     .wa-float{right:14px;bottom:14px;width:52px;height:52px}
     .scroll-cue{display:none}
@@ -486,7 +511,7 @@
     </div>
     <div class="reveal d1">
       <span class="sec-tag">Tecnología</span>
-      <h2 class="display">Parametrización morfológica, no plantillas genéricas</h2>
+      <h2 class="display">Parametrización morfológica, no&nbsp;plantillas genéricas</h2>
       <p style="font-size:16.5px;color:var(--txt);margin-top:18px">Cada perro es distinto. El software toma las medidas y la morfología del caso real y genera un diseño adaptado a esa anatomía, no una talla estándar.</p>
       <ul class="feature-list">
         <li>Diseño parametrizado por raza, tamaño y peso.</li>
