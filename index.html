@@ -265,6 +265,7 @@
   .sol.has-img .emb-wm{opacity:.12}
   .tf-media{position:absolute;inset:0}
   .tf-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .tf-chrome{display:none}
 
   /* consultar por producto */
   .sol-cta{display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-size:13px;font-weight:700;color:var(--amber);letter-spacing:.3px;cursor:pointer}
@@ -274,7 +275,11 @@
   /* responsive */
   @media(max-width:960px){
     /* Mobile estable: no ocultar contenido, pero conservar composición visual original */
-    .reveal{opacity:1 !important;transform:none !important;transition:none !important}
+    .reveal:not(.pillar){opacity:1 !important;transform:none !important;transition:none !important}
+    /* Los pilares (Ajuste anatómico, etc.) sí tienen efecto de entrada en mobile —
+       antes lo tenían los números del hero, acá se busca ese mismo golpe de efecto */
+    .band .pillar.reveal{opacity:0;transform:translateY(18px) scale(.92);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    .band .pillar.reveal.in{opacity:1;transform:none}
     [data-parallax]:not(.tf){transform:none !important}
 
     /* Títulos: en desktop sigue igual (inline-block, tal cual estaba). Acá en mobile
@@ -288,13 +293,26 @@
     .nav{transition:background .35s var(--ease),border-color .35s,top .4s var(--ease),left .4s var(--ease),right .4s var(--ease)}
     .nav-in{transition:background .4s var(--ease),border-radius .4s var(--ease),box-shadow .4s var(--ease),padding .4s var(--ease)}
     .nav.scrolled{background:none;border-bottom:none;top:14px;left:14px;right:14px}
-    .nav.scrolled .nav-in{background:rgba(15,27,49,.86);backdrop-filter:blur(16px);border-radius:18px;border:1px solid rgba(255,255,255,.1);box-shadow:0 22px 48px -22px rgba(0,0,0,.65),0 0 0 1px rgba(239,169,44,.06);padding:0 22px}
+    .nav.scrolled .nav-in{background:rgba(15,27,49,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;border:1px solid rgba(255,255,255,.1);box-shadow:0 22px 48px -22px rgba(0,0,0,.65),0 0 0 1px rgba(239,169,44,.06);padding:0 22px}
+    /* Safari/iOS no recorta el backdrop-filter (blur) al border-radius del elemento:
+       el blur se ve como un rectángulo aunque el color sí quede redondeado ("resabio
+       del rectángulo"). overflow:hidden fuerza el recorte real. Se saca en .open para
+       no cortar el menú desplegable, que sí necesita salir de esa caja. */
+    .nav.scrolled:not(.open) .nav-in{overflow:hidden}
 
     /* Tecnología: le suma color/profundidad solo en mobile (desktop queda como estaba) */
     .tech-visual::before{content:"";position:absolute;inset:-10%;background:radial-gradient(60% 60% at 55% 45%,rgba(239,169,44,.16),transparent 70%);filter:blur(24px);z-index:0;pointer-events:none}
     .tf{box-shadow:0 40px 80px -44px rgba(26,51,80,.55),0 0 0 1px rgba(239,169,44,.1);z-index:2}
     .tf.b{box-shadow:0 40px 80px -44px rgba(26,51,80,.55),0 0 0 1px rgba(239,169,44,.22)}
     .tech .emb-parallax{left:36%;top:16%;width:190px;opacity:.16}
+    /* La captura del software quedaba "blanco sobre blanco" (fondo claro de la app +
+       sección blanca). Se le da fondo oscuro propio y una barra tipo ventana de
+       navegador arriba, así se lee como una pieza de diseño y no un screenshot crudo. */
+    .tf.a{background:linear-gradient(150deg,var(--navy),var(--navy-800))}
+    .tf.a .tf-media{top:24px}
+    .tf-chrome{display:flex;position:absolute;top:0;left:0;right:0;height:24px;z-index:3;align-items:center;gap:5px;padding:0 10px;background:rgba(9,17,32,.96);border-bottom:1px solid rgba(255,255,255,.08)}
+    .tf-chrome span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.22)}
+    .tf-chrome span:first-child{background:var(--amber)}
     .hero{min-height:auto;padding:92px 0 52px;align-items:flex-start;overflow:hidden}
     .hero-in,.como-grid,.tech-grid,.cta-in{grid-template-columns:1fr;gap:30px;padding-top:0}
     .hero-in>*,.como-grid>*,.tech-grid>*,.cta-in>*{min-width:0}
@@ -506,7 +524,7 @@
   <svg class="emb-parallax" data-parallax="0.2" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
   <div class="wrap tech-grid">
     <div class="tech-visual reveal">
-      <div class="tf a" data-parallax="0.04"><div class="tf-media"><img src="assets/img/software-ui.png" alt="Software Ache Biomechanics Studio"></div></div>
+      <div class="tf a" data-parallax="0.04"><div class="tf-media"><img src="assets/img/software-ui.png" alt="Software Ache Biomechanics Studio"></div><div class="tf-chrome" aria-hidden="true"><span></span><span></span><span></span></div></div>
       <div class="tf b" data-parallax="0.1"><div class="tf-media"><img src="assets/img/protesis.png" alt="Render 3D de la prótesis Ache"></div></div>
     </div>
     <div class="reveal d1">
