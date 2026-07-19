@@ -274,11 +274,22 @@
 
 
 
-  /* problema: reemplaza marquesina abstracta por contexto claro */
-  .problem-strip{background:var(--amber);color:var(--navy-900);padding:18px 0;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.08)}
-  .problem-in{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;text-align:center;font-size:15.5px;line-height:1.35}
-  .problem-in strong,.problem-in b{font-weight:900;color:var(--navy-900)}
-  .problem-in span{color:rgba(15,27,49,.82);max-width:760px}
+  /* problema / respuesta institucional */
+  .problem-section{position:relative;background:linear-gradient(180deg,#F4F7FB 0%,#FFFFFF 100%);padding:76px 0;border-top:1px solid rgba(15,27,49,.08);border-bottom:1px solid rgba(15,27,49,.08)}
+  .problem-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:stretch}
+  .problem-card{border-radius:28px;padding:34px;box-shadow:0 18px 44px rgba(15,27,49,.08)}
+  .problem-card-dark{background:linear-gradient(135deg,var(--navy),#102642);color:#fff;position:relative;overflow:hidden}
+  .problem-card-dark::after{content:"";position:absolute;right:-90px;bottom:-90px;width:240px;height:240px;border-radius:50%;border:34px solid rgba(239,169,44,.14)}
+  .problem-card-dark .sec-tag{color:var(--amber)}
+  .problem-card-dark h2{font-size:clamp(34px,4vw,54px);line-height:.98;color:#fff;margin:18px 0}
+  .problem-card-dark p{color:rgba(255,255,255,.74);font-size:18px;line-height:1.65;max-width:780px}
+  .problem-card-light{background:#fff;border:1px solid #DCE5EE;color:var(--navy)}
+  .problem-card-light h3{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:34px;line-height:1.05;margin:18px 0 14px;color:var(--navy)}
+  .problem-card-light p{color:var(--txt);font-size:17px;line-height:1.65}
+  .problem-proof{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}
+  .problem-proof div{background:#F2F6FA;border:1px solid #DCE5EE;border-radius:18px;padding:16px 12px;text-align:center}
+  .problem-proof b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:34px;line-height:1;color:var(--amber)}
+  .problem-proof span{display:block;margin-top:6px;font-size:12px;line-height:1.25;text-transform:uppercase;letter-spacing:.7px;color:#5F6E80;font-weight:800}
   .sol-intro{margin-top:16px;color:rgba(255,255,255,.68);font-size:16.5px;max-width:720px}
   .hero .lead b{letter-spacing:.01em}
 
@@ -328,9 +339,13 @@
        de la sección, sin agregar chrome falso de navegador (generaba confusión). */
     .tf.a{background:linear-gradient(150deg,var(--navy),var(--navy-800))}
     .hero{min-height:auto;padding:92px 0 52px;align-items:flex-start;overflow:hidden}
-    .problem-strip{padding:16px 0}
-    .problem-in{display:block;text-align:left;font-size:14.5px}
-    .problem-in span,.problem-in b{display:block;margin-top:6px}
+    .problem-section{padding:42px 0}
+    .problem-grid{grid-template-columns:1fr;gap:14px}
+    .problem-card{border-radius:22px;padding:24px}
+    .problem-card-dark h2{font-size:clamp(30px,8vw,42px)}
+    .problem-card-dark p,.problem-card-light p{font-size:15.5px;line-height:1.55}
+    .problem-card-light h3{font-size:28px}
+    .problem-proof{grid-template-columns:1fr;gap:8px}
     .hero-in,.como-grid,.tech-grid,.cta-in{grid-template-columns:1fr;gap:30px;padding-top:0}
     .hero-in>*,.como-grid>*,.tech-grid>*,.cta-in>*{min-width:0}
     .hero h1{font-size:clamp(32px,8.8vw,46px);line-height:1.04;margin-bottom:18px;max-width:100%;overflow-wrap:normal}
@@ -488,8 +503,8 @@
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="n">4</div><div class="l">Líneas de producto</div></div>
-        <div class="stat"><div class="n"><b>100%</b></div><div class="l">Diseño a medida</div></div>
-        <div class="stat"><div class="n">1</div><div class="l">Caso a la vez</div></div>
+        <div class="stat"><div class="n"><b>+120</b></div><div class="l">Veterinarios en red</div></div>
+        <div class="stat"><div class="n">100%</div><div class="l">Diseño a medida</div></div>
       </div>
     </div>
     <div class="hero-visual">
@@ -502,12 +517,24 @@
   <a href="#como" class="scroll-cue" aria-label="Bajar al contenido"></a>
 </section>
 
-<!-- PROBLEMA -->
-<section class="problem-strip">
-  <div class="wrap problem-in">
-    <strong>El problema:</strong>
-    <span>muchos dispositivos se eligen por talle estándar, pero una lesión, una amputación o una cirugía cambian la anatomía real del animal.</span>
-    <b>La respuesta de Ache: diseño externo a medida, revisado por profesionales.</b>
+<!-- PROBLEMA / RESPUESTA -->
+<section class="problem-section">
+  <div class="wrap problem-grid">
+    <article class="problem-card problem-card-dark">
+      <span class="sec-tag">El problema</span>
+      <h2 class="display">La movilidad animal no se resuelve con soluciones genéricas.</h2>
+      <p>Una amputación, una lesión neurológica, una cirugía o una alteración biomecánica cambian la anatomía real del paciente. Por eso un talle estándar rara vez alcanza cuando el objetivo es recuperar función, estabilidad y calidad de vida.</p>
+    </article>
+    <article class="problem-card problem-card-light">
+      <span class="sec-tag">La respuesta de Ache</span>
+      <h3>Diseño externo a medida, acompañado por profesionales.</h3>
+      <p>Trabajamos junto a una red de más de 120 veterinarios y especialistas para transformar fotos, medidas y criterio clínico en dispositivos externos de rehabilitación: prótesis, órtesis, arneses y carros ortopédicos.</p>
+      <div class="problem-proof">
+        <div><b>+120</b><span>veterinarios vinculados</span></div>
+        <div><b>4</b><span>familias de soluciones</span></div>
+        <div><b>1</b><span>caso evaluado a la vez</span></div>
+      </div>
+    </article>
   </div>
 </section>
 
