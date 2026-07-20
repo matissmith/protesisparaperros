@@ -68,6 +68,7 @@
   .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.12)}
   .btn-lg{padding:16px 32px;font-size:15px}
   .burger{display:none;background:none;border:none;cursor:pointer;color:#fff;font-size:26px}
+  .burger span{display:block;width:22px;height:2px;background:currentColor;border-radius:999px;margin:5px 0}
 
   /* ---------- HERO ---------- */
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;color:#fff;overflow:hidden;
@@ -530,6 +531,72 @@
     .studio-steps-card{grid-template-columns:1fr !important}
   }
 
+
+  /* ─────────────────────────────────────────────────────────────
+     Landing stabilization layer — 2026-07-20
+     Mantiene identidad Ache, reduce títulos sobreactuados y suaviza cortes.
+  ───────────────────────────────────────────────────────────── */
+  .problem-section{
+    background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 18%,#FFFFFF 100%) !important;
+    padding:86px 0 84px !important;
+  }
+  .problem-card-dark h2{
+    font-size:clamp(38px,4vw,64px) !important;
+    line-height:1.02 !important;
+    letter-spacing:-.02em !important;
+    max-width:760px !important;
+  }
+  .problem-card-light h3{
+    font-size:clamp(28px,2.35vw,40px) !important;
+    line-height:1.08 !important;
+    max-width:640px !important;
+  }
+  #como .como-left h2.display,
+  #soluciones h2.display,
+  #tecnologia h2.display,
+  #contacto h2.display{
+    font-size:clamp(36px,4.4vw,64px) !important;
+    line-height:1.04 !important;
+    letter-spacing:-.02em !important;
+    max-width:820px !important;
+  }
+  #tecnologia h2.display{font-size:clamp(38px,4.8vw,72px) !important}
+  #contacto .cta-copy h2.display{font-size:clamp(32px,3.6vw,54px) !important;max-width:760px !important}
+  #como{padding-top:80px !important;background:linear-gradient(180deg,#FFFFFF 0%,#F8FAFC 100%) !important}
+  .steps .step h3{font-size:24px !important;line-height:1.1 !important}
+  .steps .step p{font-size:16px !important;line-height:1.55 !important}
+  .studio-access-card h2{font-size:clamp(34px,4vw,58px) !important}
+  .studio-access-card .btn{min-width:260px}
+  .hero-stats{opacity:1 !important;}
+  .hero-stats .stat .n{color:#FFFFFF !important;text-shadow:0 4px 18px rgba(0,0,0,.28) !important;}
+  .hero-stats .stat .n b{color:var(--amber) !important;}
+  .hero-stats .stat .l{color:rgba(255,255,255,.78) !important;}
+  .problem-proof b{color:var(--amber) !important}
+  .problem-proof span{color:#4F5F73 !important}
+  .section.dark{background:var(--navy) !important}
+  .cta{background:linear-gradient(135deg,#173555 0%,#102742 100%) !important}
+  .cta .cta-copy p{color:rgba(255,255,255,.74) !important}
+  .cta-note{border-left-color:var(--amber) !important;color:rgba(255,255,255,.76) !important}
+  @media(max-width:768px){
+    .problem-section{padding:48px 0 54px !important;background:#F7FAFD !important}
+    .problem-grid{gap:16px !important}
+    .problem-card{border-radius:22px !important;padding:26px !important}
+    .problem-card-dark h2{font-size:clamp(31px,9vw,42px) !important;line-height:1.04 !important}
+    .problem-card-light h3{font-size:clamp(25px,7.2vw,34px) !important}
+    #como .como-left h2.display,
+    #soluciones h2.display,
+    #tecnologia h2.display,
+    #contacto h2.display{
+      font-size:clamp(30px,8.2vw,42px) !important;
+      line-height:1.06 !important;
+      word-break:normal !important;
+      overflow-wrap:normal !important;
+    }
+    .hero-stats{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+    .hero-stats .l{font-size:9.5px !important}
+    .studio-access-card .btn{width:100%;min-width:0}
+  }
+
 </style>
 
 <!-- =====================================================================
@@ -595,7 +662,7 @@
       <a href="#contacto">Contacto</a>
     </nav>
     <a href="#contacto" class="btn btn-pri">Contar mi caso</a>
-    <button class="burger" aria-label="Menú">☰</button>
+    <button class="burger" aria-label="Menú"><span></span><span></span><span></span></button>
   </div>
 </header>
 
@@ -638,13 +705,13 @@
   <div class="wrap problem-grid">
     <article class="problem-card problem-card-dark">
       <span class="sec-tag">El problema</span>
-      <h2 class="display">Cada caso cambia la anatomía.</h2>
-      <p>Una amputación, una lesión neurológica o una cirugía modifican apoyo, equilibrio y tolerancia de carga. Por eso antes de diseñar necesitamos entender al paciente real, no solo su talle.</p>
+      <h2 class="display">Un talle no alcanza.</h2>
+      <p>Una amputación, una lesión neurológica o una cirugía cambian apoyo, carga y estabilidad. El dispositivo tiene que partir de la anatomía real del paciente y del criterio veterinario.</p>
     </article>
     <article class="problem-card problem-card-light">
       <span class="sec-tag">La respuesta de Ache</span>
-      <h3>Diseño externo a medida, con revisión profesional.</h3>
-      <p>Ache combina fotos, mediciones, criterio veterinario y fabricación externa para desarrollar prótesis, órtesis, arneses y carros adaptados al caso.</p>
+      <h3>Diseño a medida, acompañado por profesionales.</h3>
+      <p>Trabajamos con fotos, medidas y revisión clínica para convertir cada caso en una solución externa de movilidad: prótesis, órtesis, arnés o carro ortopédico.</p>
       <div class="problem-proof">
         <div><b>+120</b><span>veterinarios y especialistas en red</span></div>
         <div><b>4</b><span>líneas de movilidad animal</span></div>
@@ -659,8 +726,8 @@
   <div class="wrap como-grid">
     <div class="como-left reveal">
       <span class="sec-tag">Proceso</span>
-      <h2 class="display">Del caso clínico al diseño revisable.</h2>
-      <p>Ordenamos la información del paciente, las fotos y las medidas para convertirlas en una base técnica que pueda revisar el equipo profesional.</p>
+      <h2 class="display">Del caso real al diseño técnico.</h2>
+      <p>Un recorrido guiado para reunir la información clínica, medir correctamente y preparar una propuesta revisable antes de fabricar.</p>
     </div>
     <div class="steps">
       <div class="step reveal"><div class="num">01</div><div><h3>Registramos el caso</h3><p>Paciente, tutor, extremidad afectada, peso, estado clínico y antecedentes relevantes.</p></div></div>
@@ -676,8 +743,8 @@
   <div class="wrap">
     <div class="reveal" style="max-width:640px">
       <span class="sec-tag">Productos a medida</span>
-      <h2 class="display">Dispositivos externos Ache.</h2>
-      <p class="sol-intro">Cada línea se adapta según especie, tamaño, lesión, objetivo de rehabilitación y criterio veterinario.</p>
+      <h2 class="display">Soluciones externas Ache.</h2>
+      <p class="sol-intro">Prótesis, órtesis, arneses y carros pensados para recuperar movilidad con diseño externo, ajuste anatómico y revisión profesional.</p>
     </div>
     <div class="sol-grid">
       <article class="tilt sol reveal"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis de miembro Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Prótesis de miembro</h3><p>Reemplazo externo para amputaciones parciales, con socket, eje biomecánico y apoyo.</p><a href="#contacto" class="sol-cta" data-producto="Prótesis de miembro">Consultar por este producto</a></div></article>
@@ -693,8 +760,8 @@
   <div class="wrap tech-grid tech-grid-clean">
     <div class="studio-access-card reveal">
       <span class="sec-tag">Biomechanics Studio</span>
-      <h2 class="display">Software para ordenar el caso.</h2>
-      <p>El módulo guía la carga de datos, fotos, detección de raza, escala, medidas, diseño 3D conceptual y reporte clínico para revisión profesional.</p>
+      <h2 class="display">Biomechanics Studio.</h2>
+      <p>El software organiza el caso paso a paso: datos del paciente, fotos, raza, escala, medidas, modelo 3D conceptual y reporte para revisión profesional.</p>
       <a class="btn btn-pri btn-lg" href="https://app.protesisparaperros.com.ar" target="_blank" rel="noopener">Abrir demo del software</a>
     </div>
     <div class="studio-steps-card reveal d1">
@@ -722,8 +789,8 @@
   <div class="wrap cta-in">
     <div class="cta-copy reveal">
       <span class="sec-tag">Contacto directo</span>
-      <h2 class="display">Hablemos del caso.</h2>
-      <p>Si sos tutor, veterinario o rehabilitador, escribinos una descripción breve. Te orientamos sobre el canal y el próximo paso más adecuado.</p>
+      <h2 class="display">Contanos qué necesita el animal.</h2>
+      <p>Si sos tutor, veterinario o rehabilitador, mandanos una descripción breve del caso. Respondemos por el canal correcto y con el próximo paso concreto.</p>
       <p class="cta-note">Ache Innovation ofrece asistencia al diseño de dispositivos externos de rehabilitación. No reemplaza el diagnóstico ni el criterio de un profesional veterinario, que valida cada caso.</p>
     </div>
     <div class="form-card reveal d1">
