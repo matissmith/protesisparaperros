@@ -454,6 +454,82 @@
     .tf.b{display:none}
   }
 
+
+  /* ─────────────────────────────────────────────────────────────
+     Ache correction layer — 2026-07-20
+     Objetivo: recuperar autoridad visual, reducir títulos excesivos,
+     suavizar transiciones y quitar el bloque visual viejo del software.
+  ───────────────────────────────────────────────────────────── */
+  .problem-section{
+    background:linear-gradient(180deg,#EEF3F8 0%,#FFFFFF 28%,#FFFFFF 100%) !important;
+    padding:96px 0 92px !important;
+    border-top:1px solid rgba(15,27,49,.06) !important;
+  }
+  .problem-grid{gap:28px !important;align-items:stretch !important}
+  .problem-card{border-radius:26px !important;padding:38px !important;min-height:auto !important}
+  .problem-card-dark h2{
+    font-size:clamp(34px,3.1vw,48px) !important;
+    line-height:1.04 !important;
+    letter-spacing:-.02em !important;
+    margin:18px 0 20px !important;
+  }
+  .problem-card-dark p{font-size:17px !important;line-height:1.62 !important;color:rgba(255,255,255,.78) !important}
+  .problem-card-light h3{
+    font-size:clamp(26px,2.2vw,34px) !important;
+    line-height:1.08 !important;
+    letter-spacing:.01em !important;
+  }
+  .problem-proof{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:12px !important}
+  .problem-proof div{padding:17px 12px !important;background:#F5F8FB !important}
+  .problem-proof b{font-size:clamp(28px,2.4vw,38px) !important}
+  .problem-proof span{font-size:11px !important;line-height:1.2 !important;color:#637086 !important}
+
+  .section.light{background:linear-gradient(180deg,#FFFFFF 0%,#F6F9FC 100%) !important}
+  #como{padding-top:88px !important;border-top:1px solid rgba(15,27,49,.08) !important}
+  #como .como-left h2.display,
+  #soluciones h2.display,
+  #tecnologia h2.display,
+  #contacto h2.display{
+    font-size:clamp(34px,4.1vw,58px) !important;
+    line-height:1.02 !important;
+    letter-spacing:-.025em !important;
+  }
+  #soluciones h2.display{max-width:900px !important}
+  #contacto .cta-copy h2.display{font-size:clamp(30px,3.5vw,48px) !important}
+  .form-card h3{font-family:'Barlow Condensed',sans-serif !important;font-size:28px !important;line-height:1.1 !important;color:var(--ink) !important}
+
+  .tech-clean{position:relative;overflow:hidden;background:linear-gradient(180deg,#FFFFFF 0%,#F7FAFD 100%) !important}
+  .tech-clean .emb-parallax{display:none !important}
+  .tech-grid-clean{grid-template-columns:.92fr 1.08fr !important;gap:28px !important;align-items:stretch !important}
+  .studio-access-card,.studio-steps-card{
+    background:#FFFFFF;border:1px solid #DCE5EE;border-radius:26px;padding:34px;
+    box-shadow:0 24px 70px rgba(15,27,49,.08)
+  }
+  .studio-access-card h2{margin:14px 0 18px !important;color:var(--ink) !important}
+  .studio-access-card p{font-size:17px;line-height:1.62;color:var(--txt);max-width:680px;margin-bottom:26px}
+  .studio-steps-card{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;background:linear-gradient(135deg,#F8FAFD,#FFFFFF)}
+  .studio-step{border:1px solid #DCE5EE;border-radius:18px;padding:18px;background:#F4F7FB}
+  .studio-step b{display:block;color:var(--amber);font-family:'Barlow Condensed',sans-serif;font-size:28px;line-height:1;margin-bottom:8px}
+  .studio-step span{display:block;color:var(--ink);font-weight:900;margin-bottom:5px}
+  .studio-step small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+
+  @media(max-width:900px){
+    .problem-grid,.tech-grid-clean{grid-template-columns:1fr !important}
+    .problem-card{padding:28px !important}
+    .studio-steps-card{grid-template-columns:1fr 1fr !important}
+  }
+  @media(max-width:520px){
+    .problem-section{padding:54px 0 58px !important}
+    .problem-card-dark h2{font-size:clamp(29px,8.2vw,38px) !important}
+    .problem-proof{grid-template-columns:1fr !important}
+    #como .como-left h2.display,
+    #soluciones h2.display,
+    #tecnologia h2.display,
+    #contacto h2.display{font-size:clamp(28px,8vw,38px) !important;line-height:1.05 !important}
+    .studio-access-card,.studio-steps-card{padding:24px !important;border-radius:22px !important}
+    .studio-steps-card{grid-template-columns:1fr !important}
+  }
+
 </style>
 
 <!-- =====================================================================
@@ -562,17 +638,17 @@
   <div class="wrap problem-grid">
     <article class="problem-card problem-card-dark">
       <span class="sec-tag">El problema</span>
-      <h2 class="display">La movilidad animal no se resuelve con soluciones genéricas.</h2>
-      <p>Una amputación, una lesión neurológica, una cirugía o una alteración biomecánica cambian la anatomía real del paciente. Por eso un talle estándar rara vez alcanza cuando el objetivo es recuperar función, estabilidad y calidad de vida.</p>
+      <h2 class="display">Cada caso cambia la anatomía.</h2>
+      <p>Una amputación, una lesión neurológica o una cirugía modifican apoyo, equilibrio y tolerancia de carga. Por eso antes de diseñar necesitamos entender al paciente real, no solo su talle.</p>
     </article>
     <article class="problem-card problem-card-light">
       <span class="sec-tag">La respuesta de Ache</span>
-      <h3>Diseño externo a medida, acompañado por profesionales.</h3>
-      <p>Trabajamos junto a una red de más de 120 veterinarios y especialistas para transformar fotos, medidas y criterio clínico en dispositivos externos de rehabilitación: prótesis, órtesis, arneses y carros ortopédicos.</p>
+      <h3>Diseño externo a medida, con revisión profesional.</h3>
+      <p>Ache combina fotos, mediciones, criterio veterinario y fabricación externa para desarrollar prótesis, órtesis, arneses y carros adaptados al caso.</p>
       <div class="problem-proof">
-        <div><b>+120</b><span>veterinarios vinculados</span></div>
-        <div><b>4</b><span>familias de soluciones</span></div>
-        <div><b>1</b><span>caso evaluado a la vez</span></div>
+        <div><b>+120</b><span>veterinarios y especialistas en red</span></div>
+        <div><b>4</b><span>líneas de movilidad animal</span></div>
+        <div><b>100%</b><span>dispositivos externos a medida</span></div>
       </div>
     </article>
   </div>
@@ -583,8 +659,8 @@
   <div class="wrap como-grid">
     <div class="como-left reveal">
       <span class="sec-tag">Proceso</span>
-      <h2 class="display">Primero entendemos el caso. Después diseñamos.</h2>
-      <p>El recorrido ordena la información clínica, las fotos y las medidas para llegar a una solución fabricable y revisable.</p>
+      <h2 class="display">Del caso clínico al diseño revisable.</h2>
+      <p>Ordenamos la información del paciente, las fotos y las medidas para convertirlas en una base técnica que pueda revisar el equipo profesional.</p>
     </div>
     <div class="steps">
       <div class="step reveal"><div class="num">01</div><div><h3>Registramos el caso</h3><p>Paciente, tutor, extremidad afectada, peso, estado clínico y antecedentes relevantes.</p></div></div>
@@ -600,8 +676,8 @@
   <div class="wrap">
     <div class="reveal" style="max-width:640px">
       <span class="sec-tag">Productos a medida</span>
-      <h2 class="display">Soluciones externas para recuperar movilidad</h2>
-      <p class="sol-intro">No vendemos una pieza genérica: cada producto se define según especie, tamaño, lesión, objetivo de rehabilitación y criterio veterinario.</p>
+      <h2 class="display">Dispositivos externos Ache.</h2>
+      <p class="sol-intro">Cada línea se adapta según especie, tamaño, lesión, objetivo de rehabilitación y criterio veterinario.</p>
     </div>
     <div class="sol-grid">
       <article class="tilt sol reveal"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis de miembro Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Prótesis de miembro</h3><p>Reemplazo externo para amputaciones parciales, con socket, eje biomecánico y apoyo.</p><a href="#contacto" class="sol-cta" data-producto="Prótesis de miembro">Consultar por este producto</a></div></article>
@@ -613,28 +689,19 @@
 </section>
 
 <!-- TECNOLOGÍA -->
-<section id="tecnologia" class="section light tech">
-  <svg class="emb-parallax" data-parallax="0.2" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
-  <div class="wrap tech-grid">
-    <div class="tech-visual reveal">
-      <div class="tf a" data-parallax="0.04"><div class="tf-media"><img src="assets/img/software-ui.png" alt="Software Ache Biomechanics Studio"></div></div>
-      <div class="tf b" data-parallax="0.1"><div class="tf-media"><img src="assets/img/protesis.png" alt="Render 3D de la prótesis Ache"></div></div>
-    </div>
-    <div class="reveal d1">
+<section id="tecnologia" class="section light tech tech-clean">
+  <div class="wrap tech-grid tech-grid-clean">
+    <div class="studio-access-card reveal">
       <span class="sec-tag">Biomechanics Studio</span>
-      <h2 class="display">Software clínico-protésico para ordenar casos reales</h2>
-      <p style="font-size:16.5px;color:var(--txt);margin-top:18px">La plataforma guía a veterinarios y profesionales en la carga del caso: fotos, raza, escala, medidas, diseño 3D conceptual y reporte para revisión.</p>
-      <ul class="feature-list">
-        <li>Diseño parametrizado por raza, tamaño y peso.</li>
-        <li>Diferenciación entre miembro anterior y posterior.</li>
-        <li>Modelo orientado a piezas fabricables, no solo visuales.</li>
-        <li>Reporte clínico para revisión profesional.</li>
-      </ul>
-      <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
-        <a href="https://app.protesisparaperros.com.ar" class="btn btn-pri btn-lg" target="_blank" rel="noopener">Abrir demo del software</a>
-        <a href="#contacto" class="btn btn-ghost btn-lg">Solicitar evaluación profesional</a>
-      </div>
-      <p style="margin-top:12px;color:var(--muted);font-size:14px">El software se abre en una pantalla dedicada para trabajar el caso completo.</p>
+      <h2 class="display">Software para ordenar el caso.</h2>
+      <p>El módulo guía la carga de datos, fotos, detección de raza, escala, medidas, diseño 3D conceptual y reporte clínico para revisión profesional.</p>
+      <a class="btn btn-pri btn-lg" href="https://app.protesisparaperros.com.ar" target="_blank" rel="noopener">Abrir demo del software</a>
+    </div>
+    <div class="studio-steps-card reveal d1">
+      <div class="studio-step"><b>01</b><span>Caso</span><small>Paciente, tutor, extremidad y contexto clínico.</small></div>
+      <div class="studio-step"><b>02</b><span>Fotos y medidas</span><small>Imágenes, escala y mediciones del muñón o miembro.</small></div>
+      <div class="studio-step"><b>03</b><span>CAD / STL</span><small>Modelo conceptual editable para revisión técnica.</small></div>
+      <div class="studio-step"><b>04</b><span>Reporte</span><small>Documento para coordinar veterinario, fabricante y tutor.</small></div>
     </div>
   </div>
 </section>
@@ -655,8 +722,8 @@
   <div class="wrap cta-in">
     <div class="cta-copy reveal">
       <span class="sec-tag">Contacto directo</span>
-      <h2 class="display">Contanos qué necesita el animal</h2>
-      <p>Si sos tutor, veterinario o rehabilitador, escribinos con una descripción breve del caso. Te respondemos con el canal y el próximo paso correcto.</p>
+      <h2 class="display">Hablemos del caso.</h2>
+      <p>Si sos tutor, veterinario o rehabilitador, escribinos una descripción breve. Te orientamos sobre el canal y el próximo paso más adecuado.</p>
       <p class="cta-note">Ache Innovation ofrece asistencia al diseño de dispositivos externos de rehabilitación. No reemplaza el diagnóstico ni el criterio de un profesional veterinario, que valida cada caso.</p>
     </div>
     <div class="form-card reveal d1">
