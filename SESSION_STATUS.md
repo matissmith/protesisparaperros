@@ -132,3 +132,5 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - No tocar: software Streamlit/CAD, `AGENTS.md`, `ache-leads-appscript.gs`.
 - Estado: iniciado.
 - 2026-07-21 Codex: reemplazada la transición acumulada defectuosa por una sola capa `Ache premium transition system v2` en `index.html`. Objetivo: eliminar cortes rectos entre hero/problema/proceso/soluciones/tecnología sin tapar métricas ni textos; no se tocó software, copy, AGENTS.md ni ache-leads-appscript.gs. Pendiente: validación visual final antes de push si el usuario confirma que se ve bien.
+### 2026-07-21 — Restauración posterior al experimento de transiciones
+- El experimento de transiciones fue descartado porque no convergió en una solución estable. La landing volvió a la base estable `5dcfb72`, preservando selectivamente las mejoras válidas de tipografía, métricas, responsive y Tecnología verificadas en `7771270`. Cualquier nueva propuesta de transiciones deberá tratarse en otra tarea independiente.

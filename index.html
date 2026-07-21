@@ -440,7 +440,7 @@
   /* ─────────────────────────────────────────────────────────────
      Ache correction layer — 2026-07-20
      Objetivo: recuperar autoridad visual, reducir títulos excesivos,
-     suavizar transiciones y quitar el bloque visual viejo del software.
+     mejorar legibilidad y presentar el software con claridad.
   ───────────────────────────────────────────────────────────── */
   .problem-section{
     background:linear-gradient(180deg,#EEF3F8 0%,#FFFFFF 28%,#FFFFFF 100%) !important;
@@ -450,21 +450,29 @@
   .problem-grid{gap:28px !important;align-items:stretch !important}
   .problem-card{border-radius:26px !important;padding:38px !important;min-height:auto !important}
   .problem-card-dark h2{
-    font-size:clamp(34px,3.1vw,48px) !important;
-    line-height:1.04 !important;
+    font-size:clamp(30px,3vw,46px) !important;
+    line-height:1.05 !important;
     letter-spacing:-.02em !important;
     margin:18px 0 20px !important;
+    max-width:640px !important;
   }
   .problem-card-dark p{font-size:17px !important;line-height:1.62 !important;color:rgba(255,255,255,.78) !important}
   .problem-card-light h3{
-    font-size:clamp(26px,2.2vw,34px) !important;
-    line-height:1.08 !important;
+    font-size:clamp(24px,2vw,32px) !important;
+    line-height:1.12 !important;
     letter-spacing:.01em !important;
+    max-width:600px !important;
   }
   .problem-proof{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:12px !important}
   .problem-proof div{padding:17px 12px !important;background:#F5F8FB !important}
   .problem-proof b{font-size:clamp(28px,2.4vw,38px) !important}
   .problem-proof span{font-size:11px !important;line-height:1.2 !important;color:#637086 !important}
+  .hero-stats{opacity:1 !important}
+  .hero-stats .stat .n{color:#FFFFFF !important;text-shadow:0 4px 18px rgba(0,0,0,.28) !important}
+  .hero-stats .stat .n b{color:var(--amber) !important}
+  .hero-stats .stat .l{color:rgba(255,255,255,.78) !important}
+  .problem-proof b{color:var(--amber) !important}
+  .problem-proof span{color:#4F5F73 !important}
 
   .section.light{background:linear-gradient(180deg,#FFFFFF 0%,#F6F9FC 100%) !important}
   #como{padding-top:88px !important;border-top:1px solid rgba(15,27,49,.08) !important}
@@ -472,17 +480,17 @@
   #soluciones h2.display,
   #tecnologia h2.display,
   #contacto h2.display{
-    font-size:clamp(34px,4.1vw,58px) !important;
-    line-height:1.02 !important;
-    letter-spacing:-.025em !important;
+    font-size:clamp(30px,3.2vw,46px) !important;
+    line-height:1.08 !important;
+    letter-spacing:-.02em !important;
+    max-width:760px !important;
   }
   #soluciones h2.display{max-width:900px !important}
-  #contacto .cta-copy h2.display{font-size:clamp(30px,3.5vw,48px) !important}
+  #contacto .cta-copy h2.display{font-size:clamp(28px,2.8vw,40px) !important;max-width:700px !important}
   .form-card h3{font-family:'Barlow Condensed',sans-serif !important;font-size:28px !important;line-height:1.1 !important;color:var(--ink) !important}
 
   .tech-clean{position:relative;overflow:hidden;background:linear-gradient(180deg,#FFFFFF 0%,#F7FAFD 100%) !important}
   .tech-clean .emb-parallax{display:none !important}
-  .tech-grid-clean{grid-template-columns:.92fr 1.08fr !important;gap:28px !important;align-items:stretch !important}
   .studio-access-card{
     background:#FFFFFF;border:1px solid #DCE5EE;border-radius:26px;padding:34px;
     box-shadow:0 24px 70px rgba(15,27,49,.08)
@@ -501,100 +509,7 @@
     .problem-grid{grid-template-columns:1fr !important}
     .problem-card{padding:28px !important}
   }
-  @media(max-width:520px){
-    .problem-section{padding:54px 0 58px !important}
-    .problem-card-dark h2{font-size:clamp(29px,8.2vw,38px) !important}
-    .problem-proof{grid-template-columns:1fr !important}
-    #como .como-left h2.display,
-    #soluciones h2.display,
-    #tecnologia h2.display,
-    #contacto h2.display{font-size:clamp(28px,8vw,38px) !important;line-height:1.05 !important}
-    .studio-access-card,.studio-steps-card{padding:24px !important;border-radius:22px !important}
-    .studio-steps-card{grid-template-columns:1fr !important}
-  }
-
-
-  /* ─────────────────────────────────────────────────────────────
-     Landing stabilization layer — 2026-07-20
-     Mantiene identidad Ache, reduce títulos sobreactuados y suaviza cortes.
-  ───────────────────────────────────────────────────────────── */
-  .hero{
-    margin-bottom:0 !important;
-    padding-bottom:92px !important;
-  }
-  .hero::after{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    height:96px;
-    background:
-      radial-gradient(70% 110% at 50% 100%, rgba(239,169,44,.10), transparent 58%),
-      linear-gradient(180deg, rgba(12,28,52,0) 0%, rgba(12,28,52,.42) 100%);
-    pointer-events:none;
-    z-index:1;
-  }
-  .hero-in{z-index:3 !important;}
-  .problem-section{
-    position:relative !important;
-    margin-top:0 !important;
-    padding:92px 0 84px !important;
-    border-top:1px solid rgba(15,27,49,.08) !important;
-    background:linear-gradient(180deg,#F6F9FC 0%,#FFFFFF 72%) !important;
-  }
-  .problem-section::before{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:34px;
-    background:linear-gradient(180deg, rgba(23,53,85,.08), rgba(23,53,85,0));
-    pointer-events:none;
-  }
-  .problem-section .container{position:relative;z-index:1;}
-  .problem-card-dark h2{
-    font-size:clamp(30px,3vw,46px) !important;
-    line-height:1.05 !important;
-    letter-spacing:-.02em !important;
-    max-width:640px !important;
-  }
-  .problem-card-light h3{
-    font-size:clamp(24px,2vw,32px) !important;
-    line-height:1.12 !important;
-    max-width:600px !important;
-  }
-  #como .como-left h2.display,
-  #soluciones h2.display,
-  #tecnologia h2.display,
-  #contacto h2.display{
-    font-size:clamp(30px,3.2vw,46px) !important;
-    line-height:1.08 !important;
-    letter-spacing:-.02em !important;
-    max-width:760px !important;
-  }
-  #contacto .cta-copy h2.display{font-size:clamp(28px,2.8vw,40px) !important;max-width:700px !important}
-  #como{padding-top:80px !important;background:linear-gradient(180deg,#FFFFFF 0%,#F8FAFC 100%) !important}
-  .steps .step h3{font-size:22px !important;line-height:1.1 !important}
-  .steps .step p{font-size:15.5px !important;line-height:1.55 !important}
-  .studio-access-card h2{font-size:clamp(30px,3vw,44px) !important}
-  .studio-access-card .btn{min-width:260px}
-  .hero-stats{opacity:1 !important;}
-  .hero-stats .stat .n{color:#FFFFFF !important;text-shadow:0 4px 18px rgba(0,0,0,.28) !important;}
-  .hero-stats .stat .n b{color:var(--amber) !important;}
-  .hero-stats .stat .l{color:rgba(255,255,255,.78) !important;}
-  .problem-proof b{color:var(--amber) !important}
-  .problem-proof span{color:#4F5F73 !important}
-  .section.dark{background:var(--navy) !important}
-  .cta{background:linear-gradient(135deg,#173555 0%,#102742 100%) !important}
-  .cta .cta-copy p{color:rgba(255,255,255,.74) !important}
-  .cta-note{border-left-color:var(--amber) !important;color:rgba(255,255,255,.76) !important}
   @media(max-width:768px){
-    .hero{padding-bottom:58px !important}
-    .hero::after{height:58px !important;background:linear-gradient(180deg,rgba(12,28,52,0),rgba(12,28,52,.32)) !important}
-    .problem-section{padding:54px 0 54px !important;background:#F7FAFD !important}
-    .problem-section::before{display:block !important;content:"" !important;height:22px !important}
     .problem-grid{gap:16px !important}
     .problem-card{border-radius:22px !important;padding:26px !important}
     .problem-card-dark h2{font-size:clamp(31px,9vw,42px) !important;line-height:1.04 !important}
@@ -612,162 +527,12 @@
     .hero-stats .l{font-size:9.5px !important}
     .studio-access-card .btn{width:100%;min-width:0}
   }
-
-
-
-  /* ─────────────────────────────────────────────────────────────
-     Ache premium transition system v2 — 2026-07-21
-     Transiciones curvas/tecnológicas sin tapar métricas ni textos.
-  ───────────────────────────────────────────────────────────── */
-  .hero{
-    min-height:100vh !important;
-    padding-bottom:112px !important;
-    isolation:isolate !important;
-  }
-  .hero::after{
-    content:"";
-    position:absolute;
-    left:0;right:0;bottom:0;
-    height:170px;
-    pointer-events:none;
-    z-index:1;
-    background:
-      radial-gradient(70% 130px at 50% 100%, rgba(239,169,44,.10), transparent 62%),
-      linear-gradient(180deg, rgba(12,28,52,0) 0%, rgba(12,28,52,.76) 58%, #0C1C34 100%);
-  }
-  .hero-in,.hero-stats{position:relative;z-index:3;}
-  .hero-stats{margin-bottom:10px !important;}
-
-  .problem-section{
-    position:relative !important;
-    overflow:hidden !important;
-    border-top:0 !important;
-    border-bottom:0 !important;
-    padding:112px 0 132px !important;
-    background:
-      radial-gradient(900px 260px at 22% 0%, rgba(23,53,85,.08), transparent 66%),
-      linear-gradient(180deg,#F3F7FB 0%,#FFFFFF 48%,#EAF2F8 100%) !important;
-  }
-  .problem-section::before{
-    content:"";
-    position:absolute;
-    left:-8vw;right:-8vw;top:-76px;
-    height:150px;
-    border-radius:0 0 50% 50% / 0 0 100% 100%;
-    background:
-      radial-gradient(60% 92px at 50% 0%, rgba(12,28,52,.18), transparent 74%),
-      linear-gradient(90deg, transparent 0%, rgba(239,169,44,.32) 48%, transparent 100%);
-    opacity:.9;
-    pointer-events:none;
-    z-index:0;
-  }
-  .problem-section::after{
-    content:"";
-    position:absolute;
-    left:-6vw;right:-6vw;bottom:-82px;
-    height:158px;
-    border-radius:50% 50% 0 0 / 100% 100% 0 0;
-    background:
-      radial-gradient(52% 80px at 50% 0%, rgba(239,169,44,.10), transparent 72%),
-      #EAF2F8;
-    box-shadow:0 -22px 54px rgba(23,53,85,.06);
-    pointer-events:none;
-    z-index:0;
-  }
-  .problem-section .container,.problem-grid{position:relative;z-index:2;}
-
-  #como.section.light{
-    position:relative !important;
-    overflow:hidden !important;
-    padding:138px 0 128px !important;
-    border-top:0 !important;
-    border-bottom:0 !important;
-    background:
-      linear-gradient(180deg,#EAF2F8 0%,#F7FAFD 58%,#FFFFFF 100%) !important;
-  }
-  #como.section.light::before{
-    content:"";
-    position:absolute;
-    left:12%;right:12%;top:38px;
-    height:2px;
-    background:linear-gradient(90deg, transparent, rgba(239,169,44,.65), rgba(23,53,85,.16), transparent);
-    opacity:.75;
-    pointer-events:none;
-  }
-  #como.section.light::after{
-    content:"";
-    position:absolute;
-    left:-8vw;right:-8vw;bottom:-94px;
-    height:176px;
-    border-radius:50% 50% 0 0 / 100% 100% 0 0;
-    background:
-      radial-gradient(70% 120px at 50% 0%, rgba(239,169,44,.12), transparent 64%),
-      #0D1D35;
-    pointer-events:none;
-    z-index:0;
-  }
-  #como.section.light .container{position:relative;z-index:2;}
-
-  #soluciones.section.dark{
-    position:relative !important;
-    overflow:hidden !important;
-    padding-top:142px !important;
-    padding-bottom:120px !important;
-    border-top:0 !important;
-    background:
-      radial-gradient(900px 340px at 18% 0%, rgba(43,73,116,.34), transparent 66%),
-      linear-gradient(180deg,#0D1D35 0%,#10233D 54%,#0C1C34 100%) !important;
-  }
-  #soluciones.section.dark::before{
-    content:"";
-    position:absolute;
-    left:0;right:0;top:0;height:120px;
-    background:linear-gradient(180deg, rgba(13,29,53,.95), rgba(13,29,53,0));
-    pointer-events:none;
-  }
-  #soluciones.section.dark::after{
-    content:"";
-    position:absolute;
-    left:-8vw;right:-8vw;bottom:-84px;height:160px;
-    border-radius:50% 50% 0 0 / 100% 100% 0 0;
-    background:#FFFFFF;
-    box-shadow:0 -20px 60px rgba(0,0,0,.14);
-    pointer-events:none;
-  }
-  #soluciones.section.dark .container{position:relative;z-index:2;}
-
-  #tecnologia.section.light{
-    position:relative !important;
-    overflow:hidden !important;
-    padding-top:132px !important;
-    background:
-      radial-gradient(880px 260px at 76% 0%, rgba(23,53,85,.07), transparent 66%),
-      linear-gradient(180deg,#FFFFFF 0%,#F5F8FC 100%) !important;
-  }
-  #tecnologia.section.light::before{
-    content:"";
-    position:absolute;
-    left:12%;right:12%;top:34px;height:2px;
-    background:linear-gradient(90deg, transparent, rgba(239,169,44,.54), transparent);
-    pointer-events:none;
-    opacity:.72;
-  }
-  #tecnologia.section.light .container{position:relative;z-index:2;}
-
-  @media(max-width:768px){
-    .hero{padding-bottom:82px !important;}
-    .hero::after{height:112px !important;}
-    .problem-section{padding:82px 0 92px !important;}
-    .problem-section::before{top:-54px;height:108px !important;}
-    .problem-section::after{bottom:-58px;height:110px !important;}
-    #como.section.light{padding:92px 0 96px !important;}
-    #como.section.light::before{top:24px;left:16%;right:16%;}
-    #como.section.light::after{bottom:-62px;height:118px !important;}
-    #soluciones.section.dark{padding-top:96px !important;padding-bottom:86px !important;}
-    #soluciones.section.dark::before{height:84px !important;}
-    #soluciones.section.dark::after{bottom:-56px;height:106px !important;}
-    #tecnologia.section.light{padding-top:88px !important;}
-    #tecnologia.section.light::before{top:22px;left:18%;right:18%;}
+  @media(max-width:520px){
+    .problem-section{padding:54px 0 58px !important}
+    .problem-card-dark h2{font-size:clamp(29px,8.2vw,38px) !important}
+    .problem-proof{grid-template-columns:1fr !important}
+    .studio-access-card{padding:24px !important;border-radius:22px !important}
+    .studio-steps-inline{grid-template-columns:1fr}
   }
 
 
