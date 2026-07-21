@@ -800,7 +800,7 @@
       <p class="lead">Desarrollamos prótesis, órtesis, carros ortopédicos y arneses a partir de la anatomía, la condición clínica y las necesidades reales de cada caso.</p>
       <div class="hero-cta">
         <a href="#contacto-caso" class="btn btn-pri btn-lg" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
-        <a href="#profesionales" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
+        <a href="#profForm" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="n"><b>+120</b></div><div class="l">Veterinarios y profesionales en red</div></div>
@@ -815,7 +815,7 @@
       </div>
     </div>
   </div>
-  <a href="#selector" class="scroll-cue" aria-label="Bajar al contenido"></a>
+  <a href="#dispositivos" class="scroll-cue" aria-label="Bajar al contenido"></a>
 </section>
 
 <!-- SELECTOR TUTOR / PROFESIONAL -->
@@ -1140,8 +1140,8 @@
         <div class="studio-step"><b>04</b><span>Seguimiento y trazabilidad</span><small>El equipo puede conocer qué información falta, qué versión está vigente y en qué estado se encuentra cada caso.</small></div>
       </div>
       <div class="hero-cta" style="margin-top:6px">
-        <a class="btn btn-pri btn-lg" href="#profesionales" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a>
-        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profesionales" onclick="acheTrack('professional_demo_click')">Solicitar una demo guiada</a>
+        <a class="btn btn-pri btn-lg" href="#profForm" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a>
+        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" onclick="acheTrack('professional_demo_click')">Solicitar una demo guiada</a>
       </div>
     </div>
   </div>
@@ -1352,7 +1352,7 @@
       <p>Contanos qué necesita el animal o conocé cómo participar en la validación profesional de Biomechanics Studio.</p>
       <div class="close-actions reveal">
         <a href="#contacto-caso" class="btn btn-pri btn-lg">Evaluar un caso</a>
-        <a href="#profesionales" class="btn btn-ghost btn-lg" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
+        <a href="#profForm" class="btn btn-ghost btn-lg" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
       </div>
     </div>
     <div class="close-grid retire-block">
@@ -1471,17 +1471,20 @@
   onProg();window.addEventListener('scroll',onProg,{passive:true});
 
   // smooth anchor scroll con offset del nav (arregla el salto brusco a Contacto)
+  let anchorScrollFrame=null;
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener('click',(e)=>{
       const id=a.getAttribute('href'); if(!id||id.length<2) return;
       const t=document.querySelector(id); if(!t) return;
       e.preventDefault();
+      if(anchorScrollFrame){cancelAnimationFrame(anchorScrollFrame);anchorScrollFrame=null;}
+      if(id==='#profForm') t.open=true;
       const navH=78, startY=window.scrollY, endY=t.getBoundingClientRect().top+startY-navH, dist=endY-startY;
       if(reduce){window.scrollTo(0,endY);return;}
       const dur=Math.min(1100,Math.max(500,Math.abs(dist)*0.55)); let s=null;
       const ease=x=>1-Math.pow(1-x,3);
-      const step=(ts)=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1);window.scrollTo(0,startY+dist*ease(p));if(p<1)requestAnimationFrame(step);};
-      requestAnimationFrame(step);
+      const step=(ts)=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1);window.scrollTo(0,startY+dist*ease(p));if(p<1)anchorScrollFrame=requestAnimationFrame(step);else anchorScrollFrame=null;};
+      anchorScrollFrame=requestAnimationFrame(step);
     });
   });
 
