@@ -667,25 +667,40 @@
   }
 
   /* Biomechanics Studio + profesionales: un único bloque, formulario colapsado */
-  #tecnologia{padding-bottom:44px}
+  #dispositivos{padding-top:80px}
+  #tecnologia{padding-bottom:24px}
   #tecnologia .tech-grid{grid-template-columns:1fr 1fr;gap:40px;align-items:start}
   #tecnologia .tech-visual{height:600px;min-height:0}
   #tecnologia .studio-access-card{width:100%}
   #tecnologia .studio-access-card h2{font-size:clamp(30px,2.5vw,36px)!important;line-height:1.06!important}
-  #profesionales{padding:0 0 96px;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
+  #profesionales{padding:0 0 72px;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
   #profesionales>.wrap>div.reveal{display:none}
-  #profesionales details#profForm{margin-top:30px!important}
+  #profesionales details#profForm{max-width:1160px!important;margin:0 auto!important}
   details#profForm{cursor:default}
+  details#profForm:not([open]){padding:16px 18px;background:#F7FAFD;border:1px solid #DCE5EE;border-radius:16px;box-shadow:none}
   details#profForm summary{cursor:pointer;list-style:none}
+  details#profForm:not([open]) summary{display:flex;align-items:center;justify-content:space-between;gap:20px}
   details#profForm summary::-webkit-details-marker{display:none}
-  details#profForm summary::after{content:"Hacé clic para expandir el formulario ↓";display:block;font-size:12.5px;font-weight:700;color:var(--amber-dk);margin-top:10px}
-  details#profForm[open] summary::after{content:"Formulario abierto ↑"}
+  details#profForm summary::after{content:"Solicitar participación";display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;padding:10px 16px;border-radius:10px;background:var(--amber);font-size:13px;font-weight:800;color:var(--navy-900)}
+  details#profForm[open] summary::after{content:"Cerrar formulario"}
   details#profForm summary h3{display:inline}
+  details#profForm:not([open]) summary h3{margin:0!important;font-family:'Barlow',sans-serif!important;font-size:17px!important;color:var(--ink)!important}
+  details#profForm:not([open]) summary .sub{display:none}
 
   /* Ache / equipo / respaldo: fusión visual en un solo bloque continuo */
-  #sobre-ache{padding-bottom:0}
+  #sobre-ache{padding-top:72px;padding-bottom:0}
   #equipo{padding-top:36px}
+  #equipo{padding-bottom:72px}
   #equipo .sec-tag{display:none}
+
+  @media(max-width:768px){
+    #dispositivos{padding-top:56px}
+    #tecnologia{padding-bottom:20px}
+    #profesionales{padding-bottom:56px}
+    #sobre-ache{padding-top:56px}
+    #equipo{padding-bottom:56px}
+    details#profForm:not([open]) summary{align-items:flex-start;flex-direction:column;gap:12px}
+  }
 
   /* Cierre: reemplaza las 3 tarjetas por 2 CTA simples */
   .close-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
@@ -1182,7 +1197,7 @@
     </div>
 
     <details class="form-card reveal d2" style="max-width:760px;margin:52px auto 0" id="profForm">
-      <summary><h3 style="display:inline">Solicitar participación</h3>
+      <summary><h3 style="display:inline">¿Sos veterinario, rehabilitador o fabricante?</h3>
       <p class="sub">Formulario independiente para veterinarios, rehabilitadores y fabricantes.</p></summary>
       <form id="professionalForm">
         <input type="hidden" name="tipo" value="profesional">
@@ -1258,7 +1273,7 @@
   <div class="wrap">
     <div class="reveal" style="max-width:760px">
       <span class="sec-tag">Sobre Ache</span>
-      <h2 class="display">Ache, equipo y respaldo</h2>
+      <h2 class="display">El equipo detrás de Ache</h2>
       <p class="intro">Ache Innovation es una startup argentina que combina diseño de producto, conocimiento veterinario y tecnología para desarrollar soluciones de movilidad y rehabilitación animal.</p>
     </div>
     <div class="grid3 retire-block">
