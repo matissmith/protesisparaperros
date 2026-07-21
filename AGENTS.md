@@ -56,6 +56,24 @@ puede ser una idea descartada.
 8. Si vas a modificar una sección, decí primero qué archivo/sección vas a tocar y
    por qué, antes de escribir el diff.
 
+## Protocolo anti-bucles y cambios mínimos
+
+- Inspeccionar y diagnosticar antes de editar: localizar primero archivos, reglas o funciones responsables.
+- Priorizar el cambio mínimo que resuelva el problema.
+- Hacer como máximo dos intentos de implementación por tarea.
+- Cada intento debe ser acotado y tener una validación concreta.
+- Si el segundo intento falla, detenerse y explicar el problema antes de continuar.
+- No crear versiones sucesivas tipo v2, v3, v4 para una misma solución.
+- No acumular overrides: si hay reglas en conflicto, limpiar o reemplazar las anteriores antes de agregar nuevas.
+- Cancelar y diagnosticar cualquier comando que no produzca un resultado útil en 60 segundos.
+- No dejar servidores, navegadores headless ni procesos de terminal bloqueados.
+- En tareas visuales, hacer como máximo una validación desktop y una mobile por intento.
+- No modificar archivos que tengan cambios de otra sesión sin autorización explícita.
+- No hacer commit, push ni deploy salvo pedido explícito.
+- Evitar `!important`; no agregar más de 100 líneas para un cambio visual puntual sin justificarlo.
+- Si el contexto se compacta, revisar el pedido original y el diff antes de seguir.
+- No repetir mensajes de progreso sin aportar información nueva.
+
 ## Decisiones de producto que NO están escritas en el código (o poco)
 
 - `+120 veterinarios en red` es un dato institucional importante, recuperado después
@@ -99,3 +117,31 @@ python3 -m http.server 8934
 desde esta carpeta, y abrir `http://localhost:8934/index.html`. Para capturas
 automatizadas, Playwright anda bien (`pip3 install playwright && python3 -m
 playwright install webkit chromium`).
+
+## Protocolo de continuidad de sesión
+
+Este proyecto suele trabajarse en sesiones largas con Codex y Claude. Para evitar que una tarea quede incompleta, sin documentar o que la siguiente sesión vuelva a tocar cosas equivocadas, `SESSION_STATUS.md` se usa como archivo de continuidad cuando corresponde.
+
+Reglas obligatorias:
+
+1. En tareas largas, cambios estructurales o cuando Matías lo pida, leer este `AGENTS.md` y luego leer `SESSION_STATUS.md` si existe.
+2. Actualizar `SESSION_STATUS.md` cuando:
+   - la tarea sea larga o quede parcialmente resuelta;
+   - haya cambios estructurales de arquitectura, flujo, deploy, integración o criterios visuales generales;
+   - se modifique una decisión importante que otra sesión deba conocer;
+   - Matías lo pida explícitamente.
+3. No actualizar `SESSION_STATUS.md` automáticamente por cada microcambio visual, corrección puntual o ajuste menor.
+4. Si se actualiza `SESSION_STATUS.md`, la entrada debe indicar:
+   - objetivo de la sesión;
+   - repo en el que se trabajó;
+   - archivos tocados y archivos que no deben tocarse;
+   - qué se hizo;
+   - qué falta;
+   - qué quedó roto o dudoso, si aplica;
+   - cuál es el último punto estable;
+   - si hubo commit/push/deploy;
+   - próximos pasos concretos.
+5. No mezclar mundos: cambios de landing/web no deben tocar software/CAD; cambios de software/CAD no deben tocar landing/web, salvo instrucción explícita.
+6. Si algo falla, no maquillar ni ocultar el error. Documentar causa probable, archivo involucrado y cambio mínimo propuesto antes de seguir.
+
+Frase guía: documentar cuando aporta continuidad real; no convertir cada microajuste en burocracia.
