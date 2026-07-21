@@ -92,3 +92,36 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Alcance: solo `index.html` de la landing institucional. No se tocó el software Streamlit, CAD, detección de raza ni repositorios del software.
 - Cuidado aplicado: se evitó tapar las métricas del hero y se mantuvieron las secciones legibles con reglas responsive para mobile.
 - Pendiente de revisión visual: validar en navegador publicado que los cortes Hero→Problema, Problema→Proceso y Proceso→Soluciones se vean fluidos en desktop y mobile.
+
+## 2026-07-20 — Validación del sistema de transiciones + 2 correcciones (Claude)
+- Se validó en vivo (Playwright, desktop 1440 + mobile 390) el sistema de transiciones
+  de la entrada anterior: las transiciones diagonales/halos no tapan métricas ni
+  contenido, se ven intencionales. Sin cambios necesarios ahí.
+- Se detectó y corrigió: los títulos de `#como`, `#soluciones`, `#tecnologia`, `#contacto`
+  y las tarjetas Problema/Respuesta habían crecido hasta `clamp(...,72px)` en desktop en
+  rondas sucesivas de "correction layers". Se bajaron a un rango más contenido
+  (`clamp(28-30px, ~3vw, 40-46px)`), consistente con la escala original del sitio
+  (antes de las rondas de ajuste por el feedback de Andy/Loom). Cambio solo en las
+  reglas de `font-size` de esas 6 selecciones puntuales, no se tocó estructura ni copy.
+- Se restauró la composición de fotos superpuestas ("efecto 3D") en la sección
+  Tecnología/Biomechanics Studio, que se había eliminado del HTML en una ronda anterior
+  y reemplazado solo por tarjetas de texto. Ahora conviven: las dos fotos superpuestas
+  (`assets/img/software-ui.png` + `assets/img/protesis.png`, con el parallax ya afinado
+  en sesiones previas) a la izquierda, y a la derecha una sola tarjeta con el texto +
+  los 4 pasos numerados + CTA (antes eran dos tarjetas separadas, se unificaron para
+  evitar el look de "tarjeta dentro de tarjeta").
+  - Se desactivó una regla vieja (`Mobile stability patch 2026-07-19`, `@media(max-width:768px)`)
+    que aplanaba las fotos y ocultaba una de las dos (`.tf.b{display:none}`) — esa regla
+    quedó huérfana cuando el HTML de fotos se sacó en la ronda anterior, y al restaurar
+    el HTML volvía a activarse y anulaba el efecto. Se removió esa parte específica,
+    dejando intacta la parte de `.hero-stats` de ese mismo bloque (esa sigue siendo
+    necesaria y está bien).
+  - Verificado con capturas reales: el efecto se ve completo en desktop (1440) y mobile
+    (390), con margen entre las fotos y el título — no hay superposición sobre texto.
+- Validado sin overflow horizontal en 360/390/412/430/768/1024/1440.
+- Pendiente, NO se tocó todavía (requiere más cuidado, se avisó al usuario antes de
+  encararlo): las ~4 capas de "correction layer"/`!important` acumuladas en el CSS
+  siguen ahí sin consolidar. Es deuda técnica real pero no bloquea nada visible hoy.
+- Archivos tocados: `index.html`, `SESSION_STATUS.md`. No se tocó el software.
+- Estado: validado localmente, no pusheado todavía — pendiente de mostrarle antes/después
+  a Matías y su OK explícito antes de commitear/pushear.
