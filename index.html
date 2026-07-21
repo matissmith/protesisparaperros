@@ -536,10 +536,24 @@
      Landing stabilization layer — 2026-07-20
      Mantiene identidad Ache, reduce títulos sobreactuados y suaviza cortes.
   ───────────────────────────────────────────────────────────── */
+  .hero{margin-bottom:0 !important;}
   .problem-section{
-    background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 18%,#FFFFFF 100%) !important;
-    padding:86px 0 84px !important;
+    position:relative !important;
+    margin-top:-1px !important;
+    padding:46px 0 84px !important;
+    border-top:0 !important;
+    background:
+      radial-gradient(900px 220px at 50% 0%, rgba(23,53,85,.08), transparent 62%),
+      linear-gradient(180deg,#F4F7FB 0%,#FFFFFF 100%) !important;
   }
+  .problem-section::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;top:-54px;height:54px;
+    background:linear-gradient(180deg,rgba(244,247,251,0),#F4F7FB 88%);
+    pointer-events:none;
+  }
+  .problem-section .container{position:relative;z-index:1;}
   .problem-card-dark h2{
     font-size:clamp(38px,4vw,64px) !important;
     line-height:1.02 !important;
@@ -578,7 +592,8 @@
   .cta .cta-copy p{color:rgba(255,255,255,.74) !important}
   .cta-note{border-left-color:var(--amber) !important;color:rgba(255,255,255,.76) !important}
   @media(max-width:768px){
-    .problem-section{padding:48px 0 54px !important;background:#F7FAFD !important}
+    .problem-section{padding:32px 0 54px !important;background:#F7FAFD !important}
+    .problem-section::before{top:-30px;height:30px}
     .problem-grid{gap:16px !important}
     .problem-card{border-radius:22px !important;padding:26px !important}
     .problem-card-dark h2{font-size:clamp(31px,9vw,42px) !important;line-height:1.04 !important}

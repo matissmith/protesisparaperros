@@ -66,3 +66,8 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Motivo: sostener regla de cero emojis/símbolos informales en la web institucional.
 - No se tocó software, CAD, Streamlit, ni repos externos.
 
+## 2026-07-20 — Ajuste visual hero → problema
+- Se corrigió el salto abrupto entre el hero oscuro y la sección blanca de problema/respuesta.
+- Cambio limitado a CSS de landing: transición suave con gradiente superior, menor padding inicial y sin tocar textos, software, CAD ni integración.
+- Archivos previstos para commit: `index.html` y `SESSION_STATUS.md`.
+
