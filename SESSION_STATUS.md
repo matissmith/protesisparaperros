@@ -942,3 +942,152 @@ push de ambos commits de código (`3670fd1` y el de esta corrección). Sí se pu
 una nueva versión del Apps Script (Versión 2, misma URL). Pendiente: publicar la
 próxima versión del Apps Script con este fix de WhatsApp (ver checklist en el mensaje
 de cierre de esta sesión).
+
+---
+
+## 2026-07-21 — Consolidación visual de 17 a 7 bloques (Claude, sesión de continuación, INTERRUMPIDA por Matías antes de terminar la validación visual)
+
+Objetivo de esta sesión (pedido explícito de Matías): una única reestructuración
+visual y de contenido de la landing, reduciendo la arquitectura de 17 secciones a 7
+bloques visibles, sin tocar Apps Script, Google Sheets, endpoint, payloads, nombres de
+campos, listeners, lógica condicional ni analytics. Sin rollback, sin librerías nuevas,
+sin imágenes nuevas, sin push/deploy hasta aprobación visual.
+
+**Matías interrumpió la sesión** en medio de la validación visual (capturas) pidiendo
+cerrar con lo ya hecho: commit local, build, y actualización de este archivo, sin más
+iteraciones. Por eso esta entrada documenta el corte real, no un cierre de fase.
+
+### Mecanismo usado (no se borró nada)
+Todo lo que el pedido de Matías califica como "fusionar o retirar como sección
+independiente" se implementó con una clase nueva `.retire-block{display:none}`
+agregada al elemento de sección/bloque correspondiente — el HTML, los `id`, los
+formularios y los listeners siguen intactos en el DOM, solo dejan de ser visibles.
+Nada se borró del código. Esto permite reactivar cualquier bloque quitando la clase.
+
+### Secciones visibles finales (7 bloques, de arriba a abajo)
+1. **Hero** (`<section class="hero">`) — sin cambios de estructura, solo fix tipográfico (ver abajo).
+2. **Productos** (`#dispositivos`) — sin cambios de contenido en esta sesión (ya
+   estaba en el orden Prótesis→Arnés→Órtesis→Carro de una sesión anterior). **No
+   llegó a revisarse visualmente si el encuadre de imagen/marca de Gemini está
+   resuelto en esta sesión** — pendiente real, ver más abajo.
+3. **Cómo trabajamos** (`#como`) — compactado a fila de 4 (2x2 en tablet, 1 columna
+   en mobile vía media queries nuevas) + nota breve agregada debajo de los pasos con
+   el texto exacto pedido ("El envío del caso no implica una compra...").
+4. **Formulario de caso** (`#contacto-caso`) — sin cambios funcionales ni de campos.
+   Se revisó el CSS de radios/checkboxes (`.opt-grid`) y ya cumplía lo pedido (control
+   a la izquierda, texto al lado, tarjeta de ancho completo, estado seleccionado con
+   borde/fondo ámbar) de una sesión anterior — **no se alcanzó a confirmar esto con
+   una captura real en esta sesión**, solo por lectura de CSS.
+5. **Biomechanics Studio + profesionales** (`#tecnologia` + `#profesionales`
+   fusionados visualmente) — se reemplazó el copy de `#profesionales` por el texto
+   corto pedido ("Buscamos veterinarios, rehabilitadores y fabricantes de Argentina y
+   Latinoamérica...") + un único CTA ("Solicitar una demo o participar del piloto").
+   El formulario profesional (`#profForm`) se convirtió de `<div>` a `<details>/<summary>`
+   nativo (colapsado por defecto) para que no ocupe pantalla completa antes de que el
+   usuario lo pida — mismo `<form id="professionalForm">` adentro, sin tocar campos.
+6. **Ache, equipo y respaldo** (`#sobre-ache` + `#equipo` fusionados visualmente) —
+   el H2 y el párrafo de Sobre Ache se reemplazaron por el texto institucional exacto
+   pedido; se ocultaron los "3 diferenciales" como tarjetas separadas. La sección
+   "Contacto directo con Matías" se ocultó completa (su función queda cubierta por el
+   widget de WhatsApp + la mención de Matías como CEO en Equipo).
+7. **FAQ y cierre** (`#faq` + `#contacto`) — FAQ reducido a las 5 preguntas pedidas
+   (faq_id 1, 2, 4, 5, 10); las otras 6 quedan ocultas con `.retire-block` (siguen en
+   el DOM, sin romper la numeración de `faq_open`). El cierre reemplaza las 3 tarjetas
+   grandes por 2 CTA simples ("Evaluar un caso" / "Solicitar una demo"); las 3
+   tarjetas viejas quedan ocultas, no borradas.
+
+### Secciones ocultas (con `.retire-block`, no borradas)
+`#selector` ("¿Qué estás buscando?"), `.problem-section` ("Cada perro necesita una
+respuesta diferente"), `#orientador` ("¿No sabés qué dispositivo necesita?"), la
+sección sin id "Qué sucede después" (con las 3 tarjetas "Podemos avanzar" / etc.), el
+`grid2` "Hoy permite / En desarrollo" dentro de `#tecnologia`, el `grid3` de roles
+(Veterinarios/Rehabilitadores/Fabricantes) y el `grid2` "Participar implica / El
+profesional recibe" dentro de `#profesionales`, el `grid3` de "3 diferenciales" dentro
+de `#sobre-ache`, la sección completa "Contacto directo con Matías", el `.close-grid`
+de 3 tarjetas del cierre, y 6 de las 11 preguntas del FAQ (faq_id 3, 6, 7, 8, 9, 11).
+
+### Cambios de copy/texto (exactos, sin tocar lógica)
+- Widget de WhatsApp: `.wa-label` cambiado de "Hablá directo con el CEO" a
+  "Hablar con Matías" (solo el texto visible; número, `href` y tracking intactos).
+- Hero, Cómo trabajamos, Profesionales, Sobre Ache y Cierre: textos exactos pedidos
+  por Matías aplicados donde correspondía (ver arriba).
+
+### Fix tipográfico del Hero (el más validado visualmente de esta sesión)
+Causa real: `.hero h1` heredaba `text-transform:uppercase` de `.display` y tenía
+`font-size:clamp(40px,6vw,74px)` dentro de una columna angosta (`hero-in` con
+`1.08fr .92fr`) — el texto en mayúsculas no entraba y el h1 terminaba renderizando en
+4 líneas en vez de las 2 lógicas del HTML.
+Fix aplicado (confirmado con una captura real en desktop 1440px, ver abajo):
+`.hero h1{text-transform:none;font-size:clamp(34px,4vw,54px);line-height:1.08;max-width:640px}`,
+más `.hero-in{grid-template-columns:1.18fr .82fr}` (más ancho para el texto) y
+`.hero{min-height:88vh}` (antes `100vh`). Resultado verificado: el título ahora
+renderiza en 3 líneas reales en desktop 1440px, con case natural (no todo en
+mayúsculas) y el acento ámbar ya no domina toda la pantalla.
+
+### Transiciones/decoración reducidas (cambio mínimo, sin tocar `.reveal`)
+`.hero .glow`/`.glow2` y `.emblem-wm` perdieron su `animation` (flotación/rotación
+continua); `.cursor-ring` (el cursor personalizado que sigue al mouse) se ocultó con
+`display:none`. Se mantuvo el `.reveal` (fade-in al hacer scroll) y los hovers
+existentes, tal como pide la consigna ("apariciones suaves, hover simple").
+
+### Validación técnica hecha
+- Balance de tags (`section` 15/15, `form` 2/2, `div` 222/222, `details` 12/12,
+  `summary` 12/12) — sin romper anidamiento.
+- `git diff --check`: sin problemas de whitespace/conflictos.
+- `bash build.sh`: corrido 1 vez, OK. `dist/` contiene solo `index.html` + `assets/`
+  públicos (mismo filtro de sesiones anteriores).
+- Consola del navegador (preview local): sin errores de JS. Los únicos warnings son
+  los esperados de Meta Pixel (`Invalid PixelID: null`, por el placeholder sin
+  reemplazar, ya documentado en sesiones previas, no es un problema nuevo).
+- Anclas de nav (`#dispositivos`, `#como`, `#tecnologia`, `#profesionales`,
+  `#sobre-ache`) — todas siguen resolviendo a secciones visibles; ocultar sub-bloques
+  no rompió ninguna, porque los `id` de nav apuntan a las secciones contenedoras, no a
+  los bloques retirados.
+- **Única captura real lograda**: hero desktop @1440px (antes/después del fix de
+  tipografía), confirmando 3 líneas, case natural, acento ámbar no dominante.
+
+### Pendiente real, sin maquillar (la sesión se cortó acá, a pedido explícito)
+1. **No se llegó a confirmar visualmente** la sección Productos (encuadre de imagen /
+   ausencia de marca de Gemini), el Formulario de caso (radios/checkboxes en
+   viewport real), Biomechanics Studio + Profesionales fusionado, ni ninguna vista
+   mobile — la herramienta de preview tuvo un problema puntual de scroll/captura
+   (pantalla en negro al hacer `scrollIntoView` a `#dispositivos`, resuelto
+   parcialmente pero no llegó a producir una captura útil) y Matías pidió detener
+   antes de seguir insistiendo.
+2. **No se revisó si el orden/tratamiento visual de las tarjetas de Productos**
+   (recorte de imagen, `object-position`, ausencia de marca de Gemini) quedó
+   resuelto — no se tocó esa sección en esta sesión, se llegó a leer el HTML/CSS
+   existente (`.sol-media{aspect-ratio:3/2;overflow:hidden}` + `object-fit:cover`,
+   heredado de una sesión anterior que ya corrigió un recorte de tarjeta) pero no se
+   confirmó con captura si las 4 imágenes (`protesis.png`, `arnes.png`,
+   `ortesis.png`, `carro.png`) muestran alguna marca de agua de Gemini visible.
+3. **El `<details id="profForm">`** (formulario profesional colapsado) no se probó
+   funcionalmente en navegador — se armó por lectura de código (etiquetas
+   balanceadas, `id`s intactos), pero no se confirmó que abrir/cerrar el acordeón no
+   rompa el submit ni el `toggleFabricanteBlock` existente.
+4. No se revisó `#como` compactado ni el nuevo cierre de 2 CTAs con una captura real.
+5. No se probó nada en mobile (360/390/768) en esta sesión.
+
+### Archivos modificados en esta sesión
+- `index.html` (todos los cambios descritos arriba: capa CSS nueva
+  "Ache consolidación — 2026-07-21", clases `.retire-block` agregadas a los bloques
+  retirados, fix tipográfico del hero, compactación de `#como`, fusión de copy en
+  `#profesionales`/`#sobre-ache`, `<details>` para `#profForm`, cierre de 2 CTA,
+  reducción de 6 preguntas del FAQ, texto del widget de WhatsApp).
+- `SESSION_STATUS.md` (esta entrada).
+No se tocó `ache-leads-appscript.gs`, `AGENTS.md`, `build.sh` ni `assets/`. No se hizo
+push ni deploy. No se modificaron payloads, nombres de campos, `required`, listeners,
+lógica condicional ni eventos de analytics — se verificó por lectura de código que
+ningún campo de formulario ni nombre de evento cambió, solo copy visible y CSS.
+
+### Punto exacto para continuar
+1. Levantar el servidor de preview (`ache-static`, puerto 8934) y resolver el
+   problema puntual de captura en `#dispositivos` (probablemente alcanza con
+   navegar con el nav real en vez de `scrollIntoView` + JS, o esperar a que termine
+   el `reveal` antes de capturar).
+2. Tomar las capturas pendientes: Productos desktop, Formulario desktop (radios/
+   checkboxes), Biomechanics Studio desktop, Equipo desktop, Hero mobile, Formulario
+   mobile — exactamente las 7 que pidió Matías en la consigna original.
+3. Confirmar visualmente que el `<details id="profForm">` abre/cierra bien y que el
+   submit del formulario profesional sigue funcionando igual que antes.
+4. Recién con esas capturas aprobadas por Matías, evaluar push/deploy — no antes.

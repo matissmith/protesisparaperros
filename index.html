@@ -71,7 +71,7 @@
   .burger span{display:block;width:22px;height:2px;background:currentColor;border-radius:999px;margin:5px 0}
 
   /* ---------- HERO ---------- */
-  .hero{position:relative;min-height:100vh;display:flex;align-items:center;color:#fff;overflow:hidden;
+  .hero{position:relative;min-height:88vh;display:flex;align-items:center;color:#fff;overflow:hidden;
     background:radial-gradient(120% 90% at 80% -10%,#243a63 0%,var(--navy) 34%,var(--navy-900) 78%)}
   .hero .glow{position:absolute;width:640px;height:640px;right:-140px;top:-120px;border-radius:50%;
     background:radial-gradient(circle,rgba(239,169,44,.28),transparent 60%);filter:blur(20px);animation:float 12s ease-in-out infinite}
@@ -81,10 +81,10 @@
     background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
     background-size:46px 46px;mask-image:radial-gradient(90% 80% at 50% 40%,#000,transparent 85%)}
   .hero .emblem-wm{position:absolute;right:-4%;bottom:-8%;width:min(46vw,620px);opacity:.06;animation:spin 60s linear infinite}
-  .hero-in{position:relative;z-index:3;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;padding-top:90px}
+  .hero-in{position:relative;z-index:3;display:grid;grid-template-columns:1.18fr .82fr;gap:40px;align-items:center;padding-top:90px}
   .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:26px}
   .eyebrow::before{content:"";width:30px;height:1.5px;background:var(--amber)}
-  .hero h1{color:#fff;font-size:clamp(40px,6vw,74px);line-height:.98;margin-bottom:24px}
+  .hero h1{color:#fff;font-size:clamp(34px,4vw,54px);line-height:1.08;margin-bottom:24px;text-transform:none;max-width:640px}
   .hero h1 .ln{display:block;overflow:hidden}
   .hero h1 .ln > span{display:block;transform:translateY(110%);animation:rise .9s var(--ease) forwards}
   .hero h1 .ln:nth-child(2) > span{animation-delay:.12s}
@@ -633,6 +633,55 @@
     .orient-grid{grid-template-columns:repeat(2,1fr)}
     .direct-card{grid-template-columns:1fr;text-align:left}
   }
+
+  /* ─────────────────────────────────────────────────────────────
+     Ache consolidación — 2026-07-21
+     Reduce la arquitectura de 17 bloques a 7 sin borrar lógica ni
+     formularios: los bloques listados quedan ocultos (display:none)
+     pero siguen en el DOM, con sus listeners e IDs intactos.
+  ───────────────────────────────────────────────────────────── */
+  .retire-block{display:none}
+
+  /* Cómo trabajamos: 4 pasos compactos en fila (2x2 en tablet, 1 col en mobile) */
+  #como .wrap.como-grid{grid-template-columns:1fr;gap:28px}
+  #como .como-left{position:static;max-width:720px}
+  #como .steps{grid-template-columns:repeat(4,1fr);gap:16px}
+  #como .step{padding:22px 20px;grid-template-columns:1fr;gap:8px}
+  #como .step:hover{transform:translateY(-4px)}
+  #como .step .num{font-size:16px}
+  #como .step h3{font-size:16.5px}
+  #como .step p{font-size:13.5px}
+  .como-note{margin-top:22px;font-size:13.5px;color:var(--muted);border-left:2px solid var(--amber);padding-left:15px;max-width:760px}
+  @media(max-width:900px){
+    #como .steps{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:600px){
+    #como .steps{grid-template-columns:1fr}
+  }
+
+  /* Biomechanics Studio + profesionales: un único bloque, formulario colapsado */
+  #profesionales .intro{max-width:640px}
+  details#profForm{cursor:default}
+  details#profForm summary{cursor:pointer;list-style:none}
+  details#profForm summary::-webkit-details-marker{display:none}
+  details#profForm summary::after{content:"Hacé clic para expandir el formulario ↓";display:block;font-size:12.5px;font-weight:700;color:var(--amber-dk);margin-top:10px}
+  details#profForm[open] summary::after{content:"Formulario abierto ↑"}
+  details#profForm summary h3{display:inline}
+
+  /* Ache / equipo / respaldo: fusión visual en un solo bloque continuo */
+  #sobre-ache{padding-bottom:0}
+  #equipo{padding-top:36px}
+  #equipo .sec-tag{display:none}
+
+  /* Cierre: reemplaza las 3 tarjetas por 2 CTA simples */
+  .close-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+
+  /* Transiciones: se retiran movimientos continuos/decorativos que no aportan
+     comprensión ni conversión (regla explícita: solo apariciones suaves, hover
+     simple, transiciones breves). Se conserva el .reveal (fade-in al scroll). */
+  .hero .glow,.hero .glow2{animation:none}
+  .hero .emblem-wm{animation:none}
+  .cursor-ring{display:none!important}
 </style>
 
 <!-- =====================================================================
@@ -739,7 +788,7 @@
 </section>
 
 <!-- SELECTOR TUTOR / PROFESIONAL -->
-<section id="selector" class="section light">
+<section id="selector" class="section light retire-block">
   <div class="wrap">
     <div class="reveal">
       <span class="sec-tag">¿Qué estás buscando?</span>
@@ -761,7 +810,7 @@
 </section>
 
 <!-- PROBLEMA -->
-<section class="problem-section">
+<section class="problem-section retire-block">
   <div class="wrap">
     <article class="problem-card problem-card-dark" style="max-width:900px">
       <span class="sec-tag">El problema</span>
@@ -790,7 +839,7 @@
 </section>
 
 <!-- ORIENTADOR -->
-<section id="orientador" class="section light">
+<section id="orientador" class="section light retire-block">
   <div class="wrap">
     <div class="reveal" style="max-width:680px">
       <span class="sec-tag">¿No sabés qué dispositivo necesita?</span>
@@ -823,6 +872,7 @@
       <div class="step reveal d2"><div class="num">03</div><div><h3>Definimos cómo avanzar</h3><p>Podemos coordinar una evaluación, preparar una propuesta, sumar el caso a un piloto o trabajar junto con un proveedor especializado.</p></div></div>
       <div class="step reveal d3"><div class="num">04</div><div><h3>Confirmamos las condiciones</h3><p>Antes de cualquier pago, te explicamos el alcance, los próximos pasos, la disponibilidad y las condiciones necesarias para avanzar.</p></div></div>
     </div>
+    <p class="como-note reveal">El envío del caso no implica una compra. Después de revisar la información te indicaremos si podemos avanzar, si necesitamos más datos o si corresponde otra alternativa.</p>
   </div>
 </section>
 
@@ -1025,7 +1075,7 @@
 </section>
 
 <!-- QUÉ SUCEDE DESPUÉS -->
-<section class="section light" style="padding-top:0">
+<section class="section light retire-block" style="padding-top:0">
   <div class="wrap">
     <div class="reveal" style="max-width:680px">
       <span class="sec-tag">Qué sucede después</span>
@@ -1064,7 +1114,7 @@
       </div>
     </div>
   </div>
-  <div class="wrap" style="margin-top:64px">
+  <div class="wrap retire-block" style="margin-top:64px">
     <div class="grid2">
       <div class="info-card reveal">
         <h4>Hoy permite</h4>
@@ -1100,14 +1150,15 @@
     <div class="reveal" style="max-width:700px">
       <span class="sec-tag">Programa profesional</span>
       <h2 class="display">Una plataforma que se valida con profesionales</h2>
-      <p class="intro">Buscamos veterinarios, rehabilitadores y fabricantes que quieran probar Biomechanics Studio con casos reales y ayudarnos a mejorar el producto antes de su apertura comercial.</p>
+      <p class="intro">Buscamos veterinarios, rehabilitadores y fabricantes de Argentina y Latinoamérica para demos guiadas, pilotos y alianzas.</p>
+      <a href="#profForm" class="btn btn-pri btn-lg" style="margin-top:22px" onclick="document.getElementById('profForm').open=true;acheTrack('professional_demo_click')">Solicitar una demo o participar del piloto</a>
     </div>
-    <div class="grid3">
+    <div class="grid3 retire-block">
       <div class="info-card reveal"><h4>Veterinarios</h4><p>Para documentar casos, reunir la información necesaria y revisar propuestas antes de avanzar.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a></div>
       <div class="info-card reveal d1"><h4>Rehabilitadores</h4><p>Para aportar información funcional, acompañar el seguimiento y registrar cambios durante el proceso de rehabilitación.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex">Sumarse como rehabilitador</a></div>
       <div class="info-card reveal d2"><h4>Fabricantes y ortopedias</h4><p>Para recibir casos mejor documentados, revisar especificaciones y reducir intercambios innecesarios antes de fabricar.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex">Evaluar una colaboración</a></div>
     </div>
-    <div class="grid2" style="margin-top:52px">
+    <div class="grid2 retire-block" style="margin-top:52px">
       <div class="info-card reveal"><h4>Participar implica</h4>
         <ul class="check-list"><li>Demo inicial</li><li>Carga de uno o más casos</li><li>Feedback sobre el recorrido</li><li>Revisión de campos y reportes</li><li>Reuniones breves de seguimiento</li></ul>
       </div>
@@ -1116,9 +1167,9 @@
       </div>
     </div>
 
-    <div class="form-card reveal d2" style="max-width:760px;margin:52px auto 0" id="profForm">
-      <h3>Solicitar participación</h3>
-      <p class="sub">Formulario independiente para veterinarios, rehabilitadores y fabricantes.</p>
+    <details class="form-card reveal d2" style="max-width:760px;margin:52px auto 0" id="profForm">
+      <summary><h3 style="display:inline">Solicitar participación</h3>
+      <p class="sub">Formulario independiente para veterinarios, rehabilitadores y fabricantes.</p></summary>
       <form id="professionalForm">
         <input type="hidden" name="tipo" value="profesional">
         <h3 class="form-card-h">Perfil</h3>
@@ -1184,7 +1235,7 @@
         <div class="form-err" id="profFormErr"></div>
       </form>
       <div class="form-ok" id="profFormOk"></div>
-    </div>
+    </details>
   </div>
 </section>
 
@@ -1193,11 +1244,10 @@
   <div class="wrap">
     <div class="reveal" style="max-width:760px">
       <span class="sec-tag">Sobre Ache</span>
-      <h2 class="display">Tecnología, diseño y salud animal para desarrollar mejores soluciones de movilidad.</h2>
-      <p class="intro">Ache Innovation es una startup argentina que desarrolla dispositivos y herramientas digitales para mejorar la movilidad y la rehabilitación animal. Combinamos diseño de producto, conocimiento veterinario y tecnología para transformar información clínica y morfológica en soluciones adaptadas a cada caso.</p>
-      <p class="intro">Hoy estamos validando nuestras primeras líneas para perros y construyendo una red de profesionales, fabricantes e instituciones con alcance en Argentina y Latinoamérica.</p>
+      <h2 class="display">Ache, equipo y respaldo</h2>
+      <p class="intro">Ache Innovation es una startup argentina que combina diseño de producto, conocimiento veterinario y tecnología para desarrollar soluciones de movilidad y rehabilitación animal.</p>
     </div>
-    <div class="grid3">
+    <div class="grid3 retire-block">
       <div class="info-card reveal"><h4>Cada caso parte del animal</h4><p>No comenzamos por un talle o un producto estándar. Primero buscamos entender la anatomía, la condición y la necesidad funcional.</p></div>
       <div class="info-card reveal d1"><h4>Producto físico y software se desarrollan juntos</h4><p>Biomechanics Studio organiza la información del caso y acompaña el proceso de diseño de los dispositivos.</p></div>
       <div class="info-card reveal d2"><h4>La validación ocurre con actores reales</h4><p>Trabajamos con tutores, veterinarios, rehabilitadores y proveedores especializados para probar cada solución antes de escalarla.</p></div>
@@ -1227,7 +1277,7 @@
 </section>
 
 <!-- CONTACTO DIRECTO CON MATÍAS -->
-<section class="section light" style="padding-top:0">
+<section class="section light retire-block" style="padding-top:0">
   <div class="wrap">
     <div class="reveal" style="max-width:680px">
       <span class="sec-tag">Contacto directo</span>
@@ -1254,15 +1304,15 @@
     <div class="faq-list reveal">
       <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:1})"><summary>¿Ache ya vende todos los dispositivos?</summary><p>No. El arnés de rehabilitación está en preventa, las prótesis y órtesis reciben casos piloto y la línea de carros ortopédicos continúa en desarrollo. En cada sección indicamos el estado actual.</p></details>
       <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:2})"><summary>¿Cómo sé qué dispositivo necesita mi perro?</summary><p>No hace falta saberlo antes de consultar. Podés contarnos qué está pasando y revisaremos qué línea podría corresponder o qué información profesional hace falta.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:3})"><summary>¿La evaluación inicial tiene costo?</summary><p>Depende del tipo de caso y de la instancia necesaria. Antes de avanzar, te informaremos con claridad si alguna evaluación, medición o intervención requiere un costo.</p></details>
+      <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:3})"><summary>¿La evaluación inicial tiene costo?</summary><p>Depende del tipo de caso y de la instancia necesaria. Antes de avanzar, te informaremos con claridad si alguna evaluación, medición o intervención requiere un costo.</p></details>
       <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:4})"><summary>¿Cuánto cuesta un dispositivo?</summary><p>El valor depende del tipo de solución, las medidas, la complejidad del caso y el proceso de fabricación. Después de la revisión inicial podemos indicar si es posible avanzar y preparar una estimación.</p></details>
       <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:5})"><summary>¿Trabajan en todo el país?</summary><p>Recibimos consultas de toda la Argentina. La forma de evaluación, toma de medidas y entrega depende del dispositivo, la ubicación y las condiciones de cada caso.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:6})"><summary>¿Necesito la indicación de un veterinario?</summary><p>Depende del producto y del estado del animal. En prótesis, órtesis y situaciones clínicas complejas puede ser necesario contar con la evaluación o participación del profesional tratante.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:7})"><summary>¿Ache fabrica directamente los dispositivos?</summary><p>Ache desarrolla y coordina cada solución y trabaja con proveedores especializados según el tipo de producto y las necesidades del caso.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:8})"><summary>¿Qué es Biomechanics Studio?</summary><p>Es la plataforma profesional de Ache para organizar datos clínicos, fotos y medidas, generar parámetros de diseño y producir documentación técnica revisable.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:9})"><summary>¿El software reemplaza al veterinario?</summary><p>No. Biomechanics Studio funciona como una herramienta de apoyo. La evaluación clínica y las decisiones sobre tratamiento corresponden al profesional responsable.</p></details>
+      <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:6})"><summary>¿Necesito la indicación de un veterinario?</summary><p>Depende del producto y del estado del animal. En prótesis, órtesis y situaciones clínicas complejas puede ser necesario contar con la evaluación o participación del profesional tratante.</p></details>
+      <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:7})"><summary>¿Ache fabrica directamente los dispositivos?</summary><p>Ache desarrolla y coordina cada solución y trabaja con proveedores especializados según el tipo de producto y las necesidades del caso.</p></details>
+      <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:8})"><summary>¿Qué es Biomechanics Studio?</summary><p>Es la plataforma profesional de Ache para organizar datos clínicos, fotos y medidas, generar parámetros de diseño y producir documentación técnica revisable.</p></details>
+      <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:9})"><summary>¿El software reemplaza al veterinario?</summary><p>No. Biomechanics Studio funciona como una herramienta de apoyo. La evaluación clínica y las decisiones sobre tratamiento corresponden al profesional responsable.</p></details>
       <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:10})"><summary>¿Puedo probar el software?</summary><p>La plataforma está en beta. El acceso se realiza mediante demos guiadas y programas piloto para veterinarios, rehabilitadores y fabricantes de Argentina y Latinoamérica.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:11})"><summary>¿Qué pasa con los datos que envío?</summary><p>Ache utiliza la información para responder la consulta y evaluar el caso. Solo podrá compartirla con profesionales o proveedores cuando sea necesario y exista la autorización correspondiente.</p></details>
+      <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:11})"><summary>¿Qué pasa con los datos que envío?</summary><p>Ache utiliza la información para responder la consulta y evaluar el caso. Solo podrá compartirla con profesionales o proveedores cuando sea necesario y exista la autorización correspondiente.</p></details>
     </div>
   </div>
 </section>
@@ -1275,8 +1325,12 @@
       <span class="sec-tag">Cierre</span>
       <h2 class="display">Cada caso puede ser el comienzo de una mejor solución.</h2>
       <p>Contanos qué necesita el animal, sumate a la preventa del arnés o participá en la validación profesional de Biomechanics Studio.</p>
+      <div class="close-actions reveal">
+        <a href="#contacto-caso" class="btn btn-pri btn-lg">Evaluar un caso</a>
+        <a href="#profesionales" class="btn btn-ghost btn-lg" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
+      </div>
     </div>
-    <div class="close-grid">
+    <div class="close-grid retire-block">
       <div class="close-card reveal"><h4>Evaluar el caso de un perro</h4><p>Para prótesis, órtesis o una orientación inicial.</p><a href="#contacto-caso" class="btn btn-pri">Evaluar un caso</a></div>
       <div class="close-card reveal d1"><h4>Sumarse a la preventa del arnés</h4><p>Para registrar interés y recibir información cuando se definan precio, compatibilidad y entrega.</p><a href="#contacto-caso" class="btn btn-pri" onclick="document.getElementById('productoSel').value='Arnés';if(window.toggleProductoCond)toggleProductoCond();acheTrack('product_arnes_click')">Sumarme a la preventa</a></div>
       <div class="close-card reveal d2"><h4>Participar como profesional</h4><p>Para demos, pilotos, derivación de casos o alianzas de fabricación.</p><a href="#profesionales" class="btn btn-pri">Participar como profesional</a></div>
@@ -1323,7 +1377,7 @@
 </footer>
 
 <a class="wa-float" href="https://wa.me/5491123199500?text=Hola%2C%20estoy%20interesado%20en%20uno%20de%20sus%20productos.%20Te%20comento%20cu%C3%A1l%3A" aria-label="Escribinos por WhatsApp" target="_blank" rel="noopener">
-  <span class="wa-label">Hablá directo con el CEO</span>
+  <span class="wa-label">Hablar con Matías</span>
   <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12 2a10 10 0 0 0-8.5 15.28L2 22l4.85-1.27A10 10 0 1 0 12 2z"/></svg>
 </a>
 
