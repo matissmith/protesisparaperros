@@ -504,6 +504,8 @@
   .studio-step b{display:block;color:var(--amber);font-family:'Barlow Condensed',sans-serif;font-size:26px;line-height:1;margin-bottom:6px}
   .studio-step span{display:block;color:var(--ink);font-weight:900;margin-bottom:4px;font-size:14.5px}
   .studio-step small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+  .studio-cta-group{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+  .studio-cta-group .sol-cta{padding:10px 2px}
 
   @media(max-width:900px){
     .problem-grid{grid-template-columns:1fr !important}
@@ -678,6 +680,7 @@
   #profesionales{padding:28px 0 56px;background:transparent;color:var(--txt);scroll-margin-top:82px}
   #profesionales>.wrap>div.reveal{display:none}
   #profesionales details#profForm{max-width:1160px!important;margin:0 auto!important}
+  details#profForm.reveal{opacity:1;transform:none;transition:none}
   details#profForm{cursor:default}
   details#profForm:not([open]){padding:16px 18px;background:#F7FAFD;border:1px solid #DCE5EE;border-radius:16px;box-shadow:none}
   details#profForm summary{cursor:pointer;list-style:none}
@@ -1139,9 +1142,10 @@
         <div class="studio-step"><b>03</b><span>Propuesta técnica revisable</span><small>Los datos del caso se convierten en parámetros y documentación que pueden analizarse antes de fabricar.</small></div>
         <div class="studio-step"><b>04</b><span>Seguimiento y trazabilidad</span><small>El equipo puede conocer qué información falta, qué versión está vigente y en qué estado se encuentra cada caso.</small></div>
       </div>
-      <div class="hero-cta" style="margin-top:6px">
-        <a class="btn btn-pri btn-lg" href="#profForm" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a>
-        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" onclick="acheTrack('professional_demo_click')">Solicitar una demo guiada</a>
+      <div class="studio-cta-group">
+        <a class="btn btn-pri btn-lg" href="https://app.protesisparaperros.com.ar" target="_blank" rel="noopener noreferrer" onclick="acheTrack('studio_open_click')">Abrir Biomechanics Studio</a>
+        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Solicitar una demo guiada</a>
+        <a class="sol-cta" href="#profForm" data-prof-interest="pilot" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a>
       </div>
     </div>
   </div>
@@ -1351,7 +1355,7 @@
       <p>Contanos qué necesita el animal o conocé cómo participar en la validación profesional de Biomechanics Studio.</p>
       <div class="close-actions reveal">
         <a href="#contacto-caso" class="btn btn-pri btn-lg">Evaluar un caso</a>
-        <a href="#profForm" class="btn btn-ghost btn-lg" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
+        <a href="#profForm" class="btn btn-ghost btn-lg" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
       </div>
     </div>
     <div class="close-grid retire-block">
@@ -1477,7 +1481,14 @@
       const t=document.querySelector(id); if(!t) return;
       e.preventDefault();
       if(anchorScrollFrame){cancelAnimationFrame(anchorScrollFrame);anchorScrollFrame=null;}
-      if(id==='#profForm') t.open=true;
+      if(id==='#profForm'){
+        t.open=true;
+        const interest=a.dataset.profInterest;
+        const interestField=interest==='pilot'
+          ? t.querySelector('[name="interes_probar"]')
+          : interest==='demo' ? t.querySelector('[name="interes_demo"]') : null;
+        if(interestField) interestField.checked=true;
+      }
       const navH=78, startY=window.scrollY, endY=t.getBoundingClientRect().top+startY-navH, dist=endY-startY;
       if(reduce){window.scrollTo(0,endY);return;}
       const dur=Math.min(1100,Math.max(500,Math.abs(dist)*0.55)); let s=null;
