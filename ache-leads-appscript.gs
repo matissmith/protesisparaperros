@@ -117,7 +117,7 @@ function doPost(e) {
       new Date(),
       sanitizeForSheet(data.producto),
       sanitizeForSheet(data.nombre),
-      sanitizeForSheet(data.contacto),
+      forceTextForSheet(data.contacto),
       sanitizeForSheet(data.raza),
       sanitizeForSheet(data.raza_detalle),
       sanitizeForSheet(data.zona),
@@ -153,7 +153,7 @@ function doPost(e) {
       sanitizeForSheet(data.solucion_actual),
       sanitizeForSheet(data.descripcion),
       sanitizeForSheet(data.intencion),
-      sanitizeForSheet(data.whatsapp),
+      forceTextForSheet(data.whatsapp),
       sanitizeForSheet(data.email),
       sanitizeForSheet(data.medio_contacto),
       sanitizeForSheet(data.horario),
@@ -257,6 +257,15 @@ function isValidConsent(value) {
 function sanitizeForSheet(value) {
   const text = value === undefined || value === null ? '' : String(value);
   return /^[=+\-@]/.test(text) ? "'" + text : text;
+}
+
+// Fuerza texto plano en Sheets (evita que números puramente numéricos como
+// "0000000000" pierdan ceros a la izquierda al convertirse a Number). El
+// apóstrofo inicial no se muestra: Sheets lo interpreta como marca de texto,
+// igual que ya hace sanitizeForSheet para valores que empiezan con =+-@.
+function forceTextForSheet(value) {
+  const text = value === undefined || value === null ? '' : String(value);
+  return "'" + text;
 }
 
 function getOrCreateSheet() {

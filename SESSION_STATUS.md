@@ -800,3 +800,145 @@ más el commit de esta sesión (Fase 4, ver encabezado del commit en `git log`).
 No se tocó `build.sh`, `AGENTS.md`, `assets/` ni `ache-leads-appscript.gs`
 (no requirió cambios: ya cumplía lo pedido, ver punto 2). No se hizo push ni
 deploy ni se publicó el Apps Script.
+
+---
+
+## 2026-07-21 — Publicación guiada de Fase 4 + prueba real controlada + fix de WhatsApp (Claude, sesión de continuación)
+
+Objetivo de esta sesión: ejecutar el checklist de publicación de `RELEASE_CHECKLIST.md`
+paso a paso junto con Matías (él hace los clics reales en su navegador y Google
+Workspace, a los que Claude no tiene acceso directo — ver limitación técnica abajo),
+hasta cerrar una prueba real controlada del formulario de caso contra el Apps Script
+y Sheet ya publicados, y corregir el único bug real encontrado.
+
+### Limitación técnica encontrada y confirmada
+La herramienta "Claude para Chrome" tiene bloqueado a nivel de la propia herramienta
+(no es un permiso de usuario ni de la extensión) el acceso a `docs.google.com` (lectura
+y capturas) y la navegación a `protesisparaperros.com.ar` ("Navigation to this domain
+is not allowed"). Esto significa que ninguna sesión de Claude puede operar Google
+Sheets/Apps Script ni el sitio público de forma autónoma vía navegador — todo lo que
+sigue se hizo con Matías ejecutando los clics reales y compartiendo capturas/pegando
+texto, con Claude guiando paso a paso y verificando cada resultado.
+
+### 1. Push y deploy del commit de cierre de Fase 4
+- `git push origin main`: exitoso, sin conflictos (`0fd42bc` ya estaba commiteado de
+  la sesión anterior, más el fix de `#profForm` de esta sesión — ver punto 2).
+- Cloudflare Pages: confirmado indirectamente (no hay acceso al dashboard) — el HTML
+  servido en `https://protesisparaperros.com.ar/` contiene los marcadores únicos del
+  commit publicado (`faq_id:1..11`), `HTTP/2 200`, headers `server: cloudflare`.
+
+### 2. Fix visual: superposición del nav en `#profForm`
+Encontrado en la revisión funcional del Paso 3 del checklist: el `div#profForm` no
+tenía `scroll-margin-top`, a diferencia de las `.section` (que ya usan 82px), así que
+al navegar directo a esa ancla el título quedaba tapado por el nav fijo, en desktop y
+mobile. Fix de una línea: `#profForm{scroll-margin-top:82px}` agregado en `index.html`.
+Verificado por geometría exacta del DOM (la captura de pantalla de la herramienta de
+preview falló en scrolls profundos por un bug propio de esa herramienta, no del sitio;
+confirmado que ocurría también en posiciones sin relación con este fix). Commit
+`3670fd1`, pusheado y confirmado publicado (la regla ya aparece en el HTML servido).
+
+### 3. Actualización del Apps Script (nueva versión, misma URL)
+Guiado paso a paso: Matías abrió el proyecto de Apps Script vinculado a la planilla
+"ache Innovation — Leads" (confirmado como el proyecto correcto: tenía `doPost` y
+`SHEET_NAME = 'Leads'`, con las 14 columnas viejas intactas). Reemplazó el contenido
+completo por el `ache-leads-appscript.gs` ya extendido (validado en la sesión
+anterior), guardó, y creó una **nueva versión de la implementación existente**
+(Implementar > Gestionar implementaciones > editar > Nueva versión > Implementar) —
+confirmado que la URL de `/exec` no cambió (mismo ID de implementación que la versión
+anterior) y que la versión activa pasó a ser "Versión 2 del 21 jul 2026".
+
+**Aviso importante detectado y comunicado:** el código nuevo lee el mail de aviso
+(`NOTIFY_EMAIL`) desde una Propiedad del Script en vez de tenerlo hardcodeado como
+antes. Esto significa que, hasta que se configure esa propiedad manualmente, **los
+leads se siguen guardando bien pero deja de llegar el mail de aviso**. Pendiente,
+no resuelto en esta sesión (fuera de alcance de lo pedido).
+
+### 4. Headers del Sheet actualizados
+Diagnóstico correcto (con corrección de un error de conteo de la sesión anterior):
+**faltaban 52 encabezados nuevos** (no 48, como decía una entrada previa de este
+mismo archivo — se contó mal en su momento; el conteo real de `getOrCreateSheet` es
+14 viejos + 52 nuevos = 66 columnas totales, de A a BN). Matías pegó los 52 encabezados
+como una fila (texto separado por tabulaciones) desde O1, verificado con Ctrl+Flecha
+derecha que no quedó ninguna columna vacía en el medio y que el último encabezado cae
+exacto en BN1 ("Fabricante: interés en Studio").
+
+### 5. Prueba real controlada (formulario de caso, producto Prótesis)
+**Se hizo una sola prueba real**, con datos identificables ("TEST ACHE", "Matias
+TEST", "PRUEBA CONTROLADA — eliminar después"), enviada de verdad desde el sitio en
+vivo (confirmado por la columna "Página" de la fila resultante: URL real, no
+localhost). Quedó registrada en la **fila 7** de la hoja "Leads". No se borró — queda
+pendiente que Matías la borre después de esta sesión.
+
+**Resultado, verificado columna por columna (valores exactos vía barra de fórmulas,
+no solo capturas):**
+- Correcto: Audience=`tutor`, Producto=`Prótesis`, Nombre del perro=`TEST ACHE`,
+  Situación/Evaluado por veterinario/Estado actual/Etapa/Extremidad afectada/
+  Amputación realizada/Muñón/Fotos disponibles, Descripción, Intención,
+  Consentimiento obligatorio=`Sí`, Página=URL real. Ningún dato corrido de columna.
+  Los campos de Arnés/Órtesis/Carro (Diagnóstico, Soporte actual, Dificultad
+  principal, Apoya 4 patas, Nivel de asistencia, Extremidades afectadas, Movilidad
+  parcial, Solución actual) llegaron **vacíos** — confirma que el filtro por producto
+  sigue sin mezclar campos de otras líneas.
+- Aclarado (no era un bug): la columna "Tipo" mostraba `caso`, no el producto — es
+  correcto por diseño, ese campo distingue formulario de caso vs. profesional; el
+  producto ya está en la columna "Producto".
+- **Bug real encontrado:** las columnas "WhatsApp" y "Contacto" mostraban literalmente
+  `0` en vez de `0000000000` — Google Sheets interpretó el texto puramente numérico
+  como número y descartó los ceros. Confirmado con la barra de fórmulas (no solo
+  visualmente). Corregido en el punto 6 de esta misma entrada.
+- Hallazgo menor, probablemente error humano al completar el formulario (no de
+  código, ya que esta sesión había validado antes con fetch interceptado que el
+  JS manda "No" correctamente cuando esos checkboxes están destildados): las columnas
+  "Consentimiento compartir" y "Consentimiento novedades" quedaron en `Sí` en vez de
+  `No`, y "Medio de contacto preferido" quedó en `WhatsApp` en vez de `Email`. No se
+  investigó más a fondo ni se corrigió — fuera del alcance pedido (solo el bug de
+  WhatsApp).
+
+### 6. Fix del bug de WhatsApp/Contacto (aplicado, con sintaxis validada)
+Causa: `sheet.appendRow([...])` en `ache-leads-appscript.gs` escribía `contacto` y
+`whatsapp` con `sanitizeForSheet()`, que solo fuerza texto (prefijo `'`) si el valor
+empieza con `=+-@` (protección contra inyección de fórmulas) — un valor puramente
+numérico como `"0000000000"` no entra en ese caso y Google Sheets lo autoconvierte a
+Number, perdiendo los ceros a la izquierda.
+
+Fix mínimo (2 líneas cambiadas + 1 función nueva, sin tocar nombres/orden de columnas
+ni ningún otro campo): se agregó `forceTextForSheet(value)` — misma idea que
+`sanitizeForSheet` pero fuerza el prefijo `'` siempre, sin condición. Se cambiaron
+únicamente las dos líneas del `appendRow` que arman `contacto` y `whatsapp` para usar
+`forceTextForSheet` en vez de `sanitizeForSheet`. El apóstrofo inicial no se muestra
+en Sheets (se interpreta como marca de "texto plano"), igual que ya pasaba con los
+valores que arrancan con `=+-@` en `sanitizeForSheet` — mismo mecanismo, ya en uso en
+este archivo, solo aplicado de forma incondicional a estos dos campos. Preserva ceros
+iniciales, `+`, espacios, guiones y códigos de país tal cual los manda el frontend.
+
+Validado: `node --check` sobre el archivo (sintaxis OK), `git diff --check` sin
+problemas de whitespace. **No se hizo una segunda prueba real** — pendiente para
+cuando Matías lo pida, después de redeployar esta versión.
+
+### Limitaciones y pendientes explícitos de esta sesión
+1. **No verificado con una prueba real post-fix todavía** — el fix de WhatsApp está
+   escrito y commiteado, pero no redeployado ni probado de nuevo (a pedido explícito,
+   "no hagas una segunda prueba real todavía").
+2. **El mail de aviso (`NOTIFY_EMAIL`) quedó sin configurar** tras la nueva versión
+   del Apps Script — los leads se guardan bien, pero no llega mail hasta que se cargue
+   esa Propiedad del Script manualmente (Configuración del proyecto > Propiedades del
+   script). No resuelto, no pedido en esta sesión.
+3. **La fila 7 de prueba (TEST ACHE) sigue en el Sheet**, sin borrar — pendiente que
+   Matías la borre cuando confirme que ya no la necesita.
+4. Los dos hallazgos menores (consentimientos opcionales en "Sí", medio de contacto en
+   "WhatsApp" en vez de "Email") no se investigaron a fondo — probablemente error de
+   carga manual del formulario de prueba, no de código, pero quedan sin confirmar
+   100%.
+5. La discrepancia de conteo de encabezados nuevos (48 vs. 52 reales) que traía una
+   entrada anterior de este archivo ya quedó corregida en el punto 4 de esta entrada.
+
+### Archivos modificados en esta sesión
+- `index.html` (1 línea: `#profForm{scroll-margin-top:82px}`).
+- `ache-leads-appscript.gs` (fix de WhatsApp/Contacto: 2 líneas cambiadas + 1 función
+  nueva `forceTextForSheet`).
+- `SESSION_STATUS.md` (esta entrada).
+No se tocó `build.sh`, `AGENTS.md`, `RELEASE_CHECKLIST.md` ni `assets/`. Sí se hizo
+push de ambos commits de código (`3670fd1` y el de esta corrección). Sí se publicó
+una nueva versión del Apps Script (Versión 2, misma URL). Pendiente: publicar la
+próxima versión del Apps Script con este fix de WhatsApp (ver checklist en el mensaje
+de cierre de esta sesión).
