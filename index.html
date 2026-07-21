@@ -143,11 +143,11 @@
 
   /* soluciones: overlapping tilt cards */
   .sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:60px}
-  .sol{position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:linear-gradient(155deg,var(--navy-600),var(--navy-800));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
+  .sol{position:relative;border-radius:18px;overflow:hidden;min-height:520px;background:linear-gradient(155deg,var(--navy-600),var(--navy-800));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
   .sol::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:28px 28px;opacity:.5}
   .sol .emb-wm{position:absolute;right:-30px;top:-20px;width:190px;opacity:.08;transition:transform .6s var(--ease);z-index:0}
   .sol:hover .emb-wm{transform:rotate(12deg) scale(1.08)}
-  .sol .sol-body{position:relative;padding:26px 32px 30px;z-index:2}
+  .sol .sol-body{position:absolute;inset:auto 0 0 0;padding:26px 32px 28px;z-index:2;text-shadow:0 1px 10px rgba(9,16,32,.7)}
   .sol .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
   .sol h3{color:#fff;font-size:24px;margin-bottom:10px}
   .sol p{color:rgba(255,255,255,.62);font-size:14.5px;max-width:360px}
@@ -261,8 +261,9 @@
 
   /* imágenes: turnkey — si falta el archivo, queda el placeholder */
   .hv-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;z-index:2}
-  .sol-media{position:relative;width:100%;aspect-ratio:3/2;z-index:1;overflow:hidden;background:rgba(255,255,255,.04)}
+  .sol-media{position:absolute;inset:0;z-index:1;overflow:hidden}
   .sol-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .sol-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,27,49,0) 0%,rgba(15,27,49,.3) 32%,rgba(15,27,49,.92) 72%,rgba(15,27,49,.99) 100%)}
   .sol.has-img .ph-tag{display:none}
   .sol.has-img .emb-wm{opacity:.12}
   .tf-media{position:absolute;inset:0}
@@ -394,10 +395,12 @@
     /* Hero mobile audit 2026-07-18: mostrar antes el perro/producto.
        Se compacta texto + CTA secundario; el acceso a productos queda en el menú y en secciones. */
     .hero{padding-top:76px;padding-bottom:32px}
-    .hero-in{gap:18px}
+    .hero-in{display:flex;flex-direction:column;gap:18px}
+    .hero-copy{display:flex;flex-direction:column}
+    .hero-visual{width:100%;min-height:min(495px,calc((100vw - 36px)*1.502))}
     .hero h1{font-size:clamp(30px,8.1vw,39px);line-height:1.02;margin-bottom:13px}
-    .hero .lead{font-size:15px;line-height:1.45;margin-bottom:15px;max-width:34em}
-    .hero-cta{gap:9px;margin-bottom:0}
+    .hero .lead{font-size:15px;line-height:1.45;margin-bottom:15px;max-width:34em;opacity:1;animation:none}
+    .hero-cta{gap:9px;margin-bottom:0;opacity:1;animation:none}
     .hero-cta .btn{width:100%;justify-content:center;min-height:46px;padding:12px 14px;font-size:14px}
     .hero-cta .btn-ghost{display:none}
     .hv-frame{max-width:min(100%,330px);aspect-ratio:500/751}
@@ -642,13 +645,6 @@
   ───────────────────────────────────────────────────────────── */
   .retire-block{display:none}
 
-  /* Productos: catálogo compacto, con recorte seguro de las marcas de origen. */
-  #dispositivos .sol-media{height:240px;aspect-ratio:auto}
-  #dispositivos .sol[data-product="protesis"] .sol-media img{object-fit:contain}
-  #dispositivos .sol[data-product="arnes"] .sol-media img,
-  #dispositivos .sol[data-product="ortesis"] .sol-media img,
-  #dispositivos .sol[data-product="carro"] .sol-media img{object-position:50% 40%}
-
   /* Formulario de caso: controles alineados y ancho útil en desktop. */
   #contacto-caso .form-card{max-width:1040px!important}
   .opt-grid input[type="radio"],.opt-grid input[type="checkbox"]{width:auto;flex:0 0 auto}
@@ -668,13 +664,14 @@
   }
   @media(max-width:600px){
     #como .steps{grid-template-columns:1fr}
-    #dispositivos .sol-media{height:190px}
   }
 
   /* Biomechanics Studio + profesionales: un único bloque, formulario colapsado */
   #tecnologia{padding-bottom:44px}
-  #tecnologia .tech-grid{grid-template-columns:.9fr 1.1fr;gap:36px}
-  #tecnologia .studio-access-card h2{font-size:clamp(30px,3vw,44px)!important}
+  #tecnologia .tech-grid{grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  #tecnologia .tech-visual{height:600px;min-height:0}
+  #tecnologia .studio-access-card{width:100%}
+  #tecnologia .studio-access-card h2{font-size:clamp(30px,2.5vw,36px)!important;line-height:1.06!important}
   #profesionales{padding:0 0 96px;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
   #profesionales>.wrap>div.reveal{display:none}
   #profesionales details#profForm{margin-top:30px!important}
