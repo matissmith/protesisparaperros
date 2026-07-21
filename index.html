@@ -668,12 +668,12 @@
 
   /* Biomechanics Studio + profesionales: un único bloque, formulario colapsado */
   #dispositivos{padding-top:80px}
-  #tecnologia{padding-bottom:24px}
+  #tecnologia{padding-bottom:16px}
   #tecnologia .tech-grid{grid-template-columns:1fr 1fr;gap:40px;align-items:start}
   #tecnologia .tech-visual{height:600px;min-height:0}
   #tecnologia .studio-access-card{width:100%}
   #tecnologia .studio-access-card h2{font-size:clamp(30px,2.5vw,36px)!important;line-height:1.06!important}
-  #profesionales{padding:0 0 72px;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
+  #profesionales{padding:0;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
   #profesionales>.wrap>div.reveal{display:none}
   #profesionales details#profForm{max-width:1160px!important;margin:0 auto!important}
   details#profForm{cursor:default}
@@ -688,16 +688,17 @@
   details#profForm:not([open]) summary .sub{display:none}
 
   /* Ache / equipo / respaldo: fusión visual en un solo bloque continuo */
-  #sobre-ache{padding-top:72px;padding-bottom:0}
-  #equipo{padding-top:36px}
+  #sobre-ache{padding-top:56px;padding-bottom:0}
+  #equipo{padding-top:1px}
+  #equipo .team-grid{margin-top:32px}
   #equipo{padding-bottom:72px}
   #equipo .sec-tag{display:none}
 
   @media(max-width:768px){
     #dispositivos{padding-top:56px}
-    #tecnologia{padding-bottom:20px}
-    #profesionales{padding-bottom:56px}
-    #sobre-ache{padding-top:56px}
+    #tecnologia{padding-bottom:12px}
+    #profesionales{padding-bottom:0}
+    #sobre-ache{padding-top:48px}
     #equipo{padding-bottom:56px}
     details#profForm:not([open]) summary{align-items:flex-start;flex-direction:column;gap:12px}
   }
@@ -1285,12 +1286,8 @@
 </section>
 
 <!-- EQUIPO Y RED PROFESIONAL -->
-<section id="equipo" class="section light" style="padding-top:0">
+<section id="equipo" class="section light">
   <div class="wrap">
-    <div class="reveal" style="max-width:680px">
-      <span class="sec-tag">Equipo</span>
-      <h2 class="display">Las personas detrás de Ache</h2>
-    </div>
     <div class="team-grid">
       <article class="team-card reveal"><div class="team-avatar">MS</div><h4>Matías Smith</h4><span class="role">Cofundador y CEO</span><p>Lidera la estrategia, el desarrollo de negocio, las alianzas y la validación comercial de las distintas líneas de Ache.</p></article>
       <article class="team-card reveal d1"><div class="team-avatar">LD</div><h4>Lucas Díaz</h4><span class="role">Cofundador y COO</span><p>Ingeniero químico. Lidera el desarrollo operativo y productivo, el trabajo sobre materiales y procesos, la relación con proveedores y fabricantes, y la viabilidad necesaria para llevar las soluciones a producción.</p></article>
