@@ -670,12 +670,12 @@
 
   /* Biomechanics Studio + profesionales: un único bloque, formulario colapsado */
   #dispositivos{padding-top:80px}
-  #tecnologia{padding:64px 0 28px}
+  #tecnologia{padding:64px 0 0}
   #tecnologia .tech-grid{grid-template-columns:1fr 1fr;gap:40px;align-items:start}
   #tecnologia .tech-visual{height:600px;min-height:0}
   #tecnologia .studio-access-card{width:100%;background:transparent;border:0;box-shadow:none;padding:0}
   #tecnologia .studio-access-card h2{font-size:clamp(30px,2.5vw,36px)!important;line-height:1.06!important}
-  #profesionales{padding:0 0 56px;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
+  #profesionales{padding:28px 0 56px;background:transparent;color:var(--txt);scroll-margin-top:82px}
   #profesionales>.wrap>div.reveal{display:none}
   #profesionales details#profForm{max-width:1160px!important;margin:0 auto!important}
   details#profForm{cursor:default}
@@ -698,8 +698,8 @@
 
   @media(max-width:768px){
     #dispositivos{padding-top:56px}
-    #tecnologia{padding-bottom:12px}
-    #profesionales{padding-bottom:0}
+    #tecnologia{padding-bottom:0}
+    #profesionales{padding:20px 0 48px}
     #sobre-ache{padding-top:48px}
     #equipo{padding-bottom:56px}
     details#profForm:not([open]) summary{align-items:flex-start;flex-direction:column;gap:12px}
@@ -1173,10 +1173,8 @@
     </div>
     <p class="field-note" style="margin-top:24px;font-size:13.5px">Biomechanics Studio es una herramienta de apoyo. No reemplaza la evaluación clínica ni las decisiones del veterinario responsable.</p>
   </div>
-</section>
-
 <!-- PROGRAMA PILOTO PROFESIONAL -->
-<section id="profesionales" class="section dark">
+<div id="profesionales">
   <div class="wrap">
     <div class="reveal" style="max-width:700px">
       <span class="sec-tag">Programa profesional</span>
@@ -1268,6 +1266,7 @@
       <div class="form-ok" id="profFormOk"></div>
     </details>
   </div>
+</div>
 </section>
 
 <!-- SOBRE ACHE -->
