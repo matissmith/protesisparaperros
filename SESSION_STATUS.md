@@ -75,3 +75,8 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Se eliminó el pseudo-elemento que invadía el hero y tapaba las métricas `4 / +120 / 100%`.
 - La transición hero → problema queda limpia: sin overlay blanco encima de números ni textos.
 - Cambio limitado a CSS de landing. No se tocó software, CAD ni integración.
+
+## 2026-07-20 — Transición hero → problema con aire real
+- Se reemplazó el corte seco por una transición diseñada: el hero conserva una franja azul inferior y las métricas quedan dentro del bloque oscuro, sin overlay encima.
+- Se agregó sombra/degradado dentro del propio hero y un arranque suave en la sección problema, sin tapar números ni texto.
+- Cambio limitado a CSS de landing. No se tocó software, CAD, integración ni contenido.
