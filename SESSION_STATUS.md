@@ -1091,3 +1091,26 @@ ningún campo de formulario ni nombre de evento cambió, solo copy visible y CSS
 3. Confirmar visualmente que el `<details id="profForm">` abre/cierra bien y que el
    submit del formulario profesional sigue funcionando igual que antes.
 4. Recién con esas capturas aprobadas por Matías, evaluar push/deploy — no antes.
+
+## 2026-07-21 — Cierre visual de la consolidación (Codex)
+
+Objetivo: validar una sola vez la consolidación iniciada en `eff132f` y aplicar solo
+correcciones evidentes. Repo: `protesisparaperros`. Se modificaron `index.html` y
+este estado; no se tocaron Apps Script, endpoints, formularios funcionales,
+analytics, `build.sh` ni assets.
+
+Se compactó el recorte de las cuatro tarjetas de Productos sin alterar imágenes y
+las marcas de Gemini dejaron de verse. El formulario de caso usa más ancho en
+desktop y sus radios/checkboxes quedaron a la izquierda, junto al texto. Tecnología
+se compactó y Profesionales comparte el mismo tratamiento visual; el formulario
+profesional sigue colapsado y “Hoy permite / En desarrollo” permanece oculto.
+
+Validación: desktop y mobile sin overflow horizontal ni superposiciones evidentes;
+hero y formulario mobile estables. Los 10 elementos `section` visibles se perciben
+como los 7 bloques principales definidos en la consolidación. Pendiente honesto:
+el H2 “Una plataforma que se valida con profesionales” continúa visible; se alcanzó
+el límite de dos correcciones y deberá resolverse con un cambio puntual posterior.
+
+Punto estable: el commit final de esta sesión. Se ejecutaron `git diff --check` y
+`bash build.sh`. No hubo push ni deploy. Próximo paso: revisar únicamente el H2
+profesional pendiente antes de considerar publicación.

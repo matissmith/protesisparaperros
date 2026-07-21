@@ -642,6 +642,17 @@
   ───────────────────────────────────────────────────────────── */
   .retire-block{display:none}
 
+  /* Productos: catálogo compacto, con recorte seguro de las marcas de origen. */
+  #dispositivos .sol-media{height:240px;aspect-ratio:auto}
+  #dispositivos .sol[data-product="protesis"] .sol-media img{object-fit:contain}
+  #dispositivos .sol[data-product="arnes"] .sol-media img,
+  #dispositivos .sol[data-product="ortesis"] .sol-media img,
+  #dispositivos .sol[data-product="carro"] .sol-media img{object-position:50% 40%}
+
+  /* Formulario de caso: controles alineados y ancho útil en desktop. */
+  #contacto-caso .form-card{max-width:1040px!important}
+  .opt-grid input[type="radio"],.opt-grid input[type="checkbox"]{width:auto;flex:0 0 auto}
+
   /* Cómo trabajamos: 4 pasos compactos en fila (2x2 en tablet, 1 col en mobile) */
   #como .wrap.como-grid{grid-template-columns:1fr;gap:28px}
   #como .como-left{position:static;max-width:720px}
@@ -657,10 +668,18 @@
   }
   @media(max-width:600px){
     #como .steps{grid-template-columns:1fr}
+    #dispositivos .sol-media{height:190px}
   }
 
   /* Biomechanics Studio + profesionales: un único bloque, formulario colapsado */
-  #profesionales .intro{max-width:640px}
+  #tecnologia{padding-bottom:44px}
+  #tecnologia .tech-grid{grid-template-columns:.9fr 1.1fr;gap:36px}
+  #tecnologia .studio-access-card h2{font-size:clamp(30px,3vw,44px)!important}
+  #profesionales{padding:0 0 96px;background:linear-gradient(180deg,#F7FAFD 0%,#FFFFFF 100%);color:var(--txt)}
+  #profesionales .intro{max-width:760px;margin:0 auto;text-align:center}
+  #profesionales .intro .sec-tag,#profesionales .intro h2{display:none!important}
+  #profesionales .intro p{color:var(--muted)}
+  #profesionales details#profForm{margin-top:30px!important}
   details#profForm{cursor:default}
   details#profForm summary{cursor:pointer;list-style:none}
   details#profForm summary::-webkit-details-marker{display:none}
