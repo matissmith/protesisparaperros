@@ -618,3 +618,185 @@ cada uno (dentro del límite de 2 por error).
   error visible en envío inválido del paso 3).
 - `SESSION_STATUS.md` (esta entrada).
 No se tocó `build.sh`, `AGENTS.md` ni `assets/`. No se hizo push ni deploy.
+
+---
+
+## 2026-07-21 — Cierre de Fase 4: analytics, privacidad, revisión funcional y preparación de deployment (Claude, sesión de continuación)
+
+Objetivo único de esta sesión (pedido explícito): cerrar la Fase 4 técnica antes de
+publicar — analytics, revisión final, validación de privacidad, preparación de
+deployment. Sin push, sin deploy, sin publicar Apps Script, sin cambios de texto/
+diseño salvo bloqueantes, sin librerías nuevas, sin refactors generales.
+
+### 1. Analytics — auditoría de los 24 eventos pedidos
+Los 24 eventos ya estaban implementados en `index.html` de sesiones anteriores,
+todos usando la función `acheTrack(name, params)` existente (línea ~1350, con
+`try/catch` y chequeo de `window.gtag`, nunca rompe la interacción si Analytics
+está bloqueado): `hero_owner_click`, `hero_professional_click`,
+`product_protesis_click`, `product_arnes_click`, `product_ortesis_click`,
+`product_carro_click`, `case_form_start`, `case_form_step_1_complete`,
+`case_form_step_2_complete`, `case_form_submit`, `protesis_case_submit`,
+`arnes_preorder_submit`, `ortesis_case_submit`, `carro_research_submit`,
+`professional_form_start`, `professional_form_submit`,
+`manufacturer_interest_submit`, `professional_demo_click`,
+`veterinarian_pilot_click`, `whatsapp_matias_click`, `faq_open`. No se
+encontraron duplicados.
+
+**Único cambio agregado esta sesión**: `faq_open` no llevaba ninguna propiedad.
+Se agregó `{faq_id: N}` (N = posición 1 a 11, sin texto de la pregunta) a las 11
+llamadas en la sección FAQ — coincide con la lista de propiedades no sensibles
+permitidas en la consigna (`faq_id` estaba explícitamente listada pero no se
+usaba). Cambio de 1 línea por ítem, sin tocar texto ni diseño.
+
+Propiedades enviadas por evento (todas no sensibles, confirmado por lectura de
+código): `{}` (clics simples, faq_open ahora con `faq_id`), `{product, audience}`
+(submits de caso y sus 4 variantes por producto), `{audience}` (submits del
+formulario profesional y fabricante). Ninguna incluye nombre, teléfono, email,
+nombre del perro, diagnóstico, descripción, estudios ni texto libre.
+
+### 2. Revisión de privacidad (verificado, no solo leído)
+1. **Sin PII en analytics**: confirmado en código y en vivo (ver punto 3) — los
+   `trackCalls` capturados en `gtag(...)` durante los envíos de prueba solo
+   contenían `product`/`audience`, nunca `nombre`/`whatsapp`/`email`/
+   `nombre_perro`/`descripcion`/`diagnostico`.
+2. **Datos clínicos solo al receptor de leads**: confirmado — `descripcion`,
+   `diagnostico`, `situacion`, etc. solo viajan en el `fetch` a `LEADS_ENDPOINT`
+   (Apps Script), nunca a `gtag`/`fbq`.
+3. **`consent_share` (`consentimiento_compartir`) y `consent_news` (`newsletter`)
+   opcionales**: confirmado, sin `required` en el HTML.
+4. **`consent_evaluation` (`consentimiento`) es el único obligatorio** en ambos
+   formularios: confirmado, único checkbox con `required` en cada uno.
+5. **Ningún checkbox opcional preseleccionado**: confirmado programáticamente
+   (`defaultChecked === false` en los 3 checkboxes opcionales del form de caso y
+   los 6 `interes_*` del form profesional).
+6. **Errores visibles al usuario son genéricos**: confirmado — `formErr` muestra
+   "Faltan campos obligatorios..." o el mensaje de fallback con WhatsApp; el
+   `.gs` responde `GENERIC_ERROR = 'No se pudo procesar la consulta.'` al
+   frontend.
+7. **Detalles técnicos solo en consola/logs**: confirmado — `console.error` en
+   el `.gs` para errores de mail/procesamiento; el frontend nunca expone el
+   detalle real al usuario.
+8. **Ningún campo oculto de otro producto se envía**: confirmado en vivo (ver
+   punto 3) — el filtro de condicionales por producto (agregado en la sesión
+   anterior) sigue funcionando; un envío de Prótesis no incluye campos de
+   Arnés/Órtesis/Carro.
+9. **Los formularios no exponen URL ni errores internos del endpoint**: confirmado
+   — ningún mensaje de error visible menciona `LEADS_ENDPOINT`, códigos HTTP ni
+   trazas.
+
+### 3. Revisión funcional final (1 pasada desktop + 1 pasada mobile, fetch interceptado)
+Server local (`python3 -m http.server` vía `preview_start`) con `window.fetch`
+reemplazado en el propio navegador (devuelve una respuesta simulada; se confirmó
+que la URL interceptada coincidía con `LEADS_ENDPOINT` real, o sea que sin el
+intercept el POST habría salido a producción — **ningún dato se envió al
+endpoint productivo**).
+
+**Desktop (~1280×800)**: hero, tarjetas de dispositivos, FAQ (`faq_open` con
+`faq_id` correcto), CTA `hero_owner_click`, stepper completo (paso 1 bloquea sin
+`situacion`, pasos 1→2→3 avanzan con los eventos `case_form_start` /
+`case_form_step_1_complete` / `case_form_step_2_complete`), envío inválido en
+paso 3 (sin nombre/whatsapp/consentimiento) muestra error visible sin enviar
+`fetch`, envío válido de un caso Prótesis: solo viajan los 4 campos
+condicionales de Prótesis, `payload.audience:"tutor"`, eventos
+`case_form_submit` + `protesis_case_submit` con `{product, audience}` sin PII,
+confirmación visible sin superposiciones. Formulario profesional: envío con
+`interes_fabricar` → `audience:"manufacturer"`, eventos `professional_form_submit`
++ `manufacturer_interest_submit`, payload con bloque `fab_*` presente. Sin
+errores en consola.
+
+**Mobile (375×812)**: hero (incluye `+120` visible arriba, sin regresión),
+sección Dispositivos, FAQ — todo sin superposiciones ni recortes, nav como
+cápsula flotante intacto. Sin errores en consola.
+
+No se repitió la auditoría visual completa de sesiones anteriores; esta pasada
+se limitó a las secciones listadas en la consigna y no encontró bloqueantes ni
+regresiones nuevas.
+
+### 4. Revisión técnica
+1. Validación estática de JS: `node --check` sobre el script inline principal de
+   `index.html` (extraído a un temporal) y sobre `ache-leads-appscript.gs`
+   (copiado a `.js` temporal) — ambos OK.
+2. `git diff --check`: sin problemas de whitespace/conflictos.
+3. `bash build.sh`: corrido 1 sola vez. Resultado: OK.
+4. `dist/` verificado — contiene únicamente: `index.html`,
+   `assets/ache-logo.svg`, `assets/fonts/conthrax-sb.ttf`,
+   `assets/img/{arnes,carro,hero,ortesis,protesis,software-ui}.png`.
+5. Confirmado que `dist/` **no** incluye: `.gs`, `.md`, `.txt` internos,
+   `_previas/`, archivos ocultos (`.DS_Store`, etc.) ni configuraciones
+   temporales — el propio `build.sh` ya filtra todo esto (`find ... -delete`).
+
+### Commits locales pendientes de push (6, ninguno pusheado)
+```
+78570fc feat: extender receptor de leads con campos del stepper de caso y form. profesional
+bec4797 fix: corregir recorte de tarjetas de dispositivos, jerarquía de form-card-h e íconos de listas
+9cdb40e chore: limpiar salida de dist/ y corregir jerarquía de H2/form-card-h
+b06d23f fix: cerrar Fase 1 — CTA de preventa sincroniza el condicional del stepper
+6d34779 wip: reestructurar landing en 17 bloques (fase 1 en curso, sin cerrar)
+91e0e44 chore: restrict Cloudflare Pages output to public assets
+```
+más el commit de esta sesión (Fase 4, ver encabezado del commit en `git log`).
+
+### Pasos exactos para publicar (cuando Matías lo decida)
+1. **Push**: `git push origin main` desde este repo (rama `main`, remoto ya
+   configurado). Revisar que no haya conflictos con `origin/main` antes (no
+   debería haberlos, nadie más pushea a este repo salvo coordinación explícita).
+2. **Esperar deploy de Cloudflare Pages**: automático al detectar el push a
+   `main`. Verificar en el dashboard de Cloudflare Pages que el build del deploy
+   termine en verde antes de considerar la publicación completa.
+3. **Actualizar Apps Script**: abrir el proyecto de Apps Script vinculado al
+   Sheet de leads real, reemplazar el contenido por `ache-leads-appscript.gs` de
+   este repo (ya extendido de forma aditiva, ver entrada anterior de este mismo
+   archivo), y usar Implementar > Gestionar implementaciones > editar (lápiz) >
+   Nueva versión, para que la URL `/exec` ya publicada tome el cambio sin
+   cambiar de URL.
+4. **Actualizar headers del Sheet**: si el Sheet "Leads" ya existe (no se crea
+   desde cero), agregar a mano los 48 headers nuevos en la fila 1, a partir de
+   la columna 15, en el mismo orden en que aparecen en el array de
+   `getOrCreateSheet` dentro de `ache-leads-appscript.gs` (esto NO se actualiza
+   solo — limitación ya documentada en la entrada anterior).
+5. **Prueba controlada real**: con el sitio ya publicado y el Apps Script ya
+   redeployado, hacer un envío real de prueba (uno de formulario de caso, uno de
+   formulario profesional) usando datos de prueba reconocibles como tales (ej.
+   nombre "PRUEBA — borrar"), confirmar que la fila nueva aparece en el Sheet con
+   las columnas nuevas pobladas, y luego borrar esa fila de prueba del Sheet.
+
+### Rollback recomendado si algo falla
+- **Si el deploy de Cloudflare falla o rompe visualmente algo en producción**:
+  Cloudflare Pages mantiene el deploy anterior activo hasta que el nuevo build
+  termine OK; si el build falla, no reemplaza el deploy en vivo. Si el build
+  pasa pero hay una regresión visual, usar el dashboard de Cloudflare Pages para
+  volver ("rollback") al deploy anterior con un clic, sin tocar git.
+- **Si el Apps Script redeployado falla o el Sheet no recibe filas nuevas**: en
+  Implementar > Gestionar implementaciones, se puede revertir a la versión
+  anterior del script (las versiones anteriores quedan guardadas). El frontend
+  (`index.html`) no cambia de `LEADS_ENDPOINT`, así que revertir el script no
+  requiere ningún cambio en el sitio.
+- **Si algo del código del sitio necesita revertirse tras el push**: `git revert`
+  del commit problemático (nunca `reset --hard` sobre `main` ya pusheado), y
+  volver a pushear — Cloudflare redeploya automáticamente con el revert.
+
+### Limitaciones pendientes (sin maquillar)
+1. Igual que en la sesión anterior: no se puede ejecutar `ache-leads-appscript.gs`
+   de verdad sin desplegarlo (Apps Script no corre localmente). Esta sesión no
+   agregó ni quitó nada de esa limitación.
+2. Los headers del Sheet productivo (si ya existe) siguen sin actualizarse
+   solos — paso manual ya documentado arriba y en la entrada anterior.
+3. La propiedad `cta_location` y `form_step` (numérico) mencionadas en la lista
+   de propiedades permitidas de la consigna no se usan hoy en ningún evento más
+   allá de lo ya implementado (`faq_id`, `product`, `audience`) — no es un
+   error, ninguno de los 24 eventos pedidos las requiere explícitamente, se deja
+   documentado por si una futura sesión quiere enriquecer algún evento puntual.
+4. No se probó 1 combinación por cada producto/rol en esta sesión (ya se había
+   probado Prótesis/Carro y profesional-fabricante en la sesión anterior); esta
+   sesión repitió Prótesis (caso) y profesional-fabricante como muestra
+   representativa del filtro de condicionales y el payload de analytics, sin
+   volver a probar Arnés/Órtesis/veterinario/rehabilitador explícitamente.
+
+### Archivos modificados en esta sesión
+- `index.html` (único cambio funcional: `faq_id` agregado a las 11 llamadas de
+  `acheTrack('faq_open', ...)`).
+- `SESSION_STATUS.md` (esta entrada).
+- `RELEASE_CHECKLIST.md` (nuevo, checklist operativo no técnico para Matías).
+No se tocó `build.sh`, `AGENTS.md`, `assets/` ni `ache-leads-appscript.gs`
+(no requirió cambios: ya cumplía lo pedido, ver punto 2). No se hizo push ni
+deploy ni se publicó el Apps Script.
