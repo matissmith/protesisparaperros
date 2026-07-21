@@ -194,3 +194,63 @@ status más abajo, actualizada a mano tras el commit).
 4. Recién ahí: 1 captura desktop + 1 mobile, y 1 test funcional real del stepper y
    de un submit (éxito y error).
 5. Seguir con Fase 2 (visual/responsive) solo si hay créditos después de eso.
+
+---
+
+## 2026-07-21 — Cierre de Fase 1 (Claude, sesión de continuación)
+
+No se releyó `index.html` completo ni se repitió el diagnóstico previo; se retomó
+directo desde los pendientes ya documentados arriba.
+
+### Hecho en esta sesión
+1. **CTA "Sumarme a la preventa" corregido** (pendiente #2 de arriba): el
+   `onclick` ahora hace `productoSel.value='Arnés'` **y** llama a
+   `toggleProductoCond()` (con guard `window.toggleProductoCond`) para que el
+   bloque condicional de Arnés del paso 2 del stepper se active de entrada, además
+   de disparar `product_arnes_click`. Antes solo cambiaba el valor del select sin
+   sincronizar el bloque condicional.
+2. **Verificación de anclas/IDs**: se extrajeron todos los `href="#id"` del
+   documento y se cruzaron contra los `id="..."` existentes (script Python, sin
+   abrir navegador). Resultado: **0 anclas rotas** — `dispositivos`, `como`,
+   `tecnologia`, `profesionales`, `sobre-ache`, `selector`, `contacto-caso`,
+   `profForm` resuelven todos.
+3. **`bash build.sh` ejecutado** (1 sola vez, según límite): build OK, sin errores.
+4. **Verificación de `dist/`**: contiene `index.html` + `assets/` completo.
+   **Hallazgo no bloqueante, no corregido a propósito** (fuera del alcance
+   autorizado en esta sesión — no se tocó `build.sh`): `dist/assets/img/` incluye
+   `LEEME.txt` y la carpeta `_previas/` (previews viejos de prótesis). Ambos están
+   en `.gitignore` para el repo git, pero `build.sh` copia `assets/` tal cual desde
+   disco (`cp -R -- assets dist/`), no filtra por gitignore, así que esos archivos
+   internos sí terminan en el `dist/` que se serviría públicamente. No impide el
+   build ni el funcionamiento de la landing, por eso no se corrigió ahora (regla:
+   solo corregir lo que bloquea build/funcionamiento). **Queda pendiente para
+   Fase 4** (o antes, si Matías lo prioriza): que `build.sh` excluya
+   `assets/img/LEEME.txt` y `assets/img/_previas/` al copiar a `dist/`.
+5. **No se tocó `ache-leads-appscript.gs`**: el formulario actual sí puede
+   enviarse (los campos que ya existían en `FIELD_LIMITS` —`producto`, `nombre`,
+   `contacto`, `raza`, etc.— siguen llegando bien; los nuevos se descartan
+   silenciosamente sin error). No hubo incompatibilidad que impidiera el envío en
+   absoluto, así que no aplicaba la excepción para tocar ese archivo en esta sesión.
+
+### Estado de Fase 1
+**Cerrada como técnicamente estable** dentro del alcance permitido hoy: estructura
+de 17 bloques completa, copy del prompt aplicado, anclas verificadas sin roturas,
+bug de `acheTrack` (sesión anterior) y bug del CTA de preventa (esta sesión)
+corregidos, build corriendo sin errores. **No incluye** validación visual
+(desktop/mobile), pruebas funcionales exhaustivas de formularios en navegador real,
+ni la extensión de `ache-leads-appscript.gs` — esas siguen abiertas para
+Fase 2/3/4 según lo acordado.
+
+### Pendientes explícitos para la próxima sesión
+1. Extender `ache-leads-appscript.gs` de forma aditiva (sin deploy) para que los
+   campos nuevos del stepper y del formulario profesional lleguen al Sheet.
+2. Ajustar `build.sh` para excluir `LEEME.txt` y `_previas/` del `dist/` publicado.
+3. Fase 2: revisión visual real (1 desktop + 1 mobile) y ajustes de jerarquía/espaciado.
+4. Fase 3: prueba funcional real del stepper (avance/retroceso, campos
+   conservados) y de un envío válido + uno con error, en ambos formularios.
+5. Fase 4: analytics (reemplazo de IDs placeholder si corresponde) y revisión final.
+
+### Archivos modificados en esta sesión
+- `index.html` (1 línea funcional: onclick del CTA de preventa).
+- `SESSION_STATUS.md` (esta entrada).
+No se tocó `ache-leads-appscript.gs`, `AGENTS.md`, `build.sh` ni `assets/`.
