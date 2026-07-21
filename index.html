@@ -505,7 +505,6 @@
   .studio-step span{display:block;color:var(--ink);font-weight:900;margin-bottom:4px;font-size:14.5px}
   .studio-step small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
   .studio-cta-group{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
-  .studio-cta-group .sol-cta{padding:10px 2px}
 
   @media(max-width:900px){
     .problem-grid{grid-template-columns:1fr !important}
@@ -677,11 +676,13 @@
   #tecnologia .tech-visual{height:600px;min-height:0}
   #tecnologia .studio-access-card{width:100%;background:transparent;border:0;box-shadow:none;padding:0}
   #tecnologia .studio-access-card h2{font-size:clamp(30px,2.5vw,36px)!important;line-height:1.06!important}
-  #profesionales{padding:28px 0 56px;background:transparent;color:var(--txt);scroll-margin-top:82px}
-  #profesionales>.wrap>div.reveal{display:none}
-  #profesionales details#profForm{max-width:1160px!important;margin:0 auto!important}
+  .professional-form-wrap{padding:0;background:transparent;color:var(--txt)}
+  .professional-form-wrap>.wrap>div.reveal{display:none}
+  .professional-form-wrap details#profForm{max-width:1160px!important}
+  .professional-form-wrap details#profForm[open]{margin:28px auto 56px!important}
   details#profForm.reveal{opacity:1;transform:none;transition:none}
   details#profForm{cursor:default}
+  details#profForm:not([open]){display:none}
   details#profForm:not([open]){padding:16px 18px;background:#F7FAFD;border:1px solid #DCE5EE;border-radius:16px;box-shadow:none}
   details#profForm summary{cursor:pointer;list-style:none}
   details#profForm:not([open]) summary{display:flex;align-items:center;justify-content:space-between;gap:20px}
@@ -724,8 +725,8 @@
     }
     #tecnologia .tech-grid>*,
     #tecnologia .studio-access-card>*,
-    #profesionales,
-    #profesionales .wrap,
+    .professional-form-wrap,
+    .professional-form-wrap .wrap,
     #profForm,
     #professionalForm{width:100%;max-width:100%;min-width:0}
     #tecnologia .studio-access-card{display:contents}
@@ -769,11 +770,8 @@
       width:100%;max-width:100%;min-width:0;min-height:48px;
       justify-content:center;text-align:center;white-space:normal;
     }
-    #tecnologia .studio-cta-group .sol-cta{
-      padding:12px 14px;border:1px solid #DCE5EE;border-radius:10px;
-    }
-    #profesionales{padding:20px 0 48px}
-    #profesionales details#profForm{margin:0!important}
+    .professional-form-wrap{padding:0}
+    .professional-form-wrap details#profForm[open]{margin:20px auto 48px!important}
     details#profForm:not([open]){padding:16px}
     details#profForm:not([open]) summary{width:100%;align-items:stretch;flex-direction:column;gap:12px}
     details#profForm summary h3{width:100%;white-space:normal;word-break:normal}
@@ -1235,10 +1233,9 @@
         <div class="studio-step"><b>03</b><span>Propuesta técnica revisable</span><small>Los datos del caso se convierten en parámetros y documentación que pueden analizarse antes de fabricar.</small></div>
         <div class="studio-step"><b>04</b><span>Seguimiento y trazabilidad</span><small>El equipo puede conocer qué información falta, qué versión está vigente y en qué estado se encuentra cada caso.</small></div>
       </div>
-      <div class="studio-cta-group">
+      <div class="studio-cta-group" id="profesionales">
         <a class="btn btn-pri btn-lg" href="https://app.protesisparaperros.com.ar" target="_blank" rel="noopener noreferrer" onclick="acheTrack('studio_open_click')">Abrir Biomechanics Studio</a>
-        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Solicitar una demo guiada</a>
-        <a class="sol-cta" href="#profForm" data-prof-interest="pilot" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a>
+        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" onclick="acheTrack('professional_demo_click')">Participar o solicitar una demo</a>
       </div>
     </div>
   </div>
@@ -1271,7 +1268,7 @@
     <p class="field-note" style="margin-top:24px;font-size:13.5px">Biomechanics Studio es una herramienta de apoyo. No reemplaza la evaluación clínica ni las decisiones del veterinario responsable.</p>
   </div>
 <!-- PROGRAMA PILOTO PROFESIONAL -->
-<div id="profesionales">
+<div class="professional-form-wrap">
   <div class="wrap">
     <div class="reveal" style="max-width:700px">
       <span class="sec-tag">Programa profesional</span>
