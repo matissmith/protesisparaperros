@@ -85,3 +85,10 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Se corrigió el salto blanco contra blanco entre la sección Problema/Respuesta y Proceso.
 - Proceso ahora arranca como bloque propio con fondo celeste/gris Ache, sombra interna y tarjetas blancas, para que el cambio de sección sea intencional y no parezca un hueco vacío.
 - Cambio limitado a landing/CSS. No se tocó software, CAD, Streamlit ni detección de raza.
+
+## 2026-07-20 — Sistema visual de transiciones de secciones
+- Pedido del usuario: dejar de resolver los cambios de fondo con líneas rectas o cortes bruscos; generar una solución de alto nivel, tecnológica e innovadora, coherente con la landing.
+- Trabajo realizado: se agregó un sistema CSS de transiciones reutilizables entre secciones: diagonales/ondas suaves, halos radiales, scanline ámbar y entradas con profundidad visual.
+- Alcance: solo `index.html` de la landing institucional. No se tocó el software Streamlit, CAD, detección de raza ni repositorios del software.
+- Cuidado aplicado: se evitó tapar las métricas del hero y se mantuvieron las secciones legibles con reglas responsive para mobile.
+- Pendiente de revisión visual: validar en navegador publicado que los cortes Hero→Problema, Problema→Proceso y Proceso→Soluciones se vean fluidos en desktop y mobile.
