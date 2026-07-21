@@ -143,14 +143,14 @@
 
   /* soluciones: overlapping tilt cards */
   .sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:60px}
-  .sol{position:relative;border-radius:18px;overflow:hidden;min-height:520px;background:linear-gradient(155deg,var(--navy-600),var(--navy-800));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
-  .sol::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:28px 28px;opacity:.5}
+  .sol{position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:var(--navy-700);border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
+  .sol::before{display:none}
   .sol .emb-wm{position:absolute;right:-30px;top:-20px;width:190px;opacity:.08;transition:transform .6s var(--ease);z-index:0}
   .sol:hover .emb-wm{transform:rotate(12deg) scale(1.08)}
-  .sol .sol-body{position:absolute;inset:auto 0 0 0;padding:26px 32px 28px;z-index:2;text-shadow:0 1px 10px rgba(9,16,32,.7)}
+  .sol .sol-body{position:relative;display:flex;flex:1;flex-direction:column;padding:24px 28px 26px;z-index:2;background:var(--navy-700)}
   .sol .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
   .sol h3{color:#fff;font-size:24px;margin-bottom:10px}
-  .sol p{color:rgba(255,255,255,.62);font-size:14.5px;max-width:360px}
+  .sol p{color:rgba(255,255,255,.68);font-size:14px;max-width:none}
   .sol .ph-tag{position:absolute;top:24px;left:28px;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;z-index:2}
 
   /* tecnología: overlapping frames + parallax emblem */
@@ -261,9 +261,13 @@
 
   /* imágenes: turnkey — si falta el archivo, queda el placeholder */
   .hv-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;z-index:2}
-  .sol-media{position:absolute;inset:0;z-index:1;overflow:hidden}
+  .sol-media{position:relative;width:100%;height:290px;flex:0 0 290px;z-index:1;overflow:hidden;background:#EEF1F5}
   .sol-media img{width:100%;height:100%;object-fit:cover;display:block}
-  .sol-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,27,49,0) 0%,rgba(15,27,49,.3) 32%,rgba(15,27,49,.92) 72%,rgba(15,27,49,.99) 100%)}
+  .sol-media::after{content:none}
+  .sol[data-product="protesis"] .sol-media img{object-position:50% 45%}
+  .sol[data-product="arnes"] .sol-media img{object-position:50% 38%}
+  .sol[data-product="ortesis"] .sol-media img{object-position:50% 42%}
+  .sol[data-product="carro"] .sol-media img{object-position:50% 42%}
   .sol.has-img .ph-tag{display:none}
   .sol.has-img .emb-wm{opacity:.12}
   .tf-media{position:absolute;inset:0}
@@ -409,6 +413,7 @@
     .tf.b{width:72%;height:56%}
     .band-grid,.foot-top{grid-template-columns:1fr}
     .sol .sol-body{padding:22px 24px 24px}
+    .sol-media{height:240px;flex-basis:240px}
     /* clamp medido contra la palabra más larga del sitio ("Parametrización", 16
        caracteres) para que jamás necesite partirse a mitad de palabra en 360-430px */
     .section h2.display{padding-bottom:10px;font-size:clamp(24px,6.8vw,34px);line-height:1.1;max-width:100%;overflow-wrap:break-word}
@@ -844,9 +849,9 @@
       <p class="sol-intro">Cada línea se encuentra en una etapa diferente. Algunas ya reciben casos piloto, otras están en preventa y otras continúan en desarrollo.</p>
     </div>
     <div class="sol-grid">
-      <article class="tilt sol reveal" data-audience="tutor" data-product="protesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis canina Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Prótesis caninas</h3><p>Diseñadas para reemplazar parte de una extremidad cuando el caso permite recuperar apoyo y mejorar el patrón de marcha. Evaluamos la información clínica, las fotos y las medidas del animal. El diseño técnico se desarrolla con apoyo de Biomechanics Studio y trabajamos con proveedores especializados para avanzar en la fabricación.</p><a href="#contacto-caso" class="sol-cta" data-producto="Prótesis" onclick="acheTrack('product_protesis_click')">Postular un caso de prótesis</a><p class="sol-note">La viabilidad depende de la anatomía, el estado clínico y la evaluación profesional.</p></div></article>
-      <article class="tilt sol reveal d1" data-audience="tutor" data-product="arnes"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-preventa">Preventa</span><h3>Arnés de rehabilitación</h3><p>Permite asistir la marcha, descargar parte del peso y acompañar al perro durante rehabilitación, postoperatorios o pérdida de movilidad. Estamos preparando la primera producción del arnés de rehabilitación Ache. Recibimos datos de perros y tutores interesados para confirmar compatibilidad, necesidades y condiciones de entrega.</p><a href="#contacto-caso" class="sol-cta" data-producto="Arnés" onclick="acheTrack('product_arnes_click')">Sumarse a la preventa</a><p class="sol-note">El envío de datos no implica una compra. Nos contactaremos antes de confirmar precio, disponibilidad o cualquier pago.</p></div></article>
-      <article class="tilt sol reveal d2" data-audience="tutor" data-product="ortesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Órtesis personalizadas</h3><p>Brindan soporte a una articulación o extremidad para estabilizar, limitar determinados movimientos o acompañar la rehabilitación. Cada órtesis se plantea según la zona afectada, la indicación profesional y las medidas del animal. Ache coordina el proceso junto con proveedores especializados.</p><a href="#contacto-caso" class="sol-cta" data-producto="Órtesis" onclick="acheTrack('product_ortesis_click')">Consultar por una órtesis</a><p class="sol-note">La indicación y el tipo de soporte deben definirse junto con el profesional tratante.</p></div></article>
+      <article class="tilt sol reveal" data-audience="tutor" data-product="protesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis canina Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Prótesis caninas</h3><p>Diseñadas para reemplazar parte de una extremidad cuando el caso permite recuperar apoyo y mejorar el patrón de marcha. Evaluamos la información clínica, las fotos y las medidas del animal.</p><a href="#contacto-caso" class="sol-cta" data-producto="Prótesis" onclick="acheTrack('product_protesis_click')">Postular un caso de prótesis</a><p class="sol-note">La viabilidad depende de la anatomía, el estado clínico y la evaluación profesional.</p></div></article>
+      <article class="tilt sol reveal d1" data-audience="tutor" data-product="arnes"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-preventa">Preventa</span><h3>Arnés de rehabilitación</h3><p>Permite asistir la marcha, descargar parte del peso y acompañar al perro durante rehabilitación, postoperatorios o pérdida de movilidad. Estamos preparando la primera producción del arnés de rehabilitación Ache.</p><a href="#contacto-caso" class="sol-cta" data-producto="Arnés" onclick="acheTrack('product_arnes_click')">Sumarse a la preventa</a><p class="sol-note">El envío de datos no implica una compra. Nos contactaremos antes de confirmar precio, disponibilidad o cualquier pago.</p></div></article>
+      <article class="tilt sol reveal d2" data-audience="tutor" data-product="ortesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Órtesis personalizadas</h3><p>Brindan soporte a una articulación o extremidad para estabilizar, limitar determinados movimientos o acompañar la rehabilitación. Cada órtesis se plantea según la zona afectada, la indicación profesional y las medidas del animal.</p><a href="#contacto-caso" class="sol-cta" data-producto="Órtesis" onclick="acheTrack('product_ortesis_click')">Consultar por una órtesis</a><p class="sol-note">La indicación y el tipo de soporte deben definirse junto con el profesional tratante.</p></div></article>
       <article class="tilt sol reveal d3" data-audience="tutor" data-product="carro"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-desarrollo">En desarrollo</span><h3>Carros ortopédicos</h3><p>Pensados para asistir la movilidad cuando una o más extremidades no pueden sostener o impulsar correctamente al animal. Estamos desarrollando esta línea y buscamos conocer mejor qué casos, tamaños y necesidades debería contemplar antes de cerrar el diseño y la fabricación.</p><a href="#contacto-caso" class="sol-cta" data-producto="Carro" onclick="acheTrack('product_carro_click')">Contarnos qué necesita mi perro</a><p class="sol-note">Actualmente no se encuentra disponible para compra.</p></div></article>
     </div>
   </div>
