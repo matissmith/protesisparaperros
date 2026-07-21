@@ -80,3 +80,8 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Se reemplazó el corte seco por una transición diseñada: el hero conserva una franja azul inferior y las métricas quedan dentro del bloque oscuro, sin overlay encima.
 - Se agregó sombra/degradado dentro del propio hero y un arranque suave en la sección problema, sin tapar números ni texto.
 - Cambio limitado a CSS de landing. No se tocó software, CAD, integración ni contenido.
+
+## 2026-07-20 — Corte visual Problema → Proceso
+- Se corrigió el salto blanco contra blanco entre la sección Problema/Respuesta y Proceso.
+- Proceso ahora arranca como bloque propio con fondo celeste/gris Ache, sombra interna y tarjetas blancas, para que el cambio de sección sea intencional y no parezca un hueco vacío.
+- Cambio limitado a landing/CSS. No se tocó software, CAD, Streamlit ni detección de raza.
