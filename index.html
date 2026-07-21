@@ -535,7 +535,108 @@
     .studio-steps-inline{grid-template-columns:1fr}
   }
 
+  /* ─────────────────────────────────────────────────────────────
+     Ache 2026-07-21 — sistema nuevo para arquitectura de 17 bloques.
+     Reutiliza variables/clases existentes; agrega solo lo necesario.
+  ───────────────────────────────────────────────────────────── */
+  .section .intro{color:var(--muted);font-size:18px;max-width:720px;margin-top:14px;line-height:1.6}
+  .dark .section-intro,.dark .intro{color:rgba(255,255,255,.68)}
+  .h3-std{font-size:clamp(22px,2.2vw,30px);color:var(--ink);line-height:1.14}
+  .dark .h3-std{color:#fff}
 
+  /* selector tutor / profesional */
+  .path-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:44px}
+  .path-card{background:var(--bg-soft);border:1px solid var(--line);border-radius:22px;padding:38px;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s}
+  .path-card:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 26px 60px -34px rgba(26,51,80,.4)}
+  .path-card h3{font-size:23px;margin-bottom:10px;color:var(--ink)}
+  .path-card p{font-size:15.5px;color:var(--muted);margin-bottom:20px}
+
+  /* etiquetas de estado */
+  .status-badge{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;padding:7px 13px;border-radius:999px;margin-bottom:14px}
+  .status-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+  .status-piloto{background:rgba(239,169,44,.16);color:var(--amber-dk)}
+  .sol .status-piloto{background:rgba(239,169,44,.2);color:var(--amber)}
+  .status-preventa{background:rgba(43,62,110,.16);color:var(--navy-600)}
+  .sol .status-preventa{background:rgba(255,255,255,.14);color:#fff}
+  .status-desarrollo{background:rgba(122,131,151,.16);color:#5F6E80}
+  .sol .status-desarrollo{background:rgba(255,255,255,.1);color:rgba(255,255,255,.75)}
+  .sol-note{font-size:12.5px;color:rgba(255,255,255,.5);margin-top:12px;line-height:1.45}
+
+  /* orientador */
+  .orient-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:30px 0 26px}
+  .orient-opt{cursor:pointer}
+  .orient-opt input{position:absolute;opacity:0;pointer-events:none}
+  .orient-opt span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:88px;padding:16px 12px;border:1.5px solid var(--line);border-radius:14px;font-size:14px;font-weight:600;color:var(--ink);background:#fff;transition:border-color .2s,background .2s,color .2s}
+  .orient-opt input:checked + span{border-color:var(--amber);background:rgba(239,169,44,.1);color:var(--amber-dk)}
+
+  /* outcome / capacity grids reutilizables */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+  .info-card{background:var(--bg-soft);border:1px solid var(--line);border-radius:18px;padding:28px}
+  .info-card h4{font-size:18px;color:var(--ink);margin-bottom:10px}
+  .info-card p{font-size:14.5px;color:var(--muted)}
+  .dark .info-card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+  .dark .info-card h4{color:#fff}
+  .dark .info-card p{color:rgba(255,255,255,.62)}
+  .check-list{list-style:none;display:grid;gap:10px;margin-top:14px}
+  .check-list li{position:relative;padding-left:26px;font-size:14.5px;color:var(--muted)}
+  .check-list li::before{content:"";position:absolute;left:0;top:6px;width:14px;height:14px;border-radius:4px;background:rgba(239,169,44,.18);border:1px solid var(--amber)}
+  .dark .check-list li{color:rgba(255,255,255,.65)}
+
+  /* stepper del formulario de caso */
+  .stepper-progress{display:flex;align-items:center;gap:8px;margin-bottom:26px}
+  .stepper-dot{flex:1;height:5px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+  .stepper-dot.active,.stepper-dot.done{background:var(--amber)}
+  .stepper-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;margin-bottom:18px}
+  .stepper-label b{color:var(--ink)}
+  .step-panel{display:none}
+  .step-panel.active{display:block}
+  .cond-block{display:none;border-top:1px dashed var(--line);margin-top:16px;padding-top:16px}
+  .cond-block.active{display:block}
+  .opt-grid{display:grid;gap:10px;margin:8px 0 16px}
+  .opt-grid label{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--txt);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .2s,background .2s}
+  .opt-grid label:has(input:checked){border-color:var(--amber);background:rgba(239,169,44,.08)}
+  .opt-grid input{margin-top:2px}
+  .stepper-nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+  .stepper-nav .btn-back{background:none;border:1.5px solid var(--line);color:var(--ink);padding:12px 20px}
+  .stepper-nav .btn-back:hover{border-color:var(--navy)}
+  .field-note{font-size:12.5px;color:var(--muted);margin-top:-8px;margin-bottom:14px}
+
+  /* equipo */
+  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:44px}
+  .team-card{background:var(--bg-soft);border:1px solid var(--line);border-radius:20px;padding:28px;text-align:left}
+  .team-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(150deg,var(--navy),var(--navy-800));color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:'Conthrax',sans-serif;font-size:20px;margin-bottom:16px}
+  .team-card h4{font-size:18px;color:var(--ink);margin-bottom:2px}
+  .team-card .role{font-size:13px;font-weight:700;color:var(--amber-dk);text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px}
+  .team-card p{font-size:14px;color:var(--muted)}
+  .program-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .program-badges span{font-size:13px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px}
+
+  /* FAQ accordion nativo */
+  .faq-list{margin-top:36px;display:grid;gap:12px}
+  .faq-item{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+  .faq-item summary{cursor:pointer;list-style:none;padding:18px 22px;font-size:16px;font-weight:700;color:var(--ink);display:flex;justify-content:space-between;gap:16px;align-items:center}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary::after{content:"+";font-size:20px;color:var(--amber-dk);flex:0 0 auto}
+  .faq-item[open] summary::after{content:"−"}
+  .faq-item p{padding:0 22px 20px;font-size:14.5px;color:var(--muted);line-height:1.6}
+
+  /* cierre: 3 acciones */
+  .close-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+  .close-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:28px}
+  .close-card h4{color:#fff;font-size:17px;margin-bottom:8px}
+  .close-card p{font-size:14px;color:rgba(255,255,255,.62);margin-bottom:18px}
+
+  /* contacto directo Matías */
+  .direct-card{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;background:var(--bg-soft);border:1px solid var(--line);border-radius:20px;padding:30px 34px;margin-top:36px}
+  .direct-card .team-avatar{margin-bottom:0}
+  .direct-sign{font-size:13px;color:var(--muted);margin-top:14px;font-weight:600}
+
+  @media(max-width:960px){
+    .path-grid,.grid3,.grid2,.team-grid,.close-grid{grid-template-columns:1fr}
+    .orient-grid{grid-template-columns:repeat(2,1fr)}
+    .direct-card{grid-template-columns:1fr;text-align:left}
+  }
 </style>
 
 <!-- =====================================================================
@@ -595,12 +696,13 @@
       <span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span>
     </a>
     <nav class="nav-links">
-      <a href="#como">Proceso</a>
-      <a href="#soluciones">Productos a medida</a>
+      <a href="#dispositivos">Dispositivos</a>
+      <a href="#como">Cómo trabajamos</a>
       <a href="#tecnologia">Biomechanics Studio</a>
-      <a href="#contacto">Contacto</a>
+      <a href="#profesionales">Para profesionales</a>
+      <a href="#sobre-ache">Sobre Ache</a>
     </nav>
-    <a href="#contacto" class="btn btn-pri">Contar mi caso</a>
+    <a href="#contacto-caso" class="btn btn-pri" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
     <button class="burger" aria-label="Menú"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -613,88 +715,336 @@
   <svg class="emblem-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <span class="eyebrow">Rehabilitación animal · diseño a medida</span>
+      <span class="eyebrow">Movilidad y rehabilitación animal</span>
       <h1 class="display">
-        <span class="ln"><span>Volver a moverse</span></span>
-        <span class="ln"><span class="accent">con una solución propia</span></span>
+        <span class="ln"><span>Dispositivos de movilidad</span></span>
+        <span class="ln"><span class="accent">diseñados para cada perro.</span></span>
       </h1>
-      <p class="lead"><b style="color:#fff;font-weight:600">Prótesis, órtesis, arneses y carros ortopédicos</b> diseñados caso por caso para perros con lesiones, amputaciones o movilidad reducida.</p>
+      <p class="lead">Desarrollamos prótesis, órtesis, carros ortopédicos y arneses a partir de la anatomía, la condición clínica y las necesidades reales de cada caso.</p>
       <div class="hero-cta">
-        <a href="#contacto" class="btn btn-pri btn-lg">Contar mi caso</a>
-        <a href="#soluciones" class="btn btn-ghost btn-lg">Ver productos a medida</a>
+        <a href="#contacto-caso" class="btn btn-pri btn-lg" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
+        <a href="#profesionales" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><div class="n">4</div><div class="l">Líneas de producto</div></div>
-        <div class="stat"><div class="n"><b>+120</b></div><div class="l">Veterinarios en red</div></div>
-        <div class="stat"><div class="n">100%</div><div class="l">Diseño a medida</div></div>
+        <div class="stat"><div class="n"><b>+120</b></div><div class="l">Veterinarios y profesionales en red</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">Líneas de movilidad</div></div>
+        <div class="stat"><div class="n">AR · LATAM</div><div class="l">Cobertura de casos</div></div>
       </div>
+      <p style="font-size:13.5px;color:rgba(255,255,255,.55);margin-top:18px;max-width:460px">Una red de más de 120 veterinarios y profesionales forma parte del ecosistema construido alrededor de Ache.</p>
     </div>
     <div class="hero-visual">
       <div class="hv-frame" data-parallax="0.05">
-        <div class="ph"><svg class="emb" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>Espacio para foto / render<br>Perro con prótesis Ache</div>
-        <img class="hv-img" src="assets/img/hero.png" alt="Perro con dispositivo de movilidad Ache" onerror="this.style.display='none'">
+        <div class="ph"><svg class="emb" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>Espacio para foto / render<br>Perro con dispositivo Ache</div>
+        <img class="hv-img" src="assets/img/hero.png" alt="Perro utilizando un dispositivo de movilidad Ache" onerror="this.style.display='none'">
       </div>
     </div>
   </div>
-  <a href="#como" class="scroll-cue" aria-label="Bajar al contenido"></a>
+  <a href="#selector" class="scroll-cue" aria-label="Bajar al contenido"></a>
 </section>
 
-<!-- PROBLEMA / RESPUESTA -->
+<!-- SELECTOR TUTOR / PROFESIONAL -->
+<section id="selector" class="section light">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="sec-tag">¿Qué estás buscando?</span>
+      <h2 class="display">¿Qué estás buscando?</h2>
+    </div>
+    <div class="path-grid">
+      <article class="path-card reveal">
+        <h3>Necesito una solución para un perro</h3>
+        <p>Conocé nuestras líneas de dispositivos, contanos el caso y recibí una orientación inicial sobre cómo avanzar.</p>
+        <a href="#dispositivos" class="btn btn-pri" onclick="acheTrack('hero_owner_click')">Ver dispositivos</a>
+      </article>
+      <article class="path-card reveal d1">
+        <h3>Trabajo con casos de rehabilitación</h3>
+        <p>Conocé Biomechanics Studio y las posibilidades para veterinarios, rehabilitadores, clínicas y fabricantes.</p>
+        <a href="#tecnologia" class="btn btn-ghost" style="color:var(--navy);border-color:var(--navy)" onclick="acheTrack('hero_professional_click')">Ver la plataforma profesional</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
 <section class="problem-section">
-  <div class="wrap problem-grid">
-    <article class="problem-card problem-card-dark">
+  <div class="wrap">
+    <article class="problem-card problem-card-dark" style="max-width:900px">
       <span class="sec-tag">El problema</span>
-      <h2 class="display">Un talle no alcanza.</h2>
-      <p>Una amputación, una lesión neurológica o una cirugía cambian apoyo, carga y estabilidad. El dispositivo tiene que partir de la anatomía real del paciente y del criterio veterinario.</p>
-    </article>
-    <article class="problem-card problem-card-light">
-      <span class="sec-tag">La respuesta de Ache</span>
-      <h3>Diseño a medida, acompañado por profesionales.</h3>
-      <p>Trabajamos con fotos, medidas y revisión clínica para convertir cada caso en una solución externa de movilidad: prótesis, órtesis, arnés o carro ortopédico.</p>
-      <div class="problem-proof">
-        <div><b>+120</b><span>veterinarios y especialistas en red</span></div>
-        <div><b>4</b><span>líneas de movilidad animal</span></div>
-        <div><b>100%</b><span>dispositivos externos a medida</span></div>
-      </div>
+      <h2 class="display">Cada perro necesita una respuesta diferente.</h2>
+      <p>Una amputación, una lesión articular o una pérdida de movilidad no afectan de la misma manera a todos los animales. El tamaño, el peso, la anatomía, el estado clínico y la forma de moverse cambian las necesidades de cada caso. Por eso, un dispositivo genérico o una solución pensada únicamente por talle puede no ser suficiente.</p>
+      <p style="margin-top:14px">En Ache buscamos reunir la información necesaria para desarrollar soluciones adaptadas al animal y coordinadas con profesionales y proveedores especializados.</p>
     </article>
   </div>
 </section>
 
-<!-- CÓMO FUNCIONA -->
+<!-- DISPOSITIVOS -->
+<section id="dispositivos" class="section dark">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="sec-tag">Dispositivos</span>
+      <h2 class="display">Dispositivos de movilidad para distintas necesidades</h2>
+      <p class="sol-intro">Cada línea se encuentra en una etapa diferente. Algunas ya reciben casos piloto, otras están en preventa y otras continúan en desarrollo.</p>
+    </div>
+    <div class="sol-grid">
+      <article class="tilt sol reveal" data-audience="tutor" data-product="protesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis canina Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Prótesis caninas</h3><p>Diseñadas para reemplazar parte de una extremidad cuando el caso permite recuperar apoyo y mejorar el patrón de marcha. Evaluamos la información clínica, las fotos y las medidas del animal. El diseño técnico se desarrolla con apoyo de Biomechanics Studio y trabajamos con proveedores especializados para avanzar en la fabricación.</p><a href="#contacto-caso" class="sol-cta" data-producto="Prótesis" onclick="acheTrack('product_protesis_click')">Postular un caso de prótesis</a><p class="sol-note">La viabilidad depende de la anatomía, el estado clínico y la evaluación profesional.</p></div></article>
+      <article class="tilt sol reveal d1" data-audience="tutor" data-product="arnes"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-preventa">Preventa</span><h3>Arnés de rehabilitación</h3><p>Permite asistir la marcha, descargar parte del peso y acompañar al perro durante rehabilitación, postoperatorios o pérdida de movilidad. Estamos preparando la primera producción del arnés de rehabilitación Ache. Recibimos datos de perros y tutores interesados para confirmar compatibilidad, necesidades y condiciones de entrega.</p><a href="#contacto-caso" class="sol-cta" data-producto="Arnés" onclick="acheTrack('product_arnes_click')">Sumarse a la preventa</a><p class="sol-note">El envío de datos no implica una compra. Nos contactaremos antes de confirmar precio, disponibilidad o cualquier pago.</p></div></article>
+      <article class="tilt sol reveal d2" data-audience="tutor" data-product="ortesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Órtesis personalizadas</h3><p>Brindan soporte a una articulación o extremidad para estabilizar, limitar determinados movimientos o acompañar la rehabilitación. Cada órtesis se plantea según la zona afectada, la indicación profesional y las medidas del animal. Ache coordina el proceso junto con proveedores especializados.</p><a href="#contacto-caso" class="sol-cta" data-producto="Órtesis" onclick="acheTrack('product_ortesis_click')">Consultar por una órtesis</a><p class="sol-note">La indicación y el tipo de soporte deben definirse junto con el profesional tratante.</p></div></article>
+      <article class="tilt sol reveal d3" data-audience="tutor" data-product="carro"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-desarrollo">En desarrollo</span><h3>Carros ortopédicos</h3><p>Pensados para asistir la movilidad cuando una o más extremidades no pueden sostener o impulsar correctamente al animal. Estamos desarrollando esta línea y buscamos conocer mejor qué casos, tamaños y necesidades debería contemplar antes de cerrar el diseño y la fabricación.</p><a href="#contacto-caso" class="sol-cta" data-producto="Carro" onclick="acheTrack('product_carro_click')">Contarnos qué necesita mi perro</a><p class="sol-note">Actualmente no se encuentra disponible para compra.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ORIENTADOR -->
+<section id="orientador" class="section light">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="sec-tag">¿No sabés qué dispositivo necesita?</span>
+      <h2 class="display">¿No sabés qué dispositivo necesita?</h2>
+      <p class="intro">No hace falta conocer la diferencia entre una prótesis, una órtesis, un carro o un arnés antes de consultar.</p>
+    </div>
+    <div class="orient-grid reveal d1">
+      <label class="orient-opt"><input type="radio" name="orientSit" value="Le falta parte de una extremidad."><span>Le falta parte de una extremidad.</span></label>
+      <label class="orient-opt"><input type="radio" name="orientSit" value="Necesita soporte en una articulación."><span>Necesita soporte en una articulación.</span></label>
+      <label class="orient-opt"><input type="radio" name="orientSit" value="Tiene dificultad para caminar."><span>Tiene dificultad para caminar.</span></label>
+      <label class="orient-opt"><input type="radio" name="orientSit" value="Necesita asistencia durante la rehabilitación."><span>Necesita asistencia durante la rehabilitación.</span></label>
+      <label class="orient-opt"><input type="radio" name="orientSit" value="Todavía no cuenta con un diagnóstico."><span>Todavía no cuenta con un diagnóstico.</span></label>
+    </div>
+    <p class="intro reveal d2">A partir de esa información revisaremos qué línea podría corresponder o qué evaluación profesional hace falta.</p>
+    <a href="#contacto-caso" class="btn btn-pri btn-lg reveal d2" style="margin-top:20px" id="orientCta">Contarnos el caso</a>
+  </div>
+</section>
+
+<!-- CÓMO TRABAJAMOS -->
 <section id="como" class="section light">
   <div class="wrap como-grid">
     <div class="como-left reveal">
-      <span class="sec-tag">Proceso</span>
-      <h2 class="display">Del caso real al diseño técnico.</h2>
-      <p>Un recorrido guiado para reunir la información clínica, medir correctamente y preparar una propuesta revisable antes de fabricar.</p>
+      <span class="sec-tag">Cómo trabajamos</span>
+      <h2 class="display">Del caso a una propuesta concreta</h2>
+      <p>No todos los casos avanzan de la misma manera. Primero reunimos la información necesaria, después evaluamos la viabilidad y recién entonces definimos el próximo paso.</p>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="num">01</div><div><h3>Registramos el caso</h3><p>Paciente, tutor, extremidad afectada, peso, estado clínico y antecedentes relevantes.</p></div></div>
-      <div class="step reveal d1"><div class="num">02</div><div><h3>Fotos y medidas reales</h3><p>Se cargan imágenes del animal, referencia de escala y medidas de la extremidad o muñón.</p></div></div>
-      <div class="step reveal d2"><div class="num">03</div><div><h3>Diseño técnico a medida</h3><p>El software parametriza socket, apoyos y geometría según la anatomía del caso.</p></div></div>
-      <div class="step reveal d3"><div class="num">04</div><div><h3>Revisión profesional</h3><p>El reporte y el modelo se usan para validar la indicación antes de fabricar o ajustar.</p></div></div>
+      <div class="step reveal"><div class="num">01</div><div><h3>Nos contás el caso</h3><p>Seleccionás el tipo de dispositivo y completás algunos datos básicos sobre el animal, su condición y tu ubicación.</p></div></div>
+      <div class="step reveal d1"><div class="num">02</div><div><h3>Revisamos la información</h3><p>El equipo de Ache analiza el caso y, cuando hace falta, solicita fotos, medidas o documentación adicional.</p></div></div>
+      <div class="step reveal d2"><div class="num">03</div><div><h3>Definimos cómo avanzar</h3><p>Podemos coordinar una evaluación, preparar una propuesta, sumar el caso a un piloto o trabajar junto con un proveedor especializado.</p></div></div>
+      <div class="step reveal d3"><div class="num">04</div><div><h3>Confirmamos las condiciones</h3><p>Antes de cualquier pago, te explicamos el alcance, los próximos pasos, la disponibilidad y las condiciones necesarias para avanzar.</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- SOLUCIONES -->
-<section id="soluciones" class="section dark">
+<!-- FORMULARIO DE CASO -->
+<section id="contacto-caso" class="section light">
   <div class="wrap">
-    <div class="reveal" style="max-width:640px">
-      <span class="sec-tag">Productos a medida</span>
-      <h2 class="display">Soluciones externas Ache.</h2>
-      <p class="sol-intro">Prótesis, órtesis, arneses y carros pensados para recuperar movilidad con diseño externo, ajuste anatómico y revisión profesional.</p>
+    <div class="reveal" style="max-width:680px;margin-bottom:10px">
+      <span class="sec-tag">Formulario de caso</span>
+      <h2 class="display">Contanos el caso de tu perro</h2>
+      <p class="intro">Tres pasos breves. Podés volver atrás en cualquier momento sin perder lo que ya completaste.</p>
     </div>
-    <div class="sol-grid">
-      <article class="tilt sol reveal"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis de miembro Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Prótesis de miembro</h3><p>Reemplazo externo para amputaciones parciales, con socket, eje biomecánico y apoyo.</p><a href="#contacto" class="sol-cta" data-producto="Prótesis de miembro">Consultar por este producto</a></div></article>
-      <article class="tilt sol reveal d1"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Órtesis</h3><p>Estabilización de articulaciones para lesiones, post-cirugía o debilidad muscular.</p><a href="#contacto" class="sol-cta" data-producto="Órtesis">Consultar por este producto</a></div></article>
-      <article class="tilt sol reveal d2"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Carros ortopédicos</h3><p>Sillas de ruedas caninas para recuperar el desplazamiento en casos de parálisis.</p><a href="#contacto" class="sol-cta" data-producto="Carros ortopédicos">Consultar por este producto</a></div></article>
-      <article class="tilt sol reveal d3"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><h3>Arneses de rehabilitación</h3><p>Asistencia para caminar y ejercicios de recuperación post-lesión o cirugía.</p><a href="#contacto" class="sol-cta" data-producto="Arneses de rehabilitación">Consultar por este producto</a></div></article>
+    <div class="form-card reveal d1" style="max-width:760px">
+      <div class="stepper-progress" id="stepperProgress">
+        <div class="stepper-dot active" data-dot="1"></div>
+        <div class="stepper-dot" data-dot="2"></div>
+        <div class="stepper-dot" data-dot="3"></div>
+      </div>
+      <div class="stepper-label">Paso <b id="stepperCurrent">1</b> de 3</div>
+      <form id="caseForm" novalidate>
+        <input type="hidden" name="tipo" value="caso">
+
+        <!-- PASO 1 — Animal y necesidad -->
+        <div class="step-panel active" data-step="1">
+          <h3 class="form-card-h">Animal y necesidad</h3>
+          <div class="field"><label>Producto de interés</label>
+            <select name="producto" id="productoSel">
+              <option value="Aún no sé">Aún no sé qué dispositivo necesita</option>
+              <option value="Prótesis">Prótesis</option>
+              <option value="Arnés">Arnés de rehabilitación</option>
+              <option value="Órtesis">Órtesis</option>
+              <option value="Carro">Carro ortopédico</option>
+            </select>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Nombre del perro</label><input type="text" name="nombre_perro" placeholder="Nombre del perro"></div>
+            <div class="field"><label>Edad aproximada</label><input type="text" name="edad" placeholder="Ej: 4 años"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Peso aproximado</label><input type="text" name="peso" placeholder="Ej: 22 kg"></div>
+            <div class="field"><label>Raza o mestizo</label>
+              <input type="text" name="raza" id="razaInput" list="razasList" autocomplete="off" placeholder="Escribí y elegí la raza (o 'Mestizo')">
+            </div>
+          </div>
+          <div class="field" id="razaOtraWrap" style="display:none">
+            <label>Especificá (cruza, mestizo o detalle)</label>
+            <input type="text" name="raza_detalle" placeholder="Ej: cruza de labrador, mestizo mediano...">
+          </div>
+          <div class="row2">
+            <div class="field"><label>Provincia</label><input type="text" name="provincia" placeholder="Provincia"></div>
+            <div class="field"><label>Ciudad</label><input type="text" name="ciudad" placeholder="Ciudad"></div>
+          </div>
+          <div class="field">
+            <label>¿Qué está pasando actualmente?</label>
+            <div class="opt-grid">
+              <label><input type="radio" name="situacion" value="Le falta parte de una extremidad." required> Le falta parte de una extremidad.</label>
+              <label><input type="radio" name="situacion" value="Necesita soporte en una articulación."> Necesita soporte en una articulación.</label>
+              <label><input type="radio" name="situacion" value="Tiene dificultad para caminar."> Tiene dificultad para caminar.</label>
+              <label><input type="radio" name="situacion" value="Necesita asistencia durante rehabilitación."> Necesita asistencia durante rehabilitación.</label>
+              <label><input type="radio" name="situacion" value="Todavía no sé qué dispositivo necesita."> Todavía no sé qué dispositivo necesita.</label>
+            </div>
+          </div>
+          <div class="stepper-nav"><span></span><button type="button" class="btn btn-pri" data-next="2">Continuar</button></div>
+        </div>
+
+        <!-- PASO 2 — Estado del caso -->
+        <div class="step-panel" data-step="2">
+          <h3 class="form-card-h">Estado del caso</h3>
+          <div class="field">
+            <label>¿Ya fue evaluado por un veterinario?</label>
+            <div class="opt-grid">
+              <label><input type="radio" name="evaluado_vet" value="Sí" required> Sí.</label>
+              <label><input type="radio" name="evaluado_vet" value="No"> No.</label>
+              <label><input type="radio" name="evaluado_vet" value="Tiene turno pendiente"> Tiene turno pendiente.</label>
+            </div>
+          </div>
+          <div class="field"><label>Estado actual</label>
+            <select name="estado_actual">
+              <option>Ya fue amputado</option>
+              <option>Requiere una amputación</option>
+              <option>Tiene una lesión o condición sin amputación</option>
+              <option>Está en rehabilitación</option>
+              <option>Todavía no tiene diagnóstico</option>
+            </select>
+          </div>
+          <div class="field"><label>Etapa</label>
+            <select name="etapa">
+              <option>Necesito resolverlo cuanto antes</option>
+              <option>Quiero avanzar durante el próximo mes</option>
+              <option>Estoy evaluando opciones</option>
+              <option>Solo busco información</option>
+            </select>
+          </div>
+
+          <!-- condicionales por producto -->
+          <div class="cond-block" data-cond="Prótesis">
+            <div class="row2">
+              <div class="field"><label>Extremidad afectada</label><select name="extremidad_afectada"><option>Miembro anterior</option><option>Miembro posterior</option><option>No sé</option></select></div>
+              <div class="field"><label>¿Amputación ya realizada?</label><select name="amputacion_realizada"><option>Sí</option><option>No</option><option>No sé</option></select></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label>¿Tiene muñón?</label><select name="munon"><option>Sí</option><option>No</option><option>No sé</option></select></div>
+              <div class="field"><label>¿Tenés fotos o estudios?</label><select name="fotos_disponibles"><option>Sí</option><option>No, pero puedo conseguirlos</option><option>No</option></select></div>
+            </div>
+          </div>
+          <div class="cond-block" data-cond="Órtesis">
+            <div class="row2">
+              <div class="field"><label>Zona o articulación</label><input type="text" name="zona" placeholder="Ej: carpo, rodilla, columna"></div>
+              <div class="field"><label>Diagnóstico</label><input type="text" name="diagnostico" placeholder="Si lo conocés"></div>
+            </div>
+            <div class="field"><label>Soporte actual</label><input type="text" name="soporte_actual" placeholder="Si ya usa algún soporte"></div>
+          </div>
+          <div class="cond-block" data-cond="Arnés">
+            <div class="row2">
+              <div class="field"><label>Dificultad principal</label><input type="text" name="dificultad_principal" placeholder="Describí brevemente"></div>
+              <div class="field"><label>¿Puede apoyar las cuatro patas?</label><select name="apoya_4_patas"><option>Sí</option><option>No</option><option>Parcialmente</option></select></div>
+            </div>
+            <div class="field"><label>Asistencia necesaria</label><select name="asistencia"><option>Total</option><option>Parcial</option></select></div>
+          </div>
+          <div class="cond-block" data-cond="Carro">
+            <div class="row2">
+              <div class="field"><label>Extremidades afectadas</label><select name="extremidades_afectadas"><option>Posteriores</option><option>Anteriores</option><option>Las cuatro</option></select></div>
+              <div class="field"><label>¿Tiene movilidad parcial?</label><select name="movilidad_parcial"><option>Sí</option><option>No</option></select></div>
+            </div>
+            <div class="field"><label>Solución que utiliza hoy</label><input type="text" name="solucion_actual" placeholder="Si usa algo actualmente"></div>
+            <p class="field-note">Los carros ortopédicos todavía no están disponibles para compra: esta información se usa para investigación de la línea.</p>
+          </div>
+
+          <div class="field"><label>Contanos brevemente qué pasó</label><textarea name="descripcion" placeholder="Patología, tiempo de evolución, si ya hubo cirugía, etc."></textarea></div>
+          <div class="field"><label>¿Qué buscás en esta etapa?</label>
+            <select name="intencion">
+              <option>Confirmar si existe una solución posible</option>
+              <option>Recibir una orientación inicial</option>
+              <option>Conocer una estimación de costo</option>
+              <option>Avanzar lo antes posible</option>
+            </select>
+          </div>
+          <div class="stepper-nav"><button type="button" class="btn-back btn" data-back="1">Volver</button><button type="button" class="btn btn-pri" data-next="3">Continuar</button></div>
+        </div>
+
+        <!-- PASO 3 — Contacto -->
+        <div class="step-panel" data-step="3">
+          <h3 class="form-card-h">Contacto</h3>
+          <div class="row2">
+            <div class="field"><label>Nombre de la persona responsable</label><input type="text" name="nombre" required placeholder="Tu nombre"></div>
+            <div class="field"><label>WhatsApp</label><input type="text" name="whatsapp" required placeholder="Tu WhatsApp"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Email</label><input type="email" name="email" placeholder="Tu email"></div>
+            <div class="field"><label>Medio preferido de contacto</label><select name="medio_contacto"><option>WhatsApp</option><option>Email</option><option>Teléfono</option></select></div>
+          </div>
+          <div class="field"><label>Horario aproximado</label><input type="text" name="horario" placeholder="Ej: tardes, fines de semana"></div>
+          <label class="consent"><input type="checkbox" name="consentimiento" required> Autorizo a Ache a utilizar la información enviada para responder la consulta y evaluar el caso.</label>
+          <label class="consent"><input type="checkbox" name="consentimiento_compartir"> Autorizo a Ache a compartir la información del caso con veterinarios, fabricantes o proveedores especializados cuando sea necesario para evaluar una posible solución.</label>
+          <label class="consent"><input type="checkbox" name="newsletter"> Quiero recibir novedades sobre productos, pruebas y avances de Ache.</label>
+          <div class="stepper-nav"><button type="button" class="btn-back btn" data-back="2">Volver</button><button type="submit" class="btn btn-pri btn-lg">Enviar el caso</button></div>
+          <div class="form-err" id="formErr"></div>
+        </div>
+      </form>
+
+      <datalist id="razasList">
+        <option value="Mestizo / Sin raza definida"></option>
+        <option value="Otro / No sé"></option>
+        <option value="Affenpinscher"></option><option value="Airedale Terrier"></option><option value="Akita"></option>
+        <option value="Akita Americano"></option><option value="Alaskan Malamute"></option><option value="American Bully"></option>
+        <option value="American Staffordshire Terrier"></option><option value="Basenji"></option><option value="Basset Hound"></option>
+        <option value="Beagle"></option><option value="Bichón Frisé"></option><option value="Bichón Maltés"></option>
+        <option value="Bloodhound (Sabueso)"></option><option value="Bobtail (Old English Sheepdog)"></option><option value="Border Collie"></option>
+        <option value="Border Terrier"></option><option value="Borzoi"></option><option value="Boston Terrier"></option>
+        <option value="Bóxer"></option><option value="Boyero de Berna (Bernese)"></option><option value="Braco Alemán"></option>
+        <option value="Bulldog Francés"></option><option value="Bulldog Inglés"></option><option value="Bull Terrier"></option>
+        <option value="Bullmastiff"></option><option value="Ca de Bou"></option><option value="Cairn Terrier"></option>
+        <option value="Caniche (Poodle)"></option><option value="Caniche Toy"></option><option value="Cavalier King Charles Spaniel"></option>
+        <option value="Chihuahua"></option><option value="Chow Chow"></option><option value="Cocker Spaniel Americano"></option>
+        <option value="Cocker Spaniel Inglés"></option><option value="Collie"></option><option value="Corgi (Welsh Corgi)"></option>
+        <option value="Dálmata"></option><option value="Doberman"></option><option value="Dogo Argentino"></option>
+        <option value="Dogo de Burdeos"></option><option value="Fox Terrier"></option><option value="Galgo (Greyhound)"></option>
+        <option value="Galgo Español"></option><option value="Golden Retriever"></option><option value="Gran Danés"></option>
+        <option value="Gran Pirineo"></option><option value="Husky Siberiano"></option><option value="Jack Russell Terrier"></option>
+        <option value="Kelpie Australiano"></option><option value="Labrador Retriever"></option><option value="Lebrel Afgano (Afghan Hound)"></option>
+        <option value="Lhasa Apso"></option><option value="Maltés"></option><option value="Mastín del Pirineo"></option>
+        <option value="Mastín Inglés"></option><option value="Mastín Napolitano"></option><option value="Mastín Tibetano"></option>
+        <option value="Ovejero Alemán (Pastor Alemán)"></option><option value="Papillón"></option><option value="Pastor Australiano"></option>
+        <option value="Pastor Belga (Malinois)"></option><option value="Pastor Blanco Suizo"></option><option value="Pastor de Shetland"></option>
+        <option value="Pastor Ganadero Australiano (Blue Heeler)"></option><option value="Pekinés"></option><option value="Perro de Agua"></option>
+        <option value="Perro Salchicha (Dachshund)"></option><option value="Pinscher Miniatura"></option><option value="Pitbull (American Pit Bull Terrier)"></option>
+        <option value="Pointer"></option><option value="Pomerania"></option><option value="Presa Canario"></option>
+        <option value="Pug (Carlino)"></option><option value="Rhodesian Ridgeback"></option><option value="Rottweiler"></option>
+        <option value="Samoyedo"></option><option value="San Bernardo"></option><option value="Schnauzer Gigante"></option>
+        <option value="Schnauzer Miniatura"></option><option value="Schnauzer Standard"></option><option value="Setter Inglés"></option>
+        <option value="Setter Irlandés"></option><option value="Shar Pei"></option><option value="Shiba Inu"></option>
+        <option value="Shih Tzu"></option><option value="Springer Spaniel Inglés"></option><option value="Staffordshire Bull Terrier"></option>
+        <option value="Teckel (Dachshund)"></option><option value="Terranova (Newfoundland)"></option><option value="Vizsla"></option>
+        <option value="Weimaraner"></option><option value="West Highland White Terrier (Westie)"></option><option value="Whippet"></option>
+        <option value="Yorkshire Terrier"></option>
+      </datalist>
+
+      <div class="form-ok" id="formOk"></div>
     </div>
   </div>
 </section>
 
-<!-- TECNOLOGÍA -->
+<!-- QUÉ SUCEDE DESPUÉS -->
+<section class="section light" style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="sec-tag">Qué sucede después</span>
+      <h2 class="display">Enviar el caso no te obliga a comprar</h2>
+      <p class="intro">La información inicial nos permite entender la necesidad y confirmar si podemos intervenir.</p>
+    </div>
+    <div class="grid3">
+      <div class="info-card reveal"><h4>Podemos avanzar</h4><p>El caso es compatible con alguna de las líneas actuales y coordinamos el próximo paso.</p></div>
+      <div class="info-card reveal d1"><h4>Necesitamos más información</h4><p>Solicitamos fotos, medidas, estudios o la participación del profesional tratante antes de preparar una propuesta.</p></div>
+      <div class="info-card reveal d2"><h4>Hoy no podemos resolverlo directamente</h4><p>Te lo informamos con claridad y, cuando sea posible, buscamos una alternativa o derivación adecuada.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BIOMECHANICS STUDIO -->
 <section id="tecnologia" class="section light tech tech-clean">
   <div class="wrap tech-grid">
     <div class="tech-visual reveal">
@@ -702,165 +1052,238 @@
       <div class="tf b" data-parallax="0.1"><div class="tf-media"><img src="assets/img/protesis.png" alt="Render 3D de la prótesis Ache"></div></div>
     </div>
     <div class="studio-access-card reveal d1">
-      <span class="sec-tag">Biomechanics Studio</span>
-      <h2 class="display">Biomechanics Studio.</h2>
-      <p>El software organiza el caso paso a paso: datos del paciente, fotos, raza, escala, medidas, modelo 3D conceptual y reporte para revisión profesional.</p>
+      <span class="sec-tag">Plataforma profesional</span>
+      <h2 class="display">Biomechanics Studio convierte información clínica en una base técnica para diseñar mejor.</h2>
+      <p style="font-weight:700;color:var(--navy)">De fotos y medidas a una propuesta técnica revisable.</p>
+      <p>Biomechanics Studio organiza datos clínicos, imágenes y medidas para ayudar a documentar el caso, preparar el diseño del dispositivo y generar información que pueda revisarse antes de fabricar. La plataforma está en beta y se está validando con profesionales y casos reales.</p>
       <div class="studio-steps-inline">
-        <div class="studio-step"><b>01</b><span>Caso</span><small>Paciente, tutor, extremidad y contexto clínico.</small></div>
-        <div class="studio-step"><b>02</b><span>Fotos y medidas</span><small>Imágenes, escala y mediciones del muñón o miembro.</small></div>
-        <div class="studio-step"><b>03</b><span>CAD / STL</span><small>Modelo conceptual editable para revisión técnica.</small></div>
-        <div class="studio-step"><b>04</b><span>Reporte</span><small>Documento para coordinar veterinario, fabricante y tutor.</small></div>
+        <div class="studio-step"><b>01</b><span>Casos ordenados</span><small>Cada paciente concentra datos clínicos, fotos, medidas, observaciones y archivos técnicos en un mismo lugar.</small></div>
+        <div class="studio-step"><b>02</b><span>Captura guiada</span><small>La plataforma orienta qué información reunir para disminuir casos incompletos y errores evitables.</small></div>
+        <div class="studio-step"><b>03</b><span>Propuesta técnica revisable</span><small>Los datos del caso se convierten en parámetros y documentación que pueden analizarse antes de fabricar.</small></div>
+        <div class="studio-step"><b>04</b><span>Seguimiento y trazabilidad</span><small>El equipo puede conocer qué información falta, qué versión está vigente y en qué estado se encuentra cada caso.</small></div>
       </div>
-      <a class="btn btn-pri btn-lg" href="https://app.protesisparaperros.com.ar" target="_blank" rel="noopener">Abrir demo del software</a>
+      <div class="hero-cta" style="margin-top:6px">
+        <a class="btn btn-pri btn-lg" href="#profesionales" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a>
+        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profesionales" onclick="acheTrack('professional_demo_click')">Solicitar una demo guiada</a>
+      </div>
     </div>
+  </div>
+  <div class="wrap" style="margin-top:64px">
+    <div class="grid2">
+      <div class="info-card reveal">
+        <h4>Hoy permite</h4>
+        <ul class="check-list">
+          <li>Crear y documentar un caso</li>
+          <li>Cargar datos clínicos</li>
+          <li>Registrar fotos y medidas</li>
+          <li>Organizar información morfológica</li>
+          <li>Generar parámetros para diseño</li>
+          <li>Apoyar el desarrollo de una prótesis</li>
+          <li>Producir documentación técnica y reportes</li>
+        </ul>
+      </div>
+      <div class="info-card reveal d1">
+        <h4>En desarrollo</h4>
+        <ul class="check-list">
+          <li>Experiencia de navegación más clara</li>
+          <li>Dashboard e historial de casos</li>
+          <li>Seguimiento por estados</li>
+          <li>Captura y medición más automatizadas</li>
+          <li>Mejoras en el modelo 3D</li>
+          <li>Integraciones con procesos de fabricación</li>
+        </ul>
+      </div>
+    </div>
+    <p class="field-note" style="margin-top:24px;font-size:13.5px">Biomechanics Studio es una herramienta de apoyo. No reemplaza la evaluación clínica ni las decisiones del veterinario responsable.</p>
   </div>
 </section>
 
-<!-- BAND STATS -->
-<section class="band">
-  <div class="wrap band-grid">
-    <div class="pillar reveal"><span class="pill-mark"></span><h4>Ajuste anatómico</h4><p>El diseño se adapta a la morfología real del animal, no a una talla estándar.</p></div>
-    <div class="pillar reveal d1"><span class="pill-mark"></span><h4>Revisión veterinaria</h4><p>Un profesional valida cada diseño antes de fabricar.</p></div>
-    <div class="pillar reveal d2"><span class="pill-mark"></span><h4>Reporte clínico</h4><p>Documentación técnica para el seguimiento profesional del caso.</p></div>
-    <div class="pillar reveal d3"><span class="pill-mark"></span><h4>24/7</h4><p>Plataforma online: cargá tu caso cuando quieras.</p></div>
-  </div>
-</section>
-
-<!-- CTA / FORM -->
-<section id="contacto" class="section cta">
-  <svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
-  <div class="wrap cta-in">
-    <div class="cta-copy reveal">
-      <span class="sec-tag">Contacto directo</span>
-      <h2 class="display">Contanos qué necesita el animal.</h2>
-      <p>Si sos tutor, veterinario o rehabilitador, mandanos una descripción breve del caso. Respondemos por el canal correcto y con el próximo paso concreto.</p>
-      <p class="cta-note">Ache Innovation ofrece asistencia al diseño de dispositivos externos de rehabilitación. No reemplaza el diagnóstico ni el criterio de un profesional veterinario, que valida cada caso.</p>
+<!-- PROGRAMA PILOTO PROFESIONAL -->
+<section id="profesionales" class="section dark">
+  <div class="wrap">
+    <div class="reveal" style="max-width:700px">
+      <span class="sec-tag">Programa profesional</span>
+      <h2 class="display">Una plataforma que se valida con profesionales</h2>
+      <p class="intro">Buscamos veterinarios, rehabilitadores y fabricantes que quieran probar Biomechanics Studio con casos reales y ayudarnos a mejorar el producto antes de su apertura comercial.</p>
     </div>
-    <div class="form-card reveal d1">
-      <h3>Solicitar evaluación</h3>
-      <p class="sub">Mensaje breve. Si preferís, también podés escribir directo por WhatsApp.</p>
-      <form id="leadForm">
-        <div class="field"><label>Producto de interés</label><select name="producto" id="productoSel"><option>Consulta general</option><option>Prótesis de miembro</option><option>Órtesis</option><option>Carros ortopédicos</option><option>Arneses de rehabilitación</option></select></div>
+    <div class="grid3">
+      <div class="info-card reveal"><h4>Veterinarios</h4><p>Para documentar casos, reunir la información necesaria y revisar propuestas antes de avanzar.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a></div>
+      <div class="info-card reveal d1"><h4>Rehabilitadores</h4><p>Para aportar información funcional, acompañar el seguimiento y registrar cambios durante el proceso de rehabilitación.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex">Sumarse como rehabilitador</a></div>
+      <div class="info-card reveal d2"><h4>Fabricantes y ortopedias</h4><p>Para recibir casos mejor documentados, revisar especificaciones y reducir intercambios innecesarios antes de fabricar.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex">Evaluar una colaboración</a></div>
+    </div>
+    <div class="grid2" style="margin-top:52px">
+      <div class="info-card reveal"><h4>Participar implica</h4>
+        <ul class="check-list"><li>Demo inicial</li><li>Carga de uno o más casos</li><li>Feedback sobre el recorrido</li><li>Revisión de campos y reportes</li><li>Reuniones breves de seguimiento</li></ul>
+      </div>
+      <div class="info-card reveal d1"><h4>El profesional recibe</h4>
+        <ul class="check-list"><li>Acceso temprano</li><li>Acompañamiento del equipo</li><li>Posibilidad de influir sobre el desarrollo</li><li>Prioridad en futuras pruebas</li><li>Documentación organizada de casos</li></ul>
+      </div>
+    </div>
+
+    <div class="form-card reveal d2" style="max-width:760px;margin:52px auto 0" id="profForm">
+      <h3>Solicitar participación</h3>
+      <p class="sub">Formulario independiente para veterinarios, rehabilitadores y fabricantes.</p>
+      <form id="professionalForm">
+        <input type="hidden" name="tipo" value="profesional">
+        <h3 class="form-card-h">Perfil</h3>
         <div class="row2">
           <div class="field"><label>Nombre y apellido</label><input type="text" name="nombre" required placeholder="Tu nombre"></div>
-          <div class="field"><label>Email o WhatsApp</label><input type="text" name="contacto" required placeholder="Cómo te contactamos"></div>
-        </div>
-        <div class="field">
-          <label>Raza</label>
-          <input type="text" name="raza" id="razaInput" list="razasList" autocomplete="off" placeholder="Escribí y elegí la raza (o 'Mestizo')">
-          <datalist id="razasList">
-            <option value="Mestizo / Sin raza definida"></option>
-            <option value="Otro / No sé"></option>
-            <option value="Affenpinscher"></option>
-            <option value="Airedale Terrier"></option>
-            <option value="Akita"></option>
-            <option value="Akita Americano"></option>
-            <option value="Alaskan Malamute"></option>
-            <option value="American Bully"></option>
-            <option value="American Staffordshire Terrier"></option>
-            <option value="Basenji"></option>
-            <option value="Basset Hound"></option>
-            <option value="Beagle"></option>
-            <option value="Bichón Frisé"></option>
-            <option value="Bichón Maltés"></option>
-            <option value="Bloodhound (Sabueso)"></option>
-            <option value="Bobtail (Old English Sheepdog)"></option>
-            <option value="Border Collie"></option>
-            <option value="Border Terrier"></option>
-            <option value="Borzoi"></option>
-            <option value="Boston Terrier"></option>
-            <option value="Bóxer"></option>
-            <option value="Boyero de Berna (Bernese)"></option>
-            <option value="Braco Alemán"></option>
-            <option value="Bulldog Francés"></option>
-            <option value="Bulldog Inglés"></option>
-            <option value="Bull Terrier"></option>
-            <option value="Bullmastiff"></option>
-            <option value="Ca de Bou"></option>
-            <option value="Cairn Terrier"></option>
-            <option value="Caniche (Poodle)"></option>
-            <option value="Caniche Toy"></option>
-            <option value="Cavalier King Charles Spaniel"></option>
-            <option value="Chihuahua"></option>
-            <option value="Chow Chow"></option>
-            <option value="Cocker Spaniel Americano"></option>
-            <option value="Cocker Spaniel Inglés"></option>
-            <option value="Collie"></option>
-            <option value="Corgi (Welsh Corgi)"></option>
-            <option value="Dálmata"></option>
-            <option value="Doberman"></option>
-            <option value="Dogo Argentino"></option>
-            <option value="Dogo de Burdeos"></option>
-            <option value="Fox Terrier"></option>
-            <option value="Galgo (Greyhound)"></option>
-            <option value="Galgo Español"></option>
-            <option value="Golden Retriever"></option>
-            <option value="Gran Danés"></option>
-            <option value="Gran Pirineo"></option>
-            <option value="Husky Siberiano"></option>
-            <option value="Jack Russell Terrier"></option>
-            <option value="Kelpie Australiano"></option>
-            <option value="Labrador Retriever"></option>
-            <option value="Lebrel Afgano (Afghan Hound)"></option>
-            <option value="Lhasa Apso"></option>
-            <option value="Maltés"></option>
-            <option value="Mastín del Pirineo"></option>
-            <option value="Mastín Inglés"></option>
-            <option value="Mastín Napolitano"></option>
-            <option value="Mastín Tibetano"></option>
-            <option value="Ovejero Alemán (Pastor Alemán)"></option>
-            <option value="Papillón"></option>
-            <option value="Pastor Australiano"></option>
-            <option value="Pastor Belga (Malinois)"></option>
-            <option value="Pastor Blanco Suizo"></option>
-            <option value="Pastor de Shetland"></option>
-            <option value="Pastor Ganadero Australiano (Blue Heeler)"></option>
-            <option value="Pekinés"></option>
-            <option value="Perro de Agua"></option>
-            <option value="Perro Salchicha (Dachshund)"></option>
-            <option value="Pinscher Miniatura"></option>
-            <option value="Pitbull (American Pit Bull Terrier)"></option>
-            <option value="Pointer"></option>
-            <option value="Pomerania"></option>
-            <option value="Presa Canario"></option>
-            <option value="Pug (Carlino)"></option>
-            <option value="Rhodesian Ridgeback"></option>
-            <option value="Rottweiler"></option>
-            <option value="Samoyedo"></option>
-            <option value="San Bernardo"></option>
-            <option value="Schnauzer Gigante"></option>
-            <option value="Schnauzer Miniatura"></option>
-            <option value="Schnauzer Standard"></option>
-            <option value="Setter Inglés"></option>
-            <option value="Setter Irlandés"></option>
-            <option value="Shar Pei"></option>
-            <option value="Shiba Inu"></option>
-            <option value="Shih Tzu"></option>
-            <option value="Springer Spaniel Inglés"></option>
-            <option value="Staffordshire Bull Terrier"></option>
-            <option value="Teckel (Dachshund)"></option>
-            <option value="Terranova (Newfoundland)"></option>
-            <option value="Vizsla"></option>
-            <option value="Weimaraner"></option>
-            <option value="West Highland White Terrier (Westie)"></option>
-            <option value="Whippet"></option>
-            <option value="Yorkshire Terrier"></option>
-          </datalist>
-        </div>
-        <div class="field" id="razaOtraWrap" style="display:none">
-          <label>Especificá (cruza, mestizo o detalle)</label>
-          <input type="text" name="raza_detalle" placeholder="Ej: cruza de labrador, mestizo mediano...">
+          <div class="field"><label>Profesión o rol</label><input type="text" name="rol_profesional" placeholder="Ej: veterinario, rehabilitador, fabricante"></div>
         </div>
         <div class="row2">
-          <div class="field"><label>Zona afectada</label><select name="zona"><option>Miembro anterior</option><option>Miembro posterior</option><option>Cadera / columna</option><option>Otra / no sé</option></select></div>
-          <div class="field"><label>Tamaño / peso aprox.</label><input type="text" name="tamano" placeholder="Ej: 25 kg"></div>
+          <div class="field"><label>Especialidad</label><input type="text" name="especialidad" placeholder="Si aplica"></div>
+          <div class="field"><label>Clínica, institución o empresa</label><input type="text" name="institucion" placeholder="Nombre"></div>
         </div>
-        <div class="field"><label>Contanos brevemente el caso</label><textarea name="mensaje" placeholder="Patología, tiempo de evolución, si ya hubo cirugía, etc."></textarea></div>
-        <label class="consent"><input type="checkbox" name="consentimiento" required> Acepto ser contactado por Ache Innovation y que mis datos se usen para dar seguimiento a esta consulta.</label>
-        <button type="submit" class="btn btn-pri btn-lg" style="width:100%">Enviar consulta</button>
-        <div class="form-err" id="formErr"></div>
+        <div class="row2">
+          <div class="field"><label>País</label><input type="text" name="pais" placeholder="País"></div>
+          <div class="field"><label>Ciudad</label><input type="text" name="ciudad" placeholder="Ciudad"></div>
+        </div>
+
+        <h3 class="form-card-h">Experiencia</h3>
+        <div class="row2">
+          <div class="field"><label>Casos de rehabilitación por mes (aprox.)</label><input type="text" name="casos_mes" placeholder="Ej: 5-10"></div>
+          <div class="field"><label>Experiencia con amputaciones</label><select name="experiencia_amputaciones"><option>Alta</option><option>Media</option><option>Baja</option><option>Ninguna</option></select></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Experiencia con prótesis, órtesis o carros</label><select name="experiencia_dispositivos"><option>Alta</option><option>Media</option><option>Baja</option><option>Ninguna</option></select></div>
+          <div class="field"><label>Forma actual de registrar fotos y medidas</label><input type="text" name="forma_registro" placeholder="Ej: WhatsApp, planilla, historia clínica"></div>
+        </div>
+        <div class="field"><label>Forma de compartir información con fabricantes</label><input type="text" name="forma_compartir" placeholder="Ej: email, WhatsApp, en persona"></div>
+        <div class="field"><label>Principal dificultad del proceso</label><textarea name="dificultad_principal_prof" placeholder="Contanos brevemente"></textarea></div>
+
+        <h3 class="form-card-h">Interés</h3>
+        <div class="opt-grid">
+          <label><input type="checkbox" name="interes_probar" value="Probar la plataforma"> Probar la plataforma.</label>
+          <label><input type="checkbox" name="interes_derivar" value="Derivar casos"> Derivar casos.</label>
+          <label><input type="checkbox" name="interes_asesor" value="Participar como asesor"> Participar como asesor.</label>
+          <label><input type="checkbox" name="interes_fabricar" value="Fabricar dispositivos" id="interesFabricar"> Fabricar dispositivos.</label>
+          <label><input type="checkbox" name="interes_alianza" value="Evaluar una alianza"> Evaluar una alianza.</label>
+          <label><input type="checkbox" name="interes_demo" value="Solicitar una demo"> Solicitar una demo.</label>
+        </div>
+
+        <div class="cond-block" id="fabricanteBlock">
+          <h3 class="form-card-h">Datos de fabricación</h3>
+          <div class="row2">
+            <div class="field"><label>Dispositivos que fabrica</label><input type="text" name="fab_dispositivos" placeholder="Ej: prótesis, órtesis, carros"></div>
+            <div class="field"><label>Materiales</label><input type="text" name="fab_materiales" placeholder="Ej: termoplásticos, aluminio"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Capacidad aproximada</label><input type="text" name="fab_capacidad" placeholder="Unidades por mes"></div>
+            <div class="field"><label>Zona de cobertura</label><input type="text" name="fab_zona" placeholder="Ej: AMBA, Argentina, LATAM"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Formatos técnicos aceptados</label><input type="text" name="fab_formatos" placeholder="Ej: STL, STEP, planos PDF"></div>
+            <div class="field"><label>Interés en integrar Biomechanics Studio</label><select name="fab_interes_studio"><option>Sí</option><option>Tal vez</option><option>No</option></select></div>
+          </div>
+        </div>
+
+        <h3 class="form-card-h">Contacto</h3>
+        <div class="row2">
+          <div class="field"><label>Email</label><input type="email" name="email" required placeholder="Tu email"></div>
+          <div class="field"><label>WhatsApp</label><input type="text" name="whatsapp" placeholder="Tu WhatsApp"></div>
+        </div>
+        <div class="field"><label>Horarios disponibles</label><input type="text" name="horario" placeholder="Ej: tardes, fines de semana"></div>
+        <label class="consent"><input type="checkbox" name="consentimiento" required> Autorizo a Ache a utilizar esta información para evaluar la participación en el programa profesional.</label>
+        <button type="submit" class="btn btn-pri btn-lg" style="width:100%">Solicitar participación</button>
+        <div class="form-err" id="profFormErr"></div>
       </form>
-      <div class="form-ok" id="formOk">Gracias. Recibimos tu consulta y te vamos a contactar a la brevedad.</div>
+      <div class="form-ok" id="profFormOk"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE ACHE -->
+<section id="sobre-ache" class="section light">
+  <div class="wrap">
+    <div class="reveal" style="max-width:760px">
+      <span class="sec-tag">Sobre Ache</span>
+      <h2 class="display">Tecnología, diseño y salud animal para desarrollar mejores soluciones de movilidad.</h2>
+      <p class="intro">Ache Innovation es una startup argentina que desarrolla dispositivos y herramientas digitales para mejorar la movilidad y la rehabilitación animal. Combinamos diseño de producto, conocimiento veterinario y tecnología para transformar información clínica y morfológica en soluciones adaptadas a cada caso.</p>
+      <p class="intro">Hoy estamos validando nuestras primeras líneas para perros y construyendo una red de profesionales, fabricantes e instituciones con alcance en Argentina y Latinoamérica.</p>
+    </div>
+    <div class="grid3">
+      <div class="info-card reveal"><h4>Cada caso parte del animal</h4><p>No comenzamos por un talle o un producto estándar. Primero buscamos entender la anatomía, la condición y la necesidad funcional.</p></div>
+      <div class="info-card reveal d1"><h4>Producto físico y software se desarrollan juntos</h4><p>Biomechanics Studio organiza la información del caso y acompaña el proceso de diseño de los dispositivos.</p></div>
+      <div class="info-card reveal d2"><h4>La validación ocurre con actores reales</h4><p>Trabajamos con tutores, veterinarios, rehabilitadores y proveedores especializados para probar cada solución antes de escalarla.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO Y RED PROFESIONAL -->
+<section id="equipo" class="section light" style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="sec-tag">Equipo</span>
+      <h2 class="display">Las personas detrás de Ache</h2>
+    </div>
+    <div class="team-grid">
+      <article class="team-card reveal"><div class="team-avatar">MS</div><h4>Matías Smith</h4><span class="role">Cofundador y CEO</span><p>Lidera la estrategia, el desarrollo de negocio, las alianzas y la validación comercial de las distintas líneas de Ache.</p></article>
+      <article class="team-card reveal d1"><div class="team-avatar">LD</div><h4>Lucas Díaz</h4><span class="role">Cofundador y COO</span><p>Ingeniero químico. Lidera el desarrollo operativo y productivo, el trabajo sobre materiales y procesos, la relación con proveedores y fabricantes, y la viabilidad necesaria para llevar las soluciones a producción.</p></article>
+      <article class="team-card reveal d2"><div class="team-avatar">JB</div><h4>Josefina Bucca</h4><span class="role">CVO — Chief Veterinary Officer</span><p>Veterinaria responsable de aportar criterio clínico al análisis de casos y al desarrollo de soluciones que requieren acompañamiento profesional.</p></article>
+    </div>
+    <p class="intro reveal" style="margin-top:28px">El equipo de Ache también integra perfiles de diseño industrial, ingeniería, comunicación y desarrollo tecnológico.</p>
+    <p class="intro reveal" style="font-weight:700;color:var(--ink)">Una red de más de 120 veterinarios y profesionales forma parte del ecosistema construido alrededor de Ache.</p>
+    <div class="reveal" style="margin-top:32px">
+      <span class="sec-tag" style="display:block;margin-bottom:0">Programas y espacios en los que participamos</span>
+      <div class="program-badges"><span>IncuBAte</span><span>EmprendING</span><span>NAVES IAE</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO DIRECTO CON MATÍAS -->
+<section class="section light" style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="sec-tag">Contacto directo</span>
+      <h2 class="display">¿No sabés por dónde empezar?</h2>
+      <p class="intro">Contame brevemente el caso. Yo mismo voy a revisar la consulta inicial y ayudarte a entender cuál puede ser el próximo paso.</p>
+    </div>
+    <div class="direct-card reveal">
+      <div class="team-avatar" style="width:64px;height:64px">MS</div>
+      <div>
+        <a class="btn btn-pri btn-lg" href="https://wa.me/5491123199500?text=Hola%20Mat%C3%ADas%2C%20llegu%C3%A9%20desde%20la%20web%20de%20Ache%20y%20quer%C3%ADa%20consultar%20por%20el%20caso%20de%20mi%20perro." target="_blank" rel="noopener" onclick="acheTrack('whatsapp_matias_click')">Hablar con Matías</a>
+        <p class="direct-sign">Matías Smith — Cofundador y CEO de Ache</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREGUNTAS FRECUENTES -->
+<section id="faq" class="section light" style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal" style="max-width:680px">
+      <span class="sec-tag">Preguntas frecuentes</span>
+      <h2 class="display">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Ache ya vende todos los dispositivos?</summary><p>No. El arnés de rehabilitación está en preventa, las prótesis y órtesis reciben casos piloto y la línea de carros ortopédicos continúa en desarrollo. En cada sección indicamos el estado actual.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Cómo sé qué dispositivo necesita mi perro?</summary><p>No hace falta saberlo antes de consultar. Podés contarnos qué está pasando y revisaremos qué línea podría corresponder o qué información profesional hace falta.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿La evaluación inicial tiene costo?</summary><p>Depende del tipo de caso y de la instancia necesaria. Antes de avanzar, te informaremos con claridad si alguna evaluación, medición o intervención requiere un costo.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Cuánto cuesta un dispositivo?</summary><p>El valor depende del tipo de solución, las medidas, la complejidad del caso y el proceso de fabricación. Después de la revisión inicial podemos indicar si es posible avanzar y preparar una estimación.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Trabajan en todo el país?</summary><p>Recibimos consultas de toda la Argentina. La forma de evaluación, toma de medidas y entrega depende del dispositivo, la ubicación y las condiciones de cada caso.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Necesito la indicación de un veterinario?</summary><p>Depende del producto y del estado del animal. En prótesis, órtesis y situaciones clínicas complejas puede ser necesario contar con la evaluación o participación del profesional tratante.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Ache fabrica directamente los dispositivos?</summary><p>Ache desarrolla y coordina cada solución y trabaja con proveedores especializados según el tipo de producto y las necesidades del caso.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Qué es Biomechanics Studio?</summary><p>Es la plataforma profesional de Ache para organizar datos clínicos, fotos y medidas, generar parámetros de diseño y producir documentación técnica revisable.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿El software reemplaza al veterinario?</summary><p>No. Biomechanics Studio funciona como una herramienta de apoyo. La evaluación clínica y las decisiones sobre tratamiento corresponden al profesional responsable.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Puedo probar el software?</summary><p>La plataforma está en beta. El acceso se realiza mediante demos guiadas y programas piloto para veterinarios, rehabilitadores y fabricantes de Argentina y Latinoamérica.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open')"><summary>¿Qué pasa con los datos que envío?</summary><p>Ache utiliza la información para responder la consulta y evaluar el caso. Solo podrá compartirla con profesionales o proveedores cuando sea necesario y exista la autorización correspondiente.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CIERRE -->
+<section id="contacto" class="section cta">
+  <svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
+  <div class="wrap">
+    <div class="cta-copy reveal" style="max-width:700px">
+      <span class="sec-tag">Cierre</span>
+      <h2 class="display">Cada caso puede ser el comienzo de una mejor solución.</h2>
+      <p>Contanos qué necesita el animal, sumate a la preventa del arnés o participá en la validación profesional de Biomechanics Studio.</p>
+    </div>
+    <div class="close-grid">
+      <div class="close-card reveal"><h4>Evaluar el caso de un perro</h4><p>Para prótesis, órtesis o una orientación inicial.</p><a href="#contacto-caso" class="btn btn-pri">Evaluar un caso</a></div>
+      <div class="close-card reveal d1"><h4>Sumarse a la preventa del arnés</h4><p>Para registrar interés y recibir información cuando se definan precio, compatibilidad y entrega.</p><a href="#contacto-caso" class="btn btn-pri" onclick="document.getElementById('productoSel').value='Arnés'">Sumarme a la preventa</a></div>
+      <div class="close-card reveal d2"><h4>Participar como profesional</h4><p>Para demos, pilotos, derivación de casos o alianzas de fabricación.</p><a href="#profesionales" class="btn btn-pri">Participar como profesional</a></div>
     </div>
   </div>
 </section>
@@ -872,7 +1295,7 @@
     <div class="foot-top">
       <div class="foot-brand">
         <a href="#" class="logo"><svg class="mark" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span></a>
-        <p>Sistemas externos de movilidad y rehabilitación animal. Diseño a medida, acompañamiento profesional y fabricación orientada al caso real.</p>
+        <p>Potenciamos la movilidad animal, porque cada paso cuenta.</p>
         <div class="social">
           <a href="https://www.linkedin.com/company/ache-innovation/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24h-4V8z"/></svg></a>
           <a href="https://www.instagram.com/ache.innovation/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.8c-3.14 0-3.51.01-4.75.07-.9.04-1.39.19-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.32-.28.81-.32 1.71-.06 1.24-.07 1.61-.07 4.75s.01 3.51.07 4.75c.04.9.19 1.39.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.13.81.28 1.71.32 1.24.06 1.61.07 4.75.07s3.51-.01 4.75-.07c.9-.04 1.39-.19 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.32.28-.81.32-1.71.06-1.24.07-1.61.07-4.75s-.01-3.51-.07-4.75c-.04-.9-.19-1.39-.32-1.71a2.86 2.86 0 0 0-.69-1.06 2.86 2.86 0 0 0-1.06-.69c-.32-.13-.81-.28-1.71-.32-1.24-.06-1.61-.07-4.75-.07zm0 3.06A4.98 4.98 0 1 1 12 17a4.98 4.98 0 0 1 0-9.98zm0 8.22A3.24 3.24 0 1 0 12 8.76a3.24 3.24 0 0 0 0 6.48zM18.4 6.34a1.16 1.16 0 1 1-2.32 0 1.16 1.16 0 0 1 2.32 0z"/></svg></a>
@@ -880,18 +1303,18 @@
         </div>
       </div>
       <div class="foot-col">
-        <h4>Soluciones</h4>
-        <a href="#soluciones">Prótesis de miembro</a>
-        <a href="#soluciones">Órtesis</a>
-        <a href="#soluciones">Carros ortopédicos</a>
-        <a href="#soluciones">Arneses de rehabilitación</a>
+        <h4>Ache Innovation</h4>
+        <a href="#dispositivos">Dispositivos</a>
+        <a href="#como">Cómo trabajamos</a>
+        <a href="#tecnologia">Biomechanics Studio</a>
+        <a href="#profesionales">Para profesionales</a>
       </div>
       <div class="foot-col">
-        <h4>Ache</h4>
-        <a href="#como">Cómo funciona</a>
-        <a href="#tecnologia">Tecnología</a>
-        <a href="#contacto">Solicitar evaluación</a>
-        <a href="https://acheinnovation.com.ar">acheinnovation.com.ar</a>
+        <h4>Más</h4>
+        <a href="#sobre-ache">Sobre Ache</a>
+        <a href="#contacto-caso">Contacto</a>
+        <a href="#" onclick="return false" aria-disabled="true">Política de privacidad</a>
+        <a href="#" onclick="return false" aria-disabled="true">Términos de uso</a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -899,7 +1322,8 @@
       <span>protesisparaperros.com.ar</span>
     </div>
   </div>
-  <p class="disclaimer">Aviso: Ache Innovation desarrolla dispositivos externos (prótesis, órtesis, carros y arneses) de asistencia a la movilidad y la rehabilitación. La información y los diseños generados constituyen una ayuda al diseño y no sustituyen el diagnóstico, la prescripción ni el seguimiento de un profesional veterinario, responsable de validar la indicación en cada caso.</p>
+  <p class="disclaimer">Ache Innovation desarrolla herramientas y dispositivos de apoyo para movilidad y rehabilitación animal. La información del sitio no reemplaza la evaluación ni la indicación de un profesional veterinario.</p>
+  <p class="disclaimer" style="margin-top:8px;font-weight:700;color:rgba(255,255,255,.45)">El futuro de la movilidad animal empieza acá.</p>
 </footer>
 
 <a class="wa-float" href="https://wa.me/5491123199500?text=Hola%2C%20estoy%20interesado%20en%20uno%20de%20sus%20productos.%20Te%20comento%20cu%C3%A1l%3A" aria-label="Escribinos por WhatsApp" target="_blank" rel="noopener">
@@ -925,6 +1349,11 @@
         }
       }
     } catch (err) { /* el tracking nunca debe romper el envío del lead */ }
+  }
+
+  // Evento genérico sin PII: nunca debe romper la interacción que lo dispara.
+  function acheTrack(name, params) {
+    try { if (window.gtag) gtag('event', name, params || {}); } catch (err) {}
   }
 
   const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -1011,26 +1440,111 @@
   const razaInput=document.getElementById('razaInput'), razaOtra=document.getElementById('razaOtraWrap');
   if(razaInput){razaInput.addEventListener('input',()=>{const v=razaInput.value.toLowerCase();razaOtra.style.display=(v.startsWith('otro')||v.startsWith('mestizo')||v.includes('sin raza')||v.includes('cruza'))?'block':'none';});}
 
-  // consultar por producto: precarga el producto en el formulario
+  // consultar por producto: precarga el producto en el formulario y baja al paso 1
   document.querySelectorAll('[data-producto]').forEach(b=>{
-    b.addEventListener('click',()=>{const s=document.getElementById('productoSel');if(s)s.value=b.dataset.producto;});
+    b.addEventListener('click',()=>{const s=document.getElementById('productoSel');if(s)s.value=b.dataset.producto;toggleProductoCond();});
   });
 
-  // form: envía el lead al Google Sheet (Apps Script) + dispara tracking de conversión.
-  // LEADS_ENDPOINT se completa una vez publicado el Apps Script (ver ache-leads-appscript.gs).
-  const form=document.getElementById('leadForm');
+  // orientador: preselecciona la situación y el producto sugerido en el formulario de caso
+  const orientMap={
+    'Le falta parte de una extremidad.':'Prótesis',
+    'Necesita soporte en una articulación.':'Órtesis',
+    'Tiene dificultad para caminar.':'Arnés',
+    'Necesita asistencia durante la rehabilitación.':'Arnés',
+    'Todavía no cuenta con un diagnóstico.':'Aún no sé'
+  };
+  document.querySelectorAll('input[name="orientSit"]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      const prodSel=document.getElementById('productoSel');
+      if(prodSel && orientMap[r.value]) prodSel.value=orientMap[r.value];
+      toggleProductoCond();
+    });
+  });
+
+  // ---- stepper del formulario de caso ----
+  const caseForm=document.getElementById('caseForm');
+  const stepPanels=[...document.querySelectorAll('#caseForm .step-panel')];
+  const stepperDots=[...document.querySelectorAll('.stepper-dot')];
+  const stepperCurrent=document.getElementById('stepperCurrent');
+  let caseStarted=false;
+
+  function goToStep(n){
+    stepPanels.forEach(p=>p.classList.toggle('active', +p.dataset.step===n));
+    stepperDots.forEach(d=>{
+      const dn=+d.dataset.dot;
+      d.classList.toggle('active', dn===n);
+      d.classList.toggle('done', dn<n);
+    });
+    if(stepperCurrent) stepperCurrent.textContent=n;
+    document.getElementById('contacto-caso').scrollIntoView({block:'start', behavior: reduce?'auto':'smooth'});
+  }
+
+  function validStep(n){
+    const panel=stepPanels.find(p=>+p.dataset.step===n);
+    const req=[...panel.querySelectorAll('[required]')];
+    for(const el of req){
+      if(el.type==='radio'){
+        const group=panel.querySelectorAll('input[name="'+el.name+'"]');
+        if(![...group].some(g=>g.checked)) return false;
+      } else if(el.type==='checkbox'){
+        if(!el.checked) return false;
+      } else if(!el.value.trim()) return false;
+    }
+    return true;
+  }
+
+  if(caseForm){
+    caseForm.querySelectorAll('[data-next]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const cur=+btn.closest('.step-panel').dataset.step;
+        if(!validStep(cur)){ btn.closest('.step-panel').reportValidity && btn.closest('.step-panel').reportValidity(); return; }
+        if(!caseStarted){ caseStarted=true; acheTrack('case_form_start'); }
+        acheTrack('case_form_step_'+cur+'_complete');
+        goToStep(+btn.dataset.next);
+      });
+    });
+    caseForm.querySelectorAll('[data-back]').forEach(btn=>{
+      btn.addEventListener('click',()=>goToStep(+btn.dataset.back));
+    });
+  }
+
+  // condicionales por producto (paso 2)
+  function toggleProductoCond(){
+    const prod=document.getElementById('productoSel');
+    if(!prod) return;
+    const map={'Prótesis':'Prótesis','Arnés':'Arnés','Órtesis':'Órtesis','Carro':'Carro'};
+    document.querySelectorAll('#caseForm .cond-block').forEach(b=>{
+      b.classList.toggle('active', map[prod.value]===b.dataset.cond);
+    });
+  }
+  const productoSel=document.getElementById('productoSel');
+  if(productoSel){ productoSel.addEventListener('change', toggleProductoCond); toggleProductoCond(); }
+
+  // envío del formulario de caso
   const formOk=document.getElementById('formOk');
   const formErr=document.getElementById('formErr');
-  form.addEventListener('submit', async (ev) => {
+  const productConfirm={
+    'Arnés':'Tu interés quedó registrado para la preventa. Antes de solicitar cualquier pago te informaremos precio, compatibilidad y condiciones de entrega.',
+    'Carro':'Tu caso quedó registrado como parte de la investigación de esta línea. El producto todavía no se encuentra disponible.'
+  };
+  const productEventMap={'Prótesis':'protesis_case_submit','Arnés':'arnes_preorder_submit','Órtesis':'ortesis_case_submit','Carro':'carro_research_submit'};
+
+  if(caseForm) caseForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const btn = form.querySelector('button[type="submit"]');
+    if(!validStep(3)) return;
+    const btn = caseForm.querySelector('button[type="submit"]');
     const btnTxt = btn.textContent;
     btn.disabled = true; btn.textContent = 'Enviando...';
     if (formErr) formErr.style.display = 'none';
 
-    const fd = new FormData(form);
+    const fd = new FormData(caseForm);
     const payload = Object.fromEntries(fd.entries());
-    payload.consentimiento = form.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
+    payload.consentimiento = caseForm.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
+    payload.consentimiento_compartir = caseForm.querySelector('input[name="consentimiento_compartir"]').checked ? 'Sí' : 'No';
+    payload.newsletter = caseForm.querySelector('input[name="newsletter"]').checked ? 'Sí' : 'No';
+    payload.contacto = payload.whatsapp || payload.email || '';
+    payload.mensaje = payload.descripcion || '';
+    payload.tamano = payload.peso || '';
     payload.pagina = location.href;
     const qs = new URLSearchParams(location.search);
     payload.utm_source = qs.get('utm_source') || '';
@@ -1038,19 +1552,25 @@
     payload.utm_campaign = qs.get('utm_campaign') || '';
 
     try {
-      if (!LEADS_ENDPOINT || !LEADS_ENDPOINT.startsWith('http')) {
-        throw new Error('LEADS_ENDPOINT sin configurar');
-      }
+      if (!LEADS_ENDPOINT || !LEADS_ENDPOINT.startsWith('http')) throw new Error('LEADS_ENDPOINT sin configurar');
       const res = await fetch(LEADS_ENDPOINT, {
         method: 'POST',
-        headers: {'Content-Type': 'text/plain;charset=utf-8'}, // evita preflight CORS con Apps Script
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
         body: JSON.stringify(payload)
       });
       const data = await res.json().catch(() => ({ok: true}));
       if (!data.ok) throw new Error(data.error || 'Respuesta inválida del servidor');
 
       trackLeadConversion(payload);
-      form.style.display = 'none';
+      acheTrack('case_form_submit', {product: payload.producto, audience: 'tutor'});
+      if(productEventMap[payload.producto]) acheTrack(productEventMap[payload.producto], {product: payload.producto, audience: 'tutor'});
+
+      caseForm.style.display = 'none';
+      document.getElementById('stepperProgress').style.display='none';
+      document.querySelector('.stepper-label').style.display='none';
+      let msg = 'Recibimos el caso de ' + (payload.nombre_perro || 'tu perro') + '. Vamos a revisar la información y nos pondremos en contacto para confirmar si necesitamos fotos, medidas o documentación adicional. El envío no implica una compra ni garantiza que el caso pueda avanzar con un dispositivo.';
+      if(productConfirm[payload.producto]) msg += ' ' + productConfirm[payload.producto];
+      formOk.innerHTML = msg + '<br><br><a class="btn btn-pri" style="margin-top:6px" target="_blank" rel="noopener" href="https://wa.me/5491123199500?text=Hola%20Mat%C3%ADas%2C%20llegu%C3%A9%20desde%20la%20web%20de%20Ache%20y%20quer%C3%ADa%20consultar%20por%20el%20caso%20de%20mi%20perro." onclick="acheTrack(\'whatsapp_matias_click\')">Hablar con Matías por WhatsApp</a>';
       formOk.style.display = 'block';
     } catch (err) {
       btn.disabled = false; btn.textContent = btnTxt;
@@ -1060,6 +1580,69 @@
       }
     }
   });
+
+  // ---- formulario profesional ----
+  const profForm=document.getElementById('professionalForm');
+  const profOk=document.getElementById('profFormOk');
+  const profErr=document.getElementById('profFormErr');
+  const fabricanteBlock=document.getElementById('fabricanteBlock');
+  let profStarted=false;
+
+  function syncFabricanteBlock(){
+    if(!profForm||!fabricanteBlock) return;
+    const checked=profForm.querySelector('#interesFabricar').checked;
+    const rol=(profForm.querySelector('[name="rol_profesional"]').value||'').toLowerCase();
+    fabricanteBlock.classList.toggle('active', checked || rol.includes('fabric') || rol.includes('ortoped'));
+  }
+  if(profForm){
+    profForm.addEventListener('input', ()=>{
+      if(!profStarted){ profStarted=true; acheTrack('professional_form_start'); }
+      syncFabricanteBlock();
+    });
+    syncFabricanteBlock();
+
+    profForm.addEventListener('submit', async (ev)=>{
+      ev.preventDefault();
+      const btn=profForm.querySelector('button[type="submit"]');
+      const btnTxt=btn.textContent;
+      btn.disabled=true; btn.textContent='Enviando...';
+      if(profErr) profErr.style.display='none';
+
+      const fd=new FormData(profForm);
+      const payload=Object.fromEntries(fd.entries());
+      payload.consentimiento = profForm.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
+      payload.contacto = payload.email || payload.whatsapp || '';
+      payload.nombre = payload.nombre || '';
+      payload.pagina = location.href;
+      const qs=new URLSearchParams(location.search);
+      payload.utm_source=qs.get('utm_source')||''; payload.utm_medium=qs.get('utm_medium')||''; payload.utm_campaign=qs.get('utm_campaign')||'';
+
+      const interesFabricante = profForm.querySelector('#interesFabricar').checked;
+      const rol=(payload.rol_profesional||'').toLowerCase();
+      const audience = interesFabricante||rol.includes('fabric')||rol.includes('ortoped') ? 'manufacturer' : (rol.includes('rehabilit') ? 'rehabilitator' : 'veterinarian');
+
+      try {
+        if (!LEADS_ENDPOINT || !LEADS_ENDPOINT.startsWith('http')) throw new Error('LEADS_ENDPOINT sin configurar');
+        const res = await fetch(LEADS_ENDPOINT, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload)});
+        const data = await res.json().catch(()=>({ok:true}));
+        if (!data.ok) throw new Error(data.error || 'Respuesta inválida del servidor');
+
+        trackLeadConversion(payload);
+        acheTrack('professional_form_submit', {audience: audience});
+        if(audience==='manufacturer') acheTrack('manufacturer_interest_submit', {audience: audience});
+
+        profForm.style.display='none';
+        profOk.innerHTML = 'Gracias. Recibimos tu solicitud y te vamos a contactar para coordinar los próximos pasos.';
+        profOk.style.display='block';
+      } catch(err){
+        btn.disabled=false; btn.textContent=btnTxt;
+        if(profErr){
+          profErr.innerHTML='No pudimos enviar la solicitud desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20participar%20del%20programa%20profesional%20de%20Ache." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
+          profErr.style.display='block';
+        }
+      }
+    });
+  }
 
   // menú móvil (botón hamburguesa)
   const burger=document.querySelector('.burger');
