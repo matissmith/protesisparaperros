@@ -125,3 +125,10 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Archivos tocados: `index.html`, `SESSION_STATUS.md`. No se tocó el software.
 - Estado: validado localmente, no pusheado todavía — pendiente de mostrarle antes/después
   a Matías y su OK explícito antes de commitear/pushear.
+
+## 2026-07-21 — Ajuste narrativo y visual landing (Codex)
+- Objetivo: aplicar feedback documentado sin reinventar: contraste ámbar en fondos claros, jerarquía tipográfica coherente, terminología consistente, narrativa problema→solución, tarjetas de producto más claras, sección sobre Ache y mayor protagonismo del software.
+- Alcance previsto: `index.html` y este archivo.
+- No tocar: software Streamlit/CAD, `AGENTS.md`, `ache-leads-appscript.gs`.
+- Estado: iniciado.
+- 2026-07-21 Codex: reemplazada la transición acumulada defectuosa por una sola capa `Ache premium transition system v2` en `index.html`. Objetivo: eliminar cortes rectos entre hero/problema/proceso/soluciones/tecnología sin tapar métricas ni textos; no se tocó software, copy, AGENTS.md ni ache-leads-appscript.gs. Pendiente: validación visual final antes de push si el usuario confirma que se ve bien.

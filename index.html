@@ -614,223 +614,162 @@
   }
 
 
+
   /* ─────────────────────────────────────────────────────────────
-     Section break fix — 2026-07-20
-     Proceso arranca como bloque propio: no más blanco contra blanco.
+     Ache premium transition system v2 — 2026-07-21
+     Transiciones curvas/tecnológicas sin tapar métricas ni textos.
   ───────────────────────────────────────────────────────────── */
-  .problem-section{
-    padding-bottom:72px !important;
-    border-bottom:0 !important;
-    background:linear-gradient(180deg,#F6F9FC 0%,#FFFFFF 62%,#F2F7FC 100%) !important;
+  .hero{
+    min-height:100vh !important;
+    padding-bottom:112px !important;
+    isolation:isolate !important;
   }
-  #como.section.light{
-    position:relative !important;
-    margin-top:0 !important;
-    padding:96px 0 102px !important;
-    background:
-      radial-gradient(900px 360px at 16% 0%, rgba(23,53,85,.10), transparent 62%),
-      linear-gradient(180deg,#EAF2F8 0%,#F7FAFD 78%,#FFFFFF 100%) !important;
-    border-top:1px solid rgba(23,53,85,.10) !important;
-    box-shadow:inset 0 20px 42px rgba(23,53,85,.045) !important;
-  }
-  #como.section.light::before{
+  .hero::after{
     content:"";
     position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:22px;
-    background:linear-gradient(180deg,rgba(23,53,85,.09),rgba(23,53,85,0));
+    left:0;right:0;bottom:0;
+    height:170px;
     pointer-events:none;
+    z-index:1;
+    background:
+      radial-gradient(70% 130px at 50% 100%, rgba(239,169,44,.10), transparent 62%),
+      linear-gradient(180deg, rgba(12,28,52,0) 0%, rgba(12,28,52,.76) 58%, #0C1C34 100%);
   }
-  #como .wrap{position:relative;z-index:1;}
-  #como .step{
-    background:rgba(255,255,255,.88) !important;
-    border-color:#D6E1EC !important;
-    box-shadow:0 18px 48px rgba(23,53,85,.055) !important;
-  }
-  #como .step:hover{
-    transform:translateX(6px) !important;
-    border-color:rgba(239,169,44,.78) !important;
-    box-shadow:0 24px 58px rgba(23,53,85,.10) !important;
-  }
-  @media(max-width:768px){
-    .problem-section{padding-bottom:46px !important;}
-    #como.section.light{padding:62px 0 70px !important;}
-    #como.section.light::before{height:16px !important;}
-  }
+  .hero-in,.hero-stats{position:relative;z-index:3;}
+  .hero-stats{margin-bottom:10px !important;}
 
-
-
-  /* ─────────────────────────────────────────────────────────────
-     Ache transition system v1 — 2026-07-20
-     Objetivo: evitar cortes rectos entre secciones y darle a la landing
-     un lenguaje visual más tecnológico: ondas diagonales, halos y scanlines.
-     No toca contenido ni funcionalidad del software.
-  ───────────────────────────────────────────────────────────── */
-  .problem-section,
-  #como.section.light,
-  #soluciones.section.dark,
-  #tecnologia.section.light,
-  .band,
-  #contacto.section.cta{
+  .problem-section{
     position:relative !important;
     overflow:hidden !important;
-  }
-  .problem-section .wrap,
-  #como .wrap,
-  #soluciones .wrap,
-  #tecnologia .wrap,
-  .band .wrap,
-  #contacto .wrap{
-    position:relative !important;
-    z-index:2 !important;
-  }
-
-  /* Hero → Problema: transición respirada, no corte seco */
-  .problem-section{
-    padding-top:118px !important;
-    padding-bottom:118px !important;
+    border-top:0 !important;
+    border-bottom:0 !important;
+    padding:112px 0 132px !important;
     background:
-      radial-gradient(760px 260px at 18% 100%, rgba(23,53,85,.08), transparent 62%),
-      linear-gradient(180deg,#F6F9FC 0%,#FFFFFF 54%,#F2F7FC 100%) !important;
+      radial-gradient(900px 260px at 22% 0%, rgba(23,53,85,.08), transparent 66%),
+      linear-gradient(180deg,#F3F7FB 0%,#FFFFFF 48%,#EAF2F8 100%) !important;
   }
   .problem-section::before{
     content:"";
     position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:82px;
-    background:linear-gradient(180deg,rgba(12,28,52,.10),rgba(12,28,52,0));
+    left:-8vw;right:-8vw;top:-76px;
+    height:150px;
+    border-radius:0 0 50% 50% / 0 0 100% 100%;
+    background:
+      radial-gradient(60% 92px at 50% 0%, rgba(12,28,52,.18), transparent 74%),
+      linear-gradient(90deg, transparent 0%, rgba(239,169,44,.32) 48%, transparent 100%);
+    opacity:.9;
     pointer-events:none;
-    z-index:1;
+    z-index:0;
   }
   .problem-section::after{
     content:"";
     position:absolute;
-    left:0;
-    right:0;
-    bottom:-1px;
-    height:96px;
+    left:-6vw;right:-6vw;bottom:-82px;
+    height:158px;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
     background:
-      radial-gradient(720px 130px at 30% 100%, rgba(239,169,44,.14), transparent 62%),
-      linear-gradient(135deg, rgba(234,242,248,0) 0%, #EAF2F8 52%, #EAF2F8 100%);
-    clip-path:polygon(0 58%, 38% 38%, 68% 54%, 100% 22%, 100% 100%, 0 100%);
-    z-index:1;
+      radial-gradient(52% 80px at 50% 0%, rgba(239,169,44,.10), transparent 72%),
+      #EAF2F8;
+    box-shadow:0 -22px 54px rgba(23,53,85,.06);
     pointer-events:none;
+    z-index:0;
   }
+  .problem-section .container,.problem-grid{position:relative;z-index:2;}
 
-  /* Problema → Proceso: bloque claro con halo y scanline */
   #como.section.light{
-    margin-top:-1px !important;
-    padding:120px 0 112px !important;
-    background:
-      radial-gradient(720px 320px at 8% 8%, rgba(239,169,44,.10), transparent 58%),
-      radial-gradient(900px 380px at 88% 0%, rgba(23,53,85,.11), transparent 58%),
-      linear-gradient(180deg,#EAF2F8 0%,#F7FAFD 62%,#FFFFFF 100%) !important;
+    position:relative !important;
+    overflow:hidden !important;
+    padding:138px 0 128px !important;
     border-top:0 !important;
-    box-shadow:inset 0 28px 48px rgba(23,53,85,.045) !important;
+    border-bottom:0 !important;
+    background:
+      linear-gradient(180deg,#EAF2F8 0%,#F7FAFD 58%,#FFFFFF 100%) !important;
   }
   #como.section.light::before{
     content:"";
     position:absolute;
-    left:10%;
-    right:10%;
-    top:34px;
-    height:1px;
-    background:linear-gradient(90deg,transparent,rgba(239,169,44,.55),rgba(23,53,85,.16),transparent);
+    left:12%;right:12%;top:38px;
+    height:2px;
+    background:linear-gradient(90deg, transparent, rgba(239,169,44,.65), rgba(23,53,85,.16), transparent);
+    opacity:.75;
     pointer-events:none;
-    z-index:1;
   }
   #como.section.light::after{
     content:"";
     position:absolute;
-    left:0;
-    right:0;
-    bottom:-1px;
-    height:104px;
-    background:#0C1C34;
-    clip-path:polygon(0 42%, 28% 58%, 58% 34%, 100% 48%, 100% 100%, 0 100%);
-    z-index:1;
-    pointer-events:none;
-  }
-
-  /* Proceso → Soluciones: entrada oscura con corte técnico diagonal */
-  #soluciones.section.dark{
-    margin-top:-1px !important;
-    padding-top:120px !important;
+    left:-8vw;right:-8vw;bottom:-94px;
+    height:176px;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
     background:
-      radial-gradient(900px 420px at 78% 4%, rgba(239,169,44,.10), transparent 58%),
-      linear-gradient(180deg,#0C1C34 0%,#112B47 54%,#0C1C34 100%) !important;
+      radial-gradient(70% 120px at 50% 0%, rgba(239,169,44,.12), transparent 64%),
+      #0D1D35;
+    pointer-events:none;
+    z-index:0;
+  }
+  #como.section.light .container{position:relative;z-index:2;}
+
+  #soluciones.section.dark{
+    position:relative !important;
+    overflow:hidden !important;
+    padding-top:142px !important;
+    padding-bottom:120px !important;
+    border-top:0 !important;
+    background:
+      radial-gradient(900px 340px at 18% 0%, rgba(43,73,116,.34), transparent 66%),
+      linear-gradient(180deg,#0D1D35 0%,#10233D 54%,#0C1C34 100%) !important;
+  }
+  #soluciones.section.dark::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;top:0;height:120px;
+    background:linear-gradient(180deg, rgba(13,29,53,.95), rgba(13,29,53,0));
+    pointer-events:none;
   }
   #soluciones.section.dark::after{
     content:"";
     position:absolute;
-    left:0;
-    right:0;
-    bottom:-1px;
-    height:92px;
-    background:#F6F9FC;
-    clip-path:polygon(0 56%, 32% 42%, 65% 58%, 100% 30%, 100% 100%, 0 100%);
-    z-index:1;
+    left:-8vw;right:-8vw;bottom:-84px;height:160px;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+    background:#FFFFFF;
+    box-shadow:0 -20px 60px rgba(0,0,0,.14);
     pointer-events:none;
   }
+  #soluciones.section.dark .container{position:relative;z-index:2;}
 
-  /* Soluciones → Tecnología: blanco técnico con sombra de entrada */
   #tecnologia.section.light{
-    margin-top:-1px !important;
-    padding-top:120px !important;
+    position:relative !important;
+    overflow:hidden !important;
+    padding-top:132px !important;
     background:
-      radial-gradient(780px 360px at 18% 0%, rgba(23,53,85,.08), transparent 60%),
-      linear-gradient(180deg,#F6F9FC 0%,#FFFFFF 72%) !important;
+      radial-gradient(880px 260px at 76% 0%, rgba(23,53,85,.07), transparent 66%),
+      linear-gradient(180deg,#FFFFFF 0%,#F5F8FC 100%) !important;
   }
   #tecnologia.section.light::before{
     content:"";
     position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:44px;
-    background:linear-gradient(180deg,rgba(23,53,85,.06),transparent);
-    z-index:1;
+    left:12%;right:12%;top:34px;height:2px;
+    background:linear-gradient(90deg, transparent, rgba(239,169,44,.54), transparent);
     pointer-events:none;
+    opacity:.72;
   }
-
-  /* Bloques finales: profundidad, no bloques planos */
-  .band{
-    background:
-      radial-gradient(860px 360px at 50% -20%, rgba(239,169,44,.14), transparent 62%),
-      linear-gradient(180deg,#0C1C34 0%,#112B47 100%) !important;
-  }
-  .band::before{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    top:-1px;
-    height:74px;
-    background:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,0) 100%);
-    opacity:.10;
-    pointer-events:none;
-  }
-  #contacto.section.cta{
-    background:
-      radial-gradient(820px 360px at 16% 0%, rgba(239,169,44,.10), transparent 62%),
-      linear-gradient(180deg,#112B47 0%,#0C1C34 100%) !important;
-  }
+  #tecnologia.section.light .container{position:relative;z-index:2;}
 
   @media(max-width:768px){
-    .problem-section{padding-top:76px !important;padding-bottom:76px !important;}
-    .problem-section::before{height:46px !important;}
-    .problem-section::after{height:58px !important;clip-path:polygon(0 54%,50% 38%,100% 54%,100% 100%,0 100%) !important;}
-    #como.section.light{padding:76px 0 78px !important;}
-    #como.section.light::before{top:22px !important;left:18% !important;right:18% !important;}
-    #como.section.light::after{height:62px !important;clip-path:polygon(0 44%,50% 58%,100% 44%,100% 100%,0 100%) !important;}
-    #soluciones.section.dark{padding-top:82px !important;}
-    #soluciones.section.dark::after{height:58px !important;clip-path:polygon(0 58%,50% 42%,100% 58%,100% 100%,0 100%) !important;}
-    #tecnologia.section.light{padding-top:78px !important;}
+    .hero{padding-bottom:82px !important;}
+    .hero::after{height:112px !important;}
+    .problem-section{padding:82px 0 92px !important;}
+    .problem-section::before{top:-54px;height:108px !important;}
+    .problem-section::after{bottom:-58px;height:110px !important;}
+    #como.section.light{padding:92px 0 96px !important;}
+    #como.section.light::before{top:24px;left:16%;right:16%;}
+    #como.section.light::after{bottom:-62px;height:118px !important;}
+    #soluciones.section.dark{padding-top:96px !important;padding-bottom:86px !important;}
+    #soluciones.section.dark::before{height:84px !important;}
+    #soluciones.section.dark::after{bottom:-56px;height:106px !important;}
+    #tecnologia.section.light{padding-top:88px !important;}
+    #tecnologia.section.light::before{top:22px;left:18%;right:18%;}
   }
+
 
 </style>
 
