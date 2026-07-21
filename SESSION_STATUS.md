@@ -1114,3 +1114,10 @@ el límite de dos correcciones y deberá resolverse con un cambio puntual poster
 Punto estable: el commit final de esta sesión. Se ejecutaron `git diff --check` y
 `bash build.sh`. No hubo push ni deploy. Próximo paso: revisar únicamente el H2
 profesional pendiente antes de considerar publicación.
+
+## 2026-07-21 — Cierre del bloque profesional duplicado
+
+Se retiró de la vista el bloque introductorio “Una plataforma que se valida con
+profesionales” dentro de `#profesionales`. El formulario profesional y toda su lógica
+quedaron intactos; se verificó localmente que sigue visible como control colapsado.
+Se validaron `git diff --check` y `bash build.sh`. No hubo push ni deploy.
