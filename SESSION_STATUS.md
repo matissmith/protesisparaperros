@@ -345,3 +345,80 @@ de tarjetas de dispositivos, transiciones sobre texto, botones consistentes).
 - `index.html` (generalización de la regla de H2 + nueva regla `.form-card-h`).
 - `SESSION_STATUS.md` (esta entrada).
 No se tocó `ache-leads-appscript.gs`, `AGENTS.md` ni `assets/`.
+
+---
+
+## 2026-07-21 — Corrección de los 3 hallazgos visuales (Claude, sesión de continuación)
+
+No se hizo auditoría nueva ni se tocaron textos/secciones/formularios/analytics/Apps
+Script. Solo los 3 problemas ya documentados arriba.
+
+### Problema 1 — Tarjetas de Dispositivos (recorte de badge/título)
+Causa real: `.sol-body` estaba `position:absolute;inset:auto 0 0 0` dentro de `.sol`
+con `min-height:280px` fijo y `overflow:hidden`. Si el texto necesitaba más de 280px,
+crecía hacia arriba y quedaba recortado por el `overflow:hidden` del padre.
+
+Corrección aplicada (estructural, sin absolute para el bloque de contenido):
+- `.sol-media` pasó de `position:absolute;inset:0` a un bloque normal en el flujo
+  (`position:relative;aspect-ratio:3/2`), así que la foto ahora ocupa la parte de
+  arriba de la tarjeta a su proporción real (3:2, sin recorte del encuadre) y el
+  bloque de texto (`.sol-body`) quedó en flujo normal debajo, ya no absoluto.
+  Se sacó el overlay oscuro (`.sol-media::after`) que ya no hacía falta porque el
+  texto no se superpone más a la foto.
+- `.sol` pasó a `display:flex;flex-direction:column` y se sacó el `min-height:280px`
+  fijo (y sus overrides mobile de `min-height:260px`/`235px`): la tarjeta ahora
+  crece en altura según lo que necesite el contenido, en vez de recortarlo.
+  `overflow:hidden` se mantuvo en `.sol` (ya no es un problema porque el contenido
+  ya no se sale por arriba del padre) para conservar bordes redondeados y contener
+  el emblema decorativo (`.emb-wm`).
+- Validado en vivo (desktop ~1054px y mobile ~406px, con capturas reales, navegando
+  a `#dispositivos` y haciendo scroll por las 4 tarjetas): estado, título, texto,
+  CTA y aclaración se ven completos en Prótesis/Arnés/Órtesis/Carro en ambos
+  anchos, sin superposición, con la foto con protagonismo real (occupa todo el
+  ancho de la tarjeta, proporción 3:2 sin recortes raros).
+
+### Problema 2 — `.form-card-h` pisado por regla `!important`
+Causa real: `.form-card h3{...!important}` (bloque "Ache correction layer
+2026-07-20") aplicaba a cualquier `h3` dentro de `.form-card`, incluidos los que
+tenían `class="form-card-h"`, y como usa `!important` ganaba siempre sin importar
+la especificidad de la clase nueva.
+
+Corrección aplicada (sin agregar más `!important`, solo se acotó el selector
+existente): `.form-card h3{...!important}` → `.form-card h3:not(.form-card-h){...}`.
+Con eso, los `h3.form-card-h` quedan completamente fuera de esa regla vieja y la
+regla `.form-card-h` (sin `!important`) se aplica limpia. Se ajustó también
+`.form-card-h` para que cumpla lo pedido: `font-size:13px` (antes 15px),
+`font-weight:600` (antes 800, para que sea semibold y no un H2/H3 pesado), color
+ámbar (`--amber-dk`), mayúsculas, `margin:24px 0 12px` + borde superior como
+separador liviano entre bloques de un mismo formulario.
+Validado en vivo: "Animal y necesidad" (paso 1 del formulario de caso) se ve como
+etiqueta pequeña en ámbar, notoriamente menor que el título principal del paso,
+en desktop y mobile — ya no parece un H2/H3.
+
+### Problema 3 — Íconos de "Participar implica" / "El profesional recibe"
+Causa: `.check-list li::before` dibujaba un cuadrado con borde ámbar y fondo
+translúcido (visualmente idéntico a un checkbox sin marcar, sin serlo).
+Corrección: se reemplazó por un carácter `✓` real (`content:"✓"`), en ámbar,
+sin caja ni borde — un check inequívoco, sin agregar librerías ni íconos nuevos.
+Validado en vivo (mobile, sección `#profesionales`): las 10 líneas de ambas listas
+muestran el tilde ámbar, ya no parecen casilleros.
+
+### Validación técnica
+- `git diff --check`: sin problemas de whitespace/conflictos.
+- `bash build.sh`: OK. `dist/` verificado: `index.html` + assets públicos, sin
+  `LEEME.txt` ni `_previas/` (la limpieza de la sesión anterior sigue vigente).
+- Validación visual: 1 pasada desktop (~1054px) + 1 pasada mobile (~406px) con
+  Claude in Chrome, cubriendo específicamente los 3 puntos corregidos. No se
+  repitió la auditoría completa de la sesión anterior.
+
+### Pendiente (sin cambios respecto a la entrada anterior)
+- Extender `ache-leads-appscript.gs` (aditivo, sin deploy) para los campos nuevos
+  del stepper y del formulario profesional.
+- Pruebas funcionales reales de envío (éxito y error) de ambos formularios.
+- Fase 4: analytics/revisión final.
+
+### Archivos modificados en esta sesión
+- `index.html` (los 3 fixes de CSS: `.sol`/`.sol-media`/`.sol-body`,
+  `.form-card h3:not(.form-card-h)` + `.form-card-h`, `.check-list li::before`).
+- `SESSION_STATUS.md` (esta entrada).
+No se tocó `build.sh`, `ache-leads-appscript.gs`, `AGENTS.md` ni `assets/`.
