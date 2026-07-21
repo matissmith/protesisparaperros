@@ -254,3 +254,94 @@ Fase 2/3/4 según lo acordado.
 - `index.html` (1 línea funcional: onclick del CTA de preventa).
 - `SESSION_STATUS.md` (esta entrada).
 No se tocó `ache-leads-appscript.gs`, `AGENTS.md`, `build.sh` ni `assets/`.
+
+---
+
+## 2026-07-21 — Limpieza de build + revisión visual Fase 2 (Claude, sesión de continuación)
+
+No se releyó todo `index.html` ni se repitió diagnóstico previo. Se retomó directo
+sobre `build.sh`, `.gitignore` y fragmentos puntuales de `index.html`.
+
+### Parte A — Limpieza del build
+- `build.sh` ahora, después de copiar `assets/` a `dist/`, elimina explícitamente:
+  `assets/img/_previas/`, cualquier `*.txt`, `.DS_Store`, `.gitignore`, `*.md` y
+  `*.gs` dentro de `dist/`, y purga carpetas ocultas remanentes. No se tocaron los
+  archivos originales del repo ni de `assets/`, solo lo que se copia a `dist/`.
+- `bash build.sh` corrido una vez. `dist/` verificado: contiene únicamente
+  `index.html` + `assets/{ache-logo.svg, fonts/conthrax-sb.ttf, img/{arnes,carro,
+  hero,ortesis,protesis,software-ui}.png}`. `LEEME.txt` y `_previas/` confirmados
+  ausentes. Pendiente anterior cerrado.
+
+### Parte B — Revisión visual (con limitación de entorno a documentar)
+**Chrome (Claude in Chrome) no estaba conectado** en esta sesión — se intentó 2
+veces (`tabs_context_mcp`), ambas fallaron con "extension not reachable" (protocolo
+de máx. 2 intentos agotado, se documenta en vez de insistir). El servidor de
+preview propio (`preview_start`) tampoco funcionó: `python3 -m http.server` crashea
+con `PermissionError` en `os.getcwd()` dentro del sandbox que usa esa herramienta,
+independientemente de los argumentos pasados (falla en la evaluación default de
+`argparse` antes de leer `--directory`). **No hubo capturas reales de desktop ni
+mobile en esta sesión.** En su lugar se hizo una revisión de código dirigida a los
+puntos del checklist pedido, y se corrigieron 2 problemas reales de alto impacto
+encontrados así:
+1. **Jerarquía de H2 rota**: el bloque "Ache correction layer 2026-07-20" fijaba el
+   tamaño de H2 solo para `#como`, `#soluciones`, `#tecnologia`, `#contacto`. Como
+   `#soluciones` ya no existe (ahora es `#dispositivos`) y las secciones nuevas
+   (`#selector`, `#orientador`, `#profesionales`, `#sobre-ache`, `#equipo`, `#faq`)
+   nunca estuvieron en esa lista, sus H2 iban a caer al tamaño viejo y más grande
+   (`clamp(30px,4vw,52px)`, sin tope de `max-width`) en vez del tamaño consistente
+   del resto (`clamp(30px,3.2vw,46px)`). Se generalizó el selector a
+   `.section h2.display` (desktop y el breakpoint de 768px) para que todos los
+   títulos de sección compartan la misma jerarquía, sin achicar Biomechanics Studio
+   ni Equipo como pide la regla explícita. Riesgo bajo: es un selector CSS más
+   amplio sobre las mismas reglas ya probadas, no un rediseño.
+2. **Clase `.form-card-h` sin definir**: se usa 8 veces como separador de bloques
+   dentro del stepper de caso y del formulario profesional
+   ("Animal y necesidad", "Perfil", "Experiencia", etc.), pero nunca se declaró en
+   el CSS → iba a renderizar con estilos default del navegador (tamaño y márgenes
+   inconsistentes con el resto del sistema tipográfico). Se agregó una regla simple
+   reutilizando tokens existentes (`--amber-dk`, `--line`), con borde superior como
+   separador visual entre bloques de un mismo formulario.
+- Repaso adicional del checklist por código (sin captura, con el criterio de "bajo
+  riesgo, alto impacto" y sin perseguir detalle no bloqueante):
+  - Estados PREVENTA/CASOS PILOTO/EN DESARROLLO: colores diferenciados y con
+    contraste razonable ya definidos (`.status-piloto` ámbar, `.status-preventa`
+    blanco translúcido, `.status-desarrollo` gris) sobre fondo oscuro de
+    `.sol-body` — no se detectó texto pegado directo sobre imagen sin scrim (el
+    overlay `.sol-media::after` ya oscurece la base de la imagen antes del texto,
+    patrón heredado y ya validado en sesiones previas).
+  - Stepper: confirmado en código que solo el paso 1 tiene `class="active"` en el
+    HTML y que `.step-panel{display:none}` oculta el resto — un paso a la vez,
+    estructuralmente correcto.
+  - Formulario profesional: no es un stepper (no lo pedía el prompt), pero está
+    dividido con los mismos separadores `.form-card-h` en bloques temáticos, no es
+    una pared de campos sin agrupar.
+  - Secciones nuevas heredan el sistema de padding responsive ya existente
+    (`.section.light/.dark`, colapso a 1 columna en grids bajo 960px) sin reglas
+    nuevas paralelas — no se detectaron duplicaciones de sistema de espaciado.
+
+### Pendiente real y explícito
+**Falta la validación visual real en navegador** (desktop y mobile) — no se pudo
+hacer en esta sesión por la falla de tooling descrita arriba, no porque se haya
+decidido saltear. Cuando Chrome/preview estén disponibles, es el primer paso a
+retomar: 1 captura desktop (1440) + 1 mobile (390) de la landing completa,
+especialmente para confirmar visualmente los dos fixes de esta sesión (H2 y
+`.form-card-h`) y el resto del checklist de Fase 2 (saturación del hero, distinción
+de tarjetas de dispositivos, transiciones sobre texto, botones consistentes).
+
+### Punto exacto para continuar
+1. Conseguir un navegador funcional (Chrome extension conectada, o
+   `preview_start` con un runtime distinto a `python3 -m http.server` ya que ese
+   falla en este sandbox) y hacer la validación visual real pendiente.
+2. Si aparecen problemas visuales reales en esa validación, aplicar correcciones
+   puntuales (máx. 2 intentos por problema, alto impacto/bajo riesgo, sin
+   reconstruir secciones).
+3. Recién después: extender `ache-leads-appscript.gs` (aditivo, sin deploy) y
+   pruebas funcionales reales de ambos formularios (pendiente de sesiones
+   anteriores, sigue abierto).
+4. Fase 4: analytics/revisión final.
+
+### Archivos modificados en esta sesión
+- `build.sh` (limpieza de `dist/`).
+- `index.html` (generalización de la regla de H2 + nueva regla `.form-card-h`).
+- `SESSION_STATUS.md` (esta entrada).
+No se tocó `ache-leads-appscript.gs`, `AGENTS.md` ni `assets/`.
