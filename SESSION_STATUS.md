@@ -71,3 +71,7 @@ Hay cambios locales pendientes. No publicar sin revisar diff final.
 - Cambio limitado a CSS de landing: transición suave con gradiente superior, menor padding inicial y sin tocar textos, software, CAD ni integración.
 - Archivos previstos para commit: `index.html` y `SESSION_STATUS.md`.
 
+## 2026-07-20 — Corrección del degradado sobre métricas
+- Se eliminó el pseudo-elemento que invadía el hero y tapaba las métricas `4 / +120 / 100%`.
+- La transición hero → problema queda limpia: sin overlay blanco encima de números ni textos.
+- Cambio limitado a CSS de landing. No se tocó software, CAD ni integración.
