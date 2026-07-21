@@ -1526,7 +1526,10 @@
 
   if(caseForm) caseForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    if(!validStep(3)) return;
+    if(!validStep(3)){
+      if(formErr){ formErr.textContent = 'Faltan campos obligatorios: nombre, WhatsApp y la autorización para evaluar el caso.'; formErr.style.display = 'block'; }
+      return;
+    }
     const btn = caseForm.querySelector('button[type="submit"]');
     const btnTxt = btn.textContent;
     btn.disabled = true; btn.textContent = 'Enviando...';
@@ -1534,12 +1537,25 @@
 
     const fd = new FormData(caseForm);
     const payload = Object.fromEntries(fd.entries());
+    // los 4 cond-block quedan siempre en el DOM (solo se ocultan por CSS), así que FormData
+    // manda los 4 juntos; acá se descartan los campos de los bloques que no correspondan al
+    // producto elegido para no mandar valores default de <select> que el usuario nunca vio.
+    const condFieldsByProduct = {
+      'Prótesis': ['extremidad_afectada', 'amputacion_realizada', 'munon', 'fotos_disponibles'],
+      'Órtesis': ['zona', 'diagnostico', 'soporte_actual'],
+      'Arnés': ['dificultad_principal', 'apoya_4_patas', 'asistencia'],
+      'Carro': ['extremidades_afectadas', 'movilidad_parcial', 'solucion_actual']
+    };
+    Object.keys(condFieldsByProduct).forEach(prod => {
+      if (prod !== payload.producto) condFieldsByProduct[prod].forEach(field => delete payload[field]);
+    });
     payload.consentimiento = caseForm.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
     payload.consentimiento_compartir = caseForm.querySelector('input[name="consentimiento_compartir"]').checked ? 'Sí' : 'No';
     payload.newsletter = caseForm.querySelector('input[name="newsletter"]').checked ? 'Sí' : 'No';
     payload.contacto = payload.whatsapp || payload.email || '';
     payload.mensaje = payload.descripcion || '';
     payload.tamano = payload.peso || '';
+    payload.audience = 'tutor';
     payload.pagina = location.href;
     const qs = new URLSearchParams(location.search);
     payload.utm_source = qs.get('utm_source') || '';
@@ -1615,6 +1631,7 @@
       const interesFabricante = profForm.querySelector('#interesFabricar').checked;
       const rol=(payload.rol_profesional||'').toLowerCase();
       const audience = interesFabricante||rol.includes('fabric')||rol.includes('ortoped') ? 'manufacturer' : (rol.includes('rehabilit') ? 'rehabilitator' : 'veterinarian');
+      payload.audience = audience;
 
       try {
         if (!LEADS_ENDPOINT || !LEADS_ENDPOINT.startsWith('http')) throw new Error('LEADS_ENDPOINT sin configurar');

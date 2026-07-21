@@ -422,3 +422,199 @@ muestran el tilde ámbar, ya no parecen casilleros.
   `.form-card h3:not(.form-card-h)` + `.form-card-h`, `.check-list li::before`).
 - `SESSION_STATUS.md` (esta entrada).
 No se tocó `build.sh`, `ache-leads-appscript.gs`, `AGENTS.md` ni `assets/`.
+
+---
+
+## 2026-07-21 — Extensión aditiva de `ache-leads-appscript.gs` + pruebas funcionales reales (Claude, sesión de continuación)
+
+Objetivo único de esta sesión (pedido explícito): cerrar la integración funcional de los
+dos formularios (caso + profesional) con el receptor de leads existente, sin cambios
+visuales/de texto/analytics, sin deploy. Se retomó directo desde el pendiente #1 ya
+documentado arriba (no se repitió el diagnóstico de fases anteriores).
+
+### 1. Payload que envía hoy cada formulario (auditado en código, `index.html`)
+**Formulario de caso** (`#caseForm`, JS ~línea 1527 en adelante): `tipo` (fijo "caso"),
+`producto`, `nombre_perro`, `edad`, `peso`→alias a `tamano`, `raza`, `raza_detalle`,
+`provincia`, `ciudad`, `situacion`, `evaluado_vet`, `estado_actual`, `etapa`,
+condicionales según producto (`extremidad_afectada`/`amputacion_realizada`/`munon`/
+`fotos_disponibles` para Prótesis; `zona`/`diagnostico`/`soporte_actual` para Órtesis;
+`dificultad_principal`/`apoya_4_patas`/`asistencia` para Arnés;
+`extremidades_afectadas`/`movilidad_parcial`/`solucion_actual` para Carro),
+`descripcion`→alias a `mensaje`, `intencion`, `nombre`, `whatsapp`, `email`,
+`medio_contacto`, `horario`, `consentimiento`, `consentimiento_compartir`, `newsletter`,
+`contacto` (calculado: whatsapp||email), `pagina`, `utm_*`.
+
+**Formulario profesional** (`#professionalForm`, JS ~línea 1599 en adelante): `tipo`
+(fijo "profesional"), `nombre`, `rol_profesional`, `especialidad`, `institucion`,
+`pais`, `ciudad`, `casos_mes`, `experiencia_amputaciones`, `experiencia_dispositivos`,
+`forma_registro`, `forma_compartir`, `dificultad_principal_prof`, `interes_probar`,
+`interes_derivar`, `interes_asesor`, `interes_fabricar`, `interes_alianza`,
+`interes_demo`, bloque fabricante si corresponde (`fab_dispositivos`, `fab_materiales`,
+`fab_capacidad`, `fab_zona`, `fab_formatos`, `fab_interes_studio`), `email`,
+`whatsapp`, `horario`, `consentimiento`, `contacto` (calculado), `pagina`, `utm_*`.
+
+### 2. Qué aceptaba el `.gs` antes de esta sesión
+Solo 14 campos (`FIELD_LIMITS` original): `producto`, `nombre`, `contacto`, `especie`,
+`raza`, `raza_detalle`, `zona`, `tamano`, `mensaje`, `consentimiento`, `pagina`,
+`utm_source`, `utm_medium`, `utm_campaign`. Todo lo demás se descartaba en silencio
+(sin error, pero sin llegar al Sheet) — este era el gap real documentado en sesiones
+anteriores.
+
+### 3. Distinción tutor / veterinario / rehabilitador / fabricante y producto
+- **Audience**: no viajaba en el payload (se calculaba en JS solo para analytics y se
+  descartaba). Se agregó `payload.audience` en ambos formularios (2 líneas, sin tocar
+  texto ni visual): `'tutor'` fijo en el de caso, y la variable ya calculada
+  (`'veterinarian'|'rehabilitator'|'manufacturer'`) en el profesional — mismos valores
+  que ya usaba `acheTrack(...)`, sin inventar ningún valor nuevo.
+- **Producto** (Prótesis/Arnés/Órtesis/Carro): ya viajaba tal cual en `producto`
+  (valores exactos usados en `data-producto`/`productoSel`), sin cambios.
+
+### 4. Extensión aditiva de `ache-leads-appscript.gs`
+- `FIELD_LIMITS`: se agregaron 48 claves nuevas después de las 14 originales (mismo
+  orden, nada removido ni renombrado): `audience`, `tipo` + todos los campos del
+  stepper de caso (`nombre_perro`, `edad`, `provincia`, `ciudad`, `situacion`,
+  `evaluado_vet`, `estado_actual`, `etapa`, los 12 campos condicionales de los 4
+  productos, `descripcion`, `intencion`, `whatsapp`, `email`, `medio_contacto`,
+  `horario`, `consentimiento_compartir`, `newsletter`) + todos los del formulario
+  profesional (`rol_profesional`, `especialidad`, `institucion`, `pais`, `casos_mes`,
+  `experiencia_amputaciones`, `experiencia_dispositivos`, `forma_registro`,
+  `forma_compartir`, `dificultad_principal_prof`, los 6 `interes_*`, los 6 `fab_*`).
+- `doPost`: el `sheet.appendRow([...])` ahora incluye las 62 columnas totales, en el
+  mismo orden que `FIELD_LIMITS` (14 viejas intactas + 48 nuevas al final).
+- `getOrCreateSheet`: los headers de una hoja nueva (`ss.insertSheet`) incluyen las 62
+  etiquetas correspondientes. **Esto solo aplica si el Sheet no existe todavía** — no
+  reescribe headers de un Sheet ya creado (ver limitación abajo).
+- `validateAndNormalize`, `isValidConsent`, `limitText`, `sanitizeForSheet`: sin
+  cambios — ya cubrían lo pedido (ver punto 6).
+- No se tocó ninguna de las 14 columnas/campos viejos, ni su orden, ni sus límites.
+
+### 5. Consentimientos (obligatorio vs. opcionales)
+Sin cambios necesarios: `validateAndNormalize` ya solo exige `raw.consentimiento`
+(vía `isValidConsent`) para aceptar el lead; `consentimiento_compartir` y `newsletter`
+ahora viajan y se guardan, pero nunca se validan como obligatorios — se guardan
+"Sí"/"No" tal cual los manda el frontend. Confirmado con test funcional (punto 8).
+
+### 6. Seguridad/validación — estado real (sin cambios, ya estaba cubierto)
+Sanitización contra formula injection (`sanitizeForSheet`), límites de longitud
+(`FIELD_LIMITS`), validación de nombre + al menos un contacto (`data.nombre`/
+`data.contacto`), validación de consentimiento obligatorio, error genérico al
+frontend (`GENERIC_ERROR`) con detalle solo en `console.error`, fallo de mail no
+pierde el lead (try/catch separado), sin HTML crudo insertado en ningún lado
+(Sheet guarda texto plano, mail es texto plano). Nada de esto se reimplementó: ya
+cumplía lo pedido antes de esta sesión, se revisó y se confirma que sigue así con
+los campos nuevos (mismo mecanismo genérico vía `Object.keys(FIELD_LIMITS)`).
+
+### 7. Bug real encontrado y corregido en `index.html` (no en el `.gs`)
+Los 4 bloques condicionales del paso 2 (`.cond-block` por producto) quedan siempre
+en el DOM — solo se ocultan por CSS (`display:none` vs `.active`), así que
+`new FormData(caseForm)` siempre incluía los campos de **los 4 productos a la vez**,
+incluyendo valores default de `<select>` que el usuario nunca vio (ej. un lead de
+Prótesis hubiera llegado con `apoya_4_patas` de Arnés seteado a su opción por
+defecto). Se agregó un filtro de 8 líneas en el submit handler del formulario de
+caso (`index.html`, antes de armar el payload final) que borra del payload los
+campos de los bloques que no correspondan al `producto` elegido. Validado con test
+funcional real (punto 8): confirmado que ahora **solo** viajan los campos del
+producto seleccionado.
+
+Segundo hallazgo y fix, mismo formulario: al enviar el paso 3 con campos obligatorios
+vacíos (nombre/whatsapp/consentimiento), el handler hacía `return` en silencio —
+**no se mostraba ningún error** (el formulario usa `novalidate`, así que tampoco
+aparecía la validación nativa del navegador). Esto contradecía directamente la
+prueba pedida ("formulario inválido debe mostrar errores"). Fix mínimo: se agregó
+un mensaje visible en `#formErr` para ese caso específico (3 líneas). El formulario
+profesional no tenía este problema — no usa `novalidate`, así que ya mostraba la
+validación nativa del navegador correctamente (confirmado, sin cambios).
+
+Ambos fixes son quirúrgicos (JS, no visual, no texto de producto), con 1 intento
+cada uno (dentro del límite de 2 por error).
+
+### 8. Pruebas realizadas (todas documentadas, ninguna contra el endpoint productivo real)
+1. Validación estática de sintaxis: `node --check` sobre `ache-leads-appscript.gs`
+   (copiado a `.js` temporal) y sobre el bloque `<script>` principal extraído de
+   `index.html` — ambos OK.
+2. Prueba local de armado de payload (Node.js, réplica fiel de la lógica de
+   `index.html`): 19 asserts sobre 4 escenarios (caso Prótesis, caso Órtesis,
+   profesional veterinario, profesional fabricante) — todos pasaron.
+3. Prueba funcional real en navegador (servidor local `http-server` vía
+   `preview_start`, **con `window.fetch` interceptado en el propio navegador para
+   que ningún request saliera realmente al endpoint productivo real** — se
+   verificó que la URL interceptada coincidía con el `LEADS_ENDPOINT` real, o sea
+   que sin el intercept el POST sí se habría enviado a producción):
+   - Paso 1 sin campo obligatorio (`situacion`): bloquea el avance, confirmado.
+   - Ida y vuelta entre pasos 1→2→1: valores conservados (`nombre_perro` intacto).
+   - Envío válido (Prótesis, Órtesis→no probado explícito pero Carro sí): mensaje
+     de éxito visible, formulario oculto, payload correcto, `audience:"tutor"`.
+   - Envío inválido en paso 3 (sin nombre/whatsapp/consentimiento): con el fix del
+     punto 7, ahora sí se muestra `#formErr` con mensaje claro; sin el fix no
+     mostraba nada (confirmado antes/después).
+   - Condicionales: confirmado que con Prótesis solo viajan sus 4 campos; con Carro
+     solo viajan sus 3 campos (antes del fix viajaban los 4 bloques juntos).
+   - Formulario profesional: envío con `interes_fabricar` marcado → `audience:
+     "manufacturer"`, bloque fabricante activo, campos `fab_*` presentes.
+   - Separación de formularios: confirmado que enviar el formulario de caso no
+     oculta ni modifica el formulario profesional (siguen siendo elementos DOM
+     independientes, sin estado compartido).
+   - Analytics: se confirmó que los parámetros reales usados en `acheTrack(...)`
+     para los eventos de submit (`{product, audience}` / `{audience}`) no incluyen
+     ninguna clave de PII (`nombre`, `whatsapp`, `email`, `contacto`, `nombre_perro`,
+     `descripcion`, `diagnostico`).
+4. Confirmaciones visuales mínimas: 1 captura mobile (375×812, paso 1 del stepper,
+   con Chrome vía `preview_*`) y 1 captura desktop (formulario profesional,
+   sección "Perfil"/"Experiencia") — sin cambios visuales respecto a la sesión
+   anterior, ambas legibles y sin recortes.
+5. `git diff --check`: sin problemas de whitespace (corrido 1 sola vez, al final).
+6. `bash build.sh`: corrido 1 sola vez al final (post-fixes). `dist/` verificado:
+   solo `index.html` + `assets/` públicos, sin `.gs`/`.md`/`LEEME.txt`/`_previas/`.
+
+### Limitaciones explícitas (sin maquillar)
+1. **No se pudo probar `ache-leads-appscript.gs` ejecutándose de verdad** (Apps
+   Script no se puede correr localmente ni sin desplegar). La validación fue:
+   sintaxis (`node --check`), y una réplica fiel en Node.js de
+   `validateAndNormalize`/`FIELD_LIMITS`/whitelist para confirmar que ningún campo
+   nuevo real quedaría fuera. **No se desplegó ni se publicó el script** (regla
+   explícita de la tarea).
+2. **El Sheet productivo real (si ya existe, con las 14 columnas viejas) no va a
+   tener los headers de las 62 columnas nuevas automáticamente** — `getOrCreateSheet`
+   solo escribe headers cuando crea la hoja desde cero (`if (!sheet)`). Si el Sheet
+   de Matías ya existe con datos, redeployar este script va a agregar las 48
+   columnas nuevas de datos correctamente (mismo orden), pero la fila 1 (headers)
+   de ese Sheet específico no se va a actualizar sola. **Paso manual pendiente**: una
+   vez redeployado, agregar a mano los 48 títulos de columna nuevos en la fila 1 del
+   Sheet real (están listados en el array de `getOrCreateSheet`, se pueden copiar
+   tal cual).
+3. Solo se probó explícitamente un envío exitoso "de punta a punta" para
+   Prótesis y Carro (no Arnés/Órtesis), y un profesional fabricante (no
+   veterinario/rehabilitador puro) — la lógica es la misma para los 4 productos y
+   los 3 roles (mismo código genérico), pero no se ejecutó 1 test por combinación
+   para no exceder el tiempo de la sesión.
+4. No se revalidó visualmente la sección de Dispositivos ni el resto del sitio —
+   fuera de alcance de esta sesión (objetivo único: integración de formularios).
+
+### Pasos manuales pendientes para Matías (redeploy real)
+1. Abrir el proyecto de Apps Script vinculado al Sheet de leads real.
+2. Reemplazar el contenido por el `ache-leads-appscript.gs` de este commit (aditivo,
+   compatible con lo que ya hay).
+3. Implementar > Gestionar implementaciones > editar (lápiz) > Nueva versión (para
+   que la URL ya publicada tome el cambio). La URL `/exec` no cambia.
+4. Si el Sheet "Leads" ya existe: agregar a mano los 48 headers nuevos en la fila 1
+   (ver lista completa en `getOrCreateSheet` del `.gs`), en el mismo orden en que
+   aparecen ahí, a partir de la columna 15 (después de `utm_campaign`).
+5. Probar con un envío real de prueba (uno de caso, uno profesional) y confirmar
+   que aparecen las filas nuevas con las columnas nuevas pobladas.
+
+### Compatibilidad preservada (confirmado)
+- Las 14 columnas/campos viejos del `.gs` no se tocaron, no cambiaron de orden ni de
+  límite.
+- El script sigue aceptando JSON (`postData.contents`) y parámetros tradicionales
+  (`e.parameter`) — no se tocó `parseBody`.
+- La URL del endpoint (`LEADS_ENDPOINT` en `index.html`) no se modificó.
+- Ningún campo viejo fue eliminado ni renombrado.
+
+### Archivos modificados en esta sesión
+- `ache-leads-appscript.gs` (extensión aditiva: `FIELD_LIMITS`, `appendRow`, headers
+  de `getOrCreateSheet`; sin deploy).
+- `index.html` (3 cambios funcionales, no visuales, no de texto: `payload.audience`
+  en ambos formularios, filtro de campos condicionales por producto, mensaje de
+  error visible en envío inválido del paso 3).
+- `SESSION_STATUS.md` (esta entrada).
+No se tocó `build.sh`, `AGENTS.md` ni `assets/`. No se hizo push ni deploy.
