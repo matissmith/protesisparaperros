@@ -2,7 +2,7 @@
  * Ache Innovation — Recepción de leads del formulario de protesisparaperros.com.ar
  * ---------------------------------------------------------------------------
  * Qué hace: recibe el POST del formulario de la landing, guarda una fila por
- * lead en un Google Sheet y (opcional) manda un mail de aviso.
+ * lead en un Google Sheet y responde en JSON.
  *
  * CÓMO INSTALARLO (una sola vez, ~5 minutos):
  * 1. Andá a sheets.google.com y creá una hoja nueva. Nombrala, por ejemplo,
@@ -16,18 +16,17 @@
  *    - Ejecutar como: TU cuenta (Yo).
  *    - Quién tiene acceso: "Cualquier usuario" (Anyone) — sin esto el
  *      formulario público no va a poder mandar datos.
- * 5. Al implementar, Google va a pedir que autorices permisos (acceso a tus
- *    Sheets y a mandar mail en tu nombre). Es normal, es tu propio script.
+ * 5. Al implementar, Google va a pedir que autorices el acceso a Sheets.
+ *    Es normal, es tu propio script.
  * 6. Te va a dar una URL que termina en "/exec". Copiala.
  * 7. Pegá esa URL en index.html, buscá la constante LEADS_ENDPOINT
  *    (arriba del todo del <script> principal) y reemplazá el texto
  *    'REEMPLAZAR_CON_URL_APPS_SCRIPT' por esa URL, entre comillas.
  * 8. Probá: mandá una consulta de prueba desde la landing y confirmá que
- *    aparece una fila nueva en el Sheet (y el mail, si lo dejaste activo).
- *
- * Para activar el aviso por mail, configurá la propiedad de script
- * NOTIFY_EMAIL desde Configuración del proyecto > Propiedades del script.
- * Si no existe o está vacía, el lead se guarda igual y no se envía correo.
+ *    aparece una fila nueva en el Sheet.
+ * 9. Configurá NOTIFY_EMAIL en Configuración del proyecto > Propiedades del
+ *    script y ejecutá crearTriggerNotificaciones() una sola vez. El aviso se
+ *    procesa fuera de doPost() para no demorar la respuesta del formulario.
  *
  * Si más adelante cambiás algo de este script, hay que volver a
  * "Implementar > Gestionar implementaciones > editar (lápiz) > Nueva versión"
@@ -36,6 +35,23 @@
 
 const SHEET_NAME = 'Leads';
 const GENERIC_ERROR = 'No se pudo procesar la consulta.';
+const HEADERS_SCHEMA_VERSION = 'unified-intake-notifications-v1';
+const HEADERS_SCHEMA_PROPERTY = 'LEADS_HEADERS_SCHEMA';
+const NOTIFY_EMAIL = "matiassmith98@gmail.com";
+const NOTIFICATION_BATCH_SIZE = 10;
+const NOTIFICATION_HANDLER = 'procesarNotificacionesPendientes';
+const QUERY_HEADERS = Object.freeze([
+  'Producto de interés',
+  'Situación del perro',
+  'Evaluación veterinaria',
+  'Provincia',
+  'Detalle según producto'
+]);
+const NOTIFICATION_HEADERS = Object.freeze([
+  'Estado de notificación',
+  'Fecha de notificación',
+  'Error de notificación'
+]);
 const FIELD_LIMITS = Object.freeze({
   producto: 120,
   nombre: 120,
@@ -194,15 +210,11 @@ function doPost(e) {
       sanitizeForSheet(data.situacion_perro),
       sanitizeForSheet(data.evaluacion_veterinaria),
       sanitizeForSheet(data.provincia),
-      sanitizeForSheet(data.detalle_producto)
+      sanitizeForSheet(data.detalle_producto),
+      'Pendiente',
+      '',
+      ''
     ]);
-
-    try {
-      const notifyEmail = PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL');
-      if (notifyEmail && notifyEmail.trim()) notify(data, notifyEmail.trim());
-    } catch (mailErr) {
-      console.error('No se pudo enviar la notificación del lead.', mailErr);
-    }
 
     return jsonResponse({ok: true});
   } catch (err) {
@@ -360,51 +372,147 @@ function getOrCreateSheet() {
       'Fabricante: zona de cobertura', 'Fabricante: formatos técnicos', 'Fabricante: interés en Studio',
       'Tiempo transcurrido aproximado',
       'Producto de interés', 'Situación del perro', 'Evaluación veterinaria',
-      'Provincia', 'Detalle según producto'
+      'Provincia', 'Detalle según producto',
+      'Estado de notificación', 'Fecha de notificación', 'Error de notificación'
     ]);
     sheet.setFrozenRows(1);
-  } else {
+    markHeadersReady();
+  } else if (!headersAreMarkedReady()) {
     ensureQueryHeaders(sheet);
+    markHeadersReady();
   }
   return sheet;
 }
 
+function headersAreMarkedReady() {
+  return PropertiesService.getScriptProperties().getProperty(HEADERS_SCHEMA_PROPERTY) === HEADERS_SCHEMA_VERSION;
+}
+
+function markHeadersReady() {
+  PropertiesService.getScriptProperties().setProperty(HEADERS_SCHEMA_PROPERTY, HEADERS_SCHEMA_VERSION);
+}
+
 function ensureQueryHeaders(sheet) {
-  const required = [
-    'Producto de interés',
-    'Situación del perro',
-    'Evaluación veterinaria',
-    'Provincia',
-    'Detalle según producto'
-  ];
   const lastColumn = Math.max(sheet.getLastColumn(), 1);
   const existing = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const fullSuffix = QUERY_HEADERS.concat(NOTIFICATION_HEADERS);
+  if (endsWithHeaders(existing, fullSuffix)) return;
+
+  const missing = endsWithHeaders(existing, QUERY_HEADERS)
+    ? NOTIFICATION_HEADERS
+    : fullSuffix;
+  sheet.getRange(1, lastColumn + 1, 1, missing.length).setValues([missing]);
+}
+
+function endsWithHeaders(existing, required) {
   const tail = existing.slice(-required.length);
-  const alreadyAppended = required.every(function(header, index) {
+  return required.every(function(header, index) {
     return tail[index] === header;
   });
-  if (!alreadyAppended) {
-    sheet.getRange(1, lastColumn + 1, 1, required.length).setValues([required]);
+}
+
+function procesarNotificacionesPendientes() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(1000)) return;
+
+  try {
+    const sheet = getOrCreateSheet();
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+
+    const lastColumn = sheet.getLastColumn();
+    const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+    const columns = mapHeaderColumns(headers);
+    const statusColumn = columns['Estado de notificación'];
+    const dateColumn = columns['Fecha de notificación'];
+    const errorColumn = columns['Error de notificación'];
+    if (statusColumn === undefined || dateColumn === undefined || errorColumn === undefined) {
+      throw new Error('Faltan columnas de notificación.');
+    }
+
+    const notifyEmail = NOTIFY_EMAIL;
+    const rows = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
+    let processed = 0;
+
+    for (let index = 0; index < rows.length && processed < NOTIFICATION_BATCH_SIZE; index += 1) {
+      const row = rows[index];
+      if (String(row[statusColumn] || '').trim() !== 'Pendiente') continue;
+
+      const rowNumber = index + 2;
+      sheet.getRange(rowNumber, statusColumn + 1).setValue('Procesando');
+      SpreadsheetApp.flush();
+
+      try {
+        if (!notifyEmail || !notifyEmail.trim()) {
+          throw new Error('NOTIFY_EMAIL no está configurado.');
+        }
+        enviarNotificacionLead(row, columns, notifyEmail.trim());
+        sheet.getRange(rowNumber, statusColumn + 1, 1, 3)
+          .setValues([['Enviado', new Date(), '']]);
+      } catch (err) {
+        const errorMessage = String(err && err.message ? err.message : err).slice(0, 200);
+        sheet.getRange(rowNumber, statusColumn + 1, 1, 3)
+          .setValues([['Error', '', sanitizeForSheet(errorMessage)]]);
+        console.error('No se pudo enviar la notificación de la fila ' + rowNumber + '.', err);
+      }
+      processed += 1;
+    }
+  } finally {
+    lock.releaseLock();
   }
 }
 
-function notify(data, notifyEmail) {
-  const subject = 'Nuevo lead — ' + (data.producto || 'Consulta general') + ' (' + (data.nombre || 'sin nombre') + ')';
+function mapHeaderColumns(headers) {
+  const columns = {};
+  headers.forEach(function(header, index) {
+    columns[String(header)] = index;
+  });
+  return columns;
+}
+
+function rowValue(row, columns, preferredHeaders) {
+  for (let index = 0; index < preferredHeaders.length; index += 1) {
+    const column = columns[preferredHeaders[index]];
+    if (column !== undefined && row[column] !== '') return String(row[column]);
+  }
+  return '-';
+}
+
+function enviarNotificacionLead(row, columns, notifyEmail) {
+  const product = rowValue(row, columns, ['Producto de interés', 'Producto']);
+  const name = rowValue(row, columns, ['Nombre']);
+  const subject = 'Nuevo lead — ' + product + ' (' + name + ')';
   const body = [
-    'Producto: ' + (data.producto || '-'),
-    'Nombre: ' + (data.nombre || '-'),
-    'Contacto: ' + (data.contacto || '-'),
-    'Raza: ' + (data.raza || '-') + (data.raza_detalle ? ' (' + data.raza_detalle + ')' : ''),
-    'Zona afectada: ' + (data.zona || '-'),
-    'Tamaño/peso: ' + (data.tamano || '-'),
-    'Mensaje: ' + (data.mensaje || '-'),
+    'Producto: ' + product,
+    'Nombre: ' + name,
+    'WhatsApp: ' + rowValue(row, columns, ['WhatsApp', 'Contacto']),
+    'Email: ' + rowValue(row, columns, ['Email']),
+    'Ciudad: ' + rowValue(row, columns, ['Ciudad']),
+    'Provincia: ' + rowValue(row, columns, ['Provincia']),
+    'Situación: ' + rowValue(row, columns, ['Situación del perro', 'Mensaje']),
+    'Evaluación veterinaria: ' + rowValue(row, columns, ['Evaluación veterinaria']),
+    'Detalle: ' + rowValue(row, columns, ['Detalle según producto']),
     '',
-    'Página: ' + (data.pagina || '-'),
-    'Origen: ' + ([data.utm_source, data.utm_medium, data.utm_campaign].filter(Boolean).join(' / ') || 'directo'),
-    '',
-    'Este mail se generó automáticamente desde el formulario de protesisparaperros.com.ar'
+    'Página: ' + rowValue(row, columns, ['Página'])
   ].join('\n');
-  MailApp.sendEmail(notifyEmail, subject, body);
+
+  MailApp.sendEmail({
+    to: notifyEmail,
+    subject: subject,
+    body: body
+  });
+}
+
+function crearTriggerNotificaciones() {
+  const exists = ScriptApp.getProjectTriggers().some(function(trigger) {
+    return trigger.getHandlerFunction() === NOTIFICATION_HANDLER;
+  });
+  if (exists) return;
+
+  ScriptApp.newTrigger(NOTIFICATION_HANDLER)
+    .timeBased()
+    .everyMinutes(1)
+    .create();
 }
 
 function jsonResponse(obj) {

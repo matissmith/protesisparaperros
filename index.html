@@ -189,11 +189,20 @@
   .field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:7px;letter-spacing:.2px}
   .field input,.field select,.field textarea{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:14.5px;color:var(--ink);background:#fff;transition:border-color .2s,box-shadow .2s}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(43,62,110,.1)}
+  #caseForm .field input.is-invalid,#caseForm .field select.is-invalid,#caseForm .field textarea.is-invalid{border-color:#B42318;box-shadow:0 0 0 3px rgba(180,35,24,.08)}
+  #caseForm .field-error{display:block;min-height:18px;margin-top:5px;color:#B42318;font-size:12.5px;font-weight:600;line-height:1.35}
+  #caseForm .consent-field .field-error{margin:-13px 0 16px 28px}
+  #caseForm .consent:has(input.is-invalid){color:#8F1F17}
+  #caseForm .submit-spinner{display:none;width:15px;height:15px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:case-submit-spin .7s linear infinite}
+  #caseForm button.is-submitting{display:inline-flex;align-items:center;justify-content:center;gap:9px}
+  #caseForm button.is-submitting .submit-spinner{display:inline-block}
+  #caseForm .submit-status{min-height:20px;margin-top:10px;color:var(--muted);font-size:13px;font-weight:600;line-height:1.4}
+  @keyframes case-submit-spin{to{transform:rotate(360deg)}}
   .field textarea{resize:vertical;min-height:84px}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin:8px 0 20px}
   .consent input{margin-top:3px}
-  .form-ok{display:none;background:rgba(239,169,44,.12);border:1px solid var(--amber);border-radius:12px;padding:22px;color:var(--navy);font-size:15px;font-weight:600}
+  .form-ok{display:none;background:rgba(239,169,44,.12);border:1px solid var(--amber);border-radius:12px;padding:22px;color:var(--navy);font-size:15px;font-weight:600;scroll-margin-top:100px}
   .form-err{display:none;background:#FDEDED;border:1px solid #E8B4B4;border-radius:12px;padding:18px 22px;color:var(--navy);font-size:14px;font-weight:600;margin-top:14px}
   .form-err a{color:var(--amber-dk);text-decoration:underline}
 
@@ -1237,7 +1246,7 @@
         <option value="Yorkshire Terrier"></option>
       </datalist>
 
-      <div class="form-ok" id="formOk"></div>
+      <div class="form-ok" id="formOk" role="status" aria-live="polite" tabindex="-1"></div>
     </div>
   </div>
 </section>
@@ -1694,43 +1703,47 @@
     <input type="hidden" name="audience" value="tutor">
     <div class="field">
       <label for="productoSel">Producto de interés</label>
-      <select name="producto_interes" id="productoSel" required>
+      <select name="producto_interes" id="productoSel" required aria-describedby="productoError">
         <option value="Prótesis">Prótesis</option>
         <option value="Órtesis">Órtesis</option>
         <option value="Arnés de rehabilitación">Arnés de rehabilitación</option>
         <option value="Carro ortopédico">Carro ortopédico</option>
         <option value="No estoy seguro" selected>No estoy seguro</option>
       </select>
+      <span class="field-error" id="productoError" aria-live="polite"></span>
     </div>
     <div class="field">
       <label for="situacionPerro">Situación del perro</label>
-      <textarea name="situacion_perro" id="situacionPerro" minlength="10" maxlength="300" required placeholder="Contanos qué está pasando actualmente"></textarea>
-      <p class="field-note">Entre 10 y 300 caracteres.</p>
+      <textarea name="situacion_perro" id="situacionPerro" minlength="10" maxlength="300" required aria-describedby="situacionError situacionNote" placeholder="Contanos qué está pasando actualmente"></textarea>
+      <span class="field-error" id="situacionError" aria-live="polite"></span>
+      <p class="field-note" id="situacionNote">Entre 10 y 300 caracteres.</p>
     </div>
     <div class="field">
       <label for="evaluacionVeterinaria">Evaluación veterinaria</label>
-      <select name="evaluacion_veterinaria" id="evaluacionVeterinaria" required>
+      <select name="evaluacion_veterinaria" id="evaluacionVeterinaria" required aria-describedby="evaluacionError">
         <option value="" selected disabled>Elegí una opción</option>
         <option value="Sí">Sí</option>
         <option value="No">No</option>
         <option value="Está en evaluación">Está en evaluación</option>
       </select>
+      <span class="field-error" id="evaluacionError" aria-live="polite"></span>
     </div>
     <div class="field" id="detalleProductoField">
       <label for="detalleProducto" id="detalleProductoLabel">Detalle según producto</label>
-      <select name="detalle_producto" id="detalleProducto" required></select>
+      <select name="detalle_producto" id="detalleProducto" required aria-describedby="detalleError"></select>
+      <span class="field-error" id="detalleError" aria-live="polite"></span>
     </div>
     <div class="row2">
-      <div class="field"><label for="nombreConsulta">Nombre completo</label><input type="text" name="nombre" id="nombreConsulta" maxlength="120" required autocomplete="name" placeholder="Tu nombre y apellido"></div>
-      <div class="field"><label for="whatsappConsulta">WhatsApp</label><input type="tel" inputmode="tel" name="whatsapp" id="whatsappConsulta" maxlength="120" required autocomplete="tel" placeholder="Tu WhatsApp"></div>
+      <div class="field"><label for="nombreConsulta">Nombre completo</label><input type="text" name="nombre" id="nombreConsulta" maxlength="120" required autocomplete="name" aria-describedby="nombreError" placeholder="Tu nombre y apellido"><span class="field-error" id="nombreError" aria-live="polite"></span></div>
+      <div class="field"><label for="whatsappConsulta">WhatsApp</label><input type="tel" inputmode="tel" name="whatsapp" id="whatsappConsulta" maxlength="120" required autocomplete="tel" aria-describedby="whatsappError" placeholder="Tu WhatsApp"><span class="field-error" id="whatsappError" aria-live="polite"></span></div>
     </div>
     <div class="row2">
-      <div class="field"><label for="emailConsulta">Email</label><input type="email" name="email" id="emailConsulta" maxlength="200" required autocomplete="email" placeholder="Tu email"></div>
-      <div class="field"><label for="ciudadConsulta">Ciudad</label><input type="text" name="ciudad" id="ciudadConsulta" maxlength="120" required autocomplete="address-level2" placeholder="Ciudad o localidad"></div>
+      <div class="field"><label for="emailConsulta">Email</label><input type="email" name="email" id="emailConsulta" maxlength="200" required autocomplete="email" aria-describedby="emailError" placeholder="Tu email"><span class="field-error" id="emailError" aria-live="polite"></span></div>
+      <div class="field"><label for="ciudadConsulta">Ciudad</label><input type="text" name="ciudad" id="ciudadConsulta" maxlength="120" required autocomplete="address-level2" aria-describedby="ciudadError" placeholder="Ciudad o localidad"><span class="field-error" id="ciudadError" aria-live="polite"></span></div>
     </div>
     <div class="field">
       <label for="provinciaConsulta">Provincia</label>
-      <select name="provincia" id="provinciaConsulta" required autocomplete="address-level1">
+      <select name="provincia" id="provinciaConsulta" required autocomplete="address-level1" aria-describedby="provinciaError">
         <option value="" selected disabled>Elegí una provincia</option>
         <option>Buenos Aires</option><option>Catamarca</option><option>Chaco</option><option>Chubut</option>
         <option>Ciudad Autónoma de Buenos Aires</option><option>Córdoba</option><option>Corrientes</option>
@@ -1740,10 +1753,15 @@
         <option>Santa Cruz</option><option>Santa Fe</option><option>Santiago del Estero</option>
         <option>Tierra del Fuego, Antártida e Islas del Atlántico Sur</option><option>Tucumán</option>
       </select>
+      <span class="field-error" id="provinciaError" aria-live="polite"></span>
     </div>
-    <label class="consent"><input type="checkbox" name="consentimiento" required> Autorizo a Ache a utilizar la información enviada para responder la consulta y evaluar el caso.</label>
+    <div class="consent-field">
+      <label class="consent"><input type="checkbox" name="consentimiento" required aria-describedby="consentimientoError"> Autorizo a Ache a utilizar la información enviada para responder la consulta y evaluar el caso.</label>
+      <span class="field-error" id="consentimientoError" aria-live="polite"></span>
+    </div>
     <p class="field-note">Esta primera orientación no reemplaza una evaluación veterinaria. Si el caso requiere revisión clínica, te pediremos después fotografías, videos, estudios y otros datos específicos.</p>
-    <div class="stepper-nav"><span></span><button type="submit" class="btn btn-pri btn-lg">Enviar consulta</button></div>
+    <div class="stepper-nav"><span></span><button type="submit" class="btn btn-pri btn-lg"><span class="submit-spinner" aria-hidden="true"></span><span class="submit-label">Enviar consulta</span></button></div>
+    <div class="submit-status" id="caseSubmitStatus" role="status" aria-live="polite"></div>
     <div class="form-err" id="formErr"></div>
   `;
   const stepPanels=[...document.querySelectorAll('#caseForm .step-panel')];
@@ -1818,6 +1836,7 @@
       options:['Le falta total o parcialmente una extremidad','Necesita soporte en una pata o articulación','Necesita ayuda para levantarse o caminar','Tiene dificultades para usar dos o más patas','Ninguna de estas','No estoy seguro']
     }
   };
+  const caseTouchedFields=new Set();
 
   // Cambia solo la pregunta específica; los campos comunes conservan sus valores.
   function toggleProductoCond(){
@@ -1831,6 +1850,8 @@
     label.textContent=config.question;
     detail.innerHTML='<option value="" selected disabled>Elegí una opción</option>'+
       config.options.map(option=>'<option value="'+option+'">'+option+'</option>').join('');
+    caseTouchedFields.delete('detalle_producto');
+    setCaseFieldError(detail,'');
   }
   const productoSel=document.getElementById('productoSel');
   if(productoSel){ productoSel.addEventListener('change', toggleProductoCond); toggleProductoCond(); }
@@ -1857,78 +1878,100 @@
     return digits.length>=8&&digits.length<=15&&!/^(\d)\1+$/.test(digits);
   }
 
-  function getCaseFormError(){
-    const producto=caseForm.querySelector('[name="producto_interes"]');
-    if(!productDetails[producto.value]){
-      return {field:producto,message:'Seleccioná un producto de interés.'};
-    }
+  const caseFieldOrder=[
+    'producto_interes','situacion_perro','evaluacion_veterinaria','detalle_producto',
+    'nombre','whatsapp','email','ciudad','provincia','consentimiento'
+  ];
 
-    const situacion=caseForm.querySelector('[name="situacion_perro"]');
-    const situacionLength=situacion.value.trim().length;
-    if(situacionLength<10||situacionLength>300){
-      return {field:situacion,message:'La situación del perro debe tener entre 10 y 300 caracteres.'};
+  function getCaseFieldMessage(name){
+    const field=caseForm.querySelector('[name="'+name+'"]');
+    if(name==='producto_interes'){
+      return productDetails[field.value]?'':'Seleccioná qué necesitás evaluar.';
     }
-
-    const evaluacion=caseForm.querySelector('[name="evaluacion_veterinaria"]');
-    if(!['Sí','No','Está en evaluación'].includes(evaluacion.value)){
-      return {field:evaluacion,message:'Indicá si el perro tuvo una evaluación veterinaria.'};
+    if(name==='situacion_perro'){
+      const length=field.value.trim().length;
+      if(!length) return 'Contanos brevemente qué le pasa a tu perro.';
+      if(length<10) return 'Escribí al menos 10 caracteres.';
+      if(length>300) return 'El texto no puede superar los 300 caracteres.';
+      return '';
     }
-
-    const detalle=caseForm.querySelector('[name="detalle_producto"]');
-    const allowedDetails=productDetails[producto.value].options;
-    if(!allowedDetails.includes(detalle.value)){
-      return {field:detalle,message:'Seleccioná el detalle correspondiente al producto.'};
+    if(name==='evaluacion_veterinaria'){
+      return ['Sí','No','Está en evaluación'].includes(field.value)?'':'Indicá si el caso fue evaluado por un veterinario.';
     }
-
-    const nombre=caseForm.querySelector('[name="nombre"]');
-    const nameValue=nombre.value.trim();
-    if(nameValue.length<3||!/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(nameValue)){
-      return {field:nombre,message:'Revisá el nombre y apellido.'};
+    if(name==='detalle_producto'){
+      const product=caseForm.querySelector('[name="producto_interes"]').value;
+      return productDetails[product]&&productDetails[product].options.includes(field.value)?'':'Seleccioná una opción.';
     }
-
-    const whatsapp=caseForm.querySelector('[name="whatsapp"]');
-    if(!isValidWhatsapp(whatsapp.value)){
-      return {field:whatsapp,message:'Revisá el WhatsApp. Ingresá un número válido, por ejemplo +54 11 1234 5678.'};
+    if(name==='nombre'){
+      const value=field.value.trim();
+      return value.length>=3&&/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(value)?'':'Revisá el nombre y apellido.';
     }
-
-    const email=caseForm.querySelector('[name="email"]');
-    const emailPattern=/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/;
-    if(!email.value||email.value!==email.value.trim()||!emailPattern.test(email.value)){
-      return {field:email,message:'Revisá el email. Ingresá una dirección válida, por ejemplo nombre@dominio.com.'};
+    if(name==='whatsapp'){
+      return isValidWhatsapp(field.value)?'':'Revisá el WhatsApp. Ingresá un número válido, por ejemplo +54 11 1234 5678.';
     }
-
-    const ciudad=caseForm.querySelector('[name="ciudad"]');
-    const cityValue=ciudad.value.trim();
-    if(cityValue.length<2||!/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(cityValue)){
-      return {field:ciudad,message:'Revisá la ciudad o localidad.'};
+    if(name==='email'){
+      const pattern=/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/;
+      return field.value&&field.value===field.value.trim()&&pattern.test(field.value)?'':'Revisá el email. Ingresá una dirección válida, por ejemplo nombre@dominio.com.';
     }
-
-    const provincia=caseForm.querySelector('[name="provincia"]');
-    const allowedProvinces=[...provincia.options].filter(option=>!option.disabled).map(option=>option.value);
-    if(!allowedProvinces.includes(provincia.value)){
-      return {field:provincia,message:'Seleccioná una provincia.'};
+    if(name==='ciudad'){
+      const value=field.value.trim();
+      return value.length>=2&&/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(value)?'':'Revisá la ciudad o localidad.';
     }
-
-    const consentimiento=caseForm.querySelector('[name="consentimiento"]');
-    if(!consentimiento.checked){
-      return {field:consentimiento,message:'Necesitamos tu autorización para responder la consulta y evaluar el caso.'};
+    if(name==='provincia'){
+      const allowed=[...field.options].filter(option=>!option.disabled).map(option=>option.value);
+      return allowed.includes(field.value)?'':'Seleccioná una provincia.';
     }
-    return null;
+    if(name==='consentimiento'){
+      return field.checked?'':'Necesitamos tu autorización para enviar la consulta.';
+    }
+    return '';
   }
+
+  function setCaseFieldError(field,message){
+    const errorIds=(field.getAttribute('aria-describedby')||'').split(/\s+/);
+    const error=errorIds.map(id=>document.getElementById(id)).find(el=>el&&el.classList.contains('field-error'));
+    if(error) error.textContent=message;
+    field.classList.toggle('is-invalid',Boolean(message));
+    if(message) field.setAttribute('aria-invalid','true');
+    else field.removeAttribute('aria-invalid');
+  }
+
+  function validateCaseField(name){
+    const field=caseForm.querySelector('[name="'+name+'"]');
+    const message=getCaseFieldMessage(name);
+    setCaseFieldError(field,message);
+    return !message;
+  }
+
+  caseFieldOrder.forEach(name=>{
+    const field=caseForm.querySelector('[name="'+name+'"]');
+    field.addEventListener('blur',()=>{
+      caseTouchedFields.add(name);
+      validateCaseField(name);
+    });
+    const liveEvent=field.tagName==='SELECT'||field.type==='checkbox'?'change':'input';
+    field.addEventListener(liveEvent,()=>{
+      if(caseTouchedFields.has(name)) validateCaseField(name);
+    });
+  });
+
+  let caseSubmitting=false;
 
   if(caseForm) caseForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const validationError=getCaseFormError();
-    if(validationError){
-      if(formErr){ formErr.textContent=validationError.message; formErr.style.display='block'; }
-      if(validationError.field) validationError.field.focus();
+    if(caseSubmitting) return;
+    const invalidFields=caseFieldOrder.filter(name=>{
+      caseTouchedFields.add(name);
+      return !validateCaseField(name);
+    });
+    if(invalidFields.length){
+      if(formErr){ formErr.textContent=''; formErr.style.display='none'; }
+      const firstInvalid=caseForm.querySelector('[name="'+invalidFields[0]+'"]');
+      firstInvalid.focus({preventScroll:true});
+      firstInvalid.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
       return;
     }
     const btn = ev.submitter || caseForm.querySelector('button[type="submit"]');
-    const btnTxt = btn.textContent;
-    btn.disabled = true; btn.textContent = 'Enviando...';
-    if (formErr) formErr.style.display = 'none';
-
     const fd = new FormData(caseForm);
     const payload = Object.fromEntries(fd.entries());
     payload.whatsapp = normalizeWhatsapp(payload.whatsapp);
@@ -1944,6 +1987,15 @@
     payload.utm_medium = qs.get('utm_medium') || '';
     payload.utm_campaign = qs.get('utm_campaign') || '';
 
+    const submitStatus=document.getElementById('caseSubmitStatus');
+    const submitLabel=btn.querySelector('.submit-label');
+    const formControls=[...caseForm.querySelectorAll('input,select,textarea,button')];
+    caseSubmitting=true;
+    formControls.forEach(control=>{control.disabled=true;});
+    btn.classList.add('is-submitting');
+    submitLabel.textContent='Enviando consulta…';
+    submitStatus.textContent='Estamos enviando tu consulta. No cierres esta página.';
+    if(formErr){formErr.textContent='';formErr.style.display='none';}
     try {
       if (!LEADS_ENDPOINT || !LEADS_ENDPOINT.startsWith('http')) throw new Error('LEADS_ENDPOINT sin configurar');
       const res = await fetch(LEADS_ENDPOINT, {
@@ -1953,19 +2005,26 @@
       });
       const data = await res.json().catch(() => ({ok: true}));
       if (!data.ok) throw new Error(data.error || 'Respuesta inválida del servidor');
-
       trackLeadConversion(payload);
       acheTrack('case_form_submit', {product: payload.producto, audience: 'tutor'});
       if(productEventMap[payload.producto]) acheTrack(productEventMap[payload.producto], {product: payload.producto, audience: 'tutor'});
 
-      caseForm.style.display = 'none';
       const msg = 'Recibimos tu consulta. Vamos a contactarte dentro de las próximas 48 horas para conocer mejor el caso y orientarte sobre el próximo paso.';
       formOk.innerHTML = '<p>'+msg+'</p><p>Podés cerrar esta página. No es necesario que vuelvas a enviar el formulario.</p>';
       formOk.style.display = 'block';
+      caseForm.style.display = 'none';
+      requestAnimationFrame(()=>{
+        formOk.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+        formOk.focus({preventScroll:true});
+      });
     } catch (err) {
-      btn.disabled = false; btn.textContent = btnTxt;
+      caseSubmitting=false;
+      formControls.forEach(control=>{control.disabled=false;});
+      btn.classList.remove('is-submitting');
+      submitLabel.textContent='Enviar consulta';
+      submitStatus.textContent='';
       if (formErr) {
-        formErr.innerHTML = 'No pudimos enviar tu consulta desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20un%20producto." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
+        formErr.textContent='No pudimos enviar la consulta. Revisá tu conexión e intentá nuevamente.';
         formErr.style.display = 'block';
       }
     }
