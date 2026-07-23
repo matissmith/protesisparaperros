@@ -592,6 +592,13 @@
   .step-panel.active{display:block}
   .cond-block{display:none;border-top:1px dashed var(--line);margin-top:16px;padding-top:16px}
   .cond-block.active{display:block}
+  /* vista corta de 8 campos para consulta de prótesis (no toca el stepper de los demás productos) */
+  #protesisSimple{display:none}
+  #contacto-caso.simple-mode #caseFormIntro,
+  #contacto-caso.simple-mode .stepper-progress,
+  #contacto-caso.simple-mode .stepper-label,
+  #contacto-caso.simple-mode .step-panel{display:none}
+  #contacto-caso.simple-mode #protesisSimple{display:block}
   .opt-grid{display:grid;gap:10px;margin:8px 0 16px}
   .opt-grid label{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--txt);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .2s,background .2s}
   .opt-grid label:has(input:checked){border-color:var(--amber);background:rgba(239,169,44,.08)}
@@ -1007,7 +1014,7 @@
     <div class="reveal" style="max-width:680px;margin-bottom:10px">
       <span class="sec-tag">Formulario de caso</span>
       <h2 class="display">Contanos el caso de tu perro</h2>
-      <p class="intro">Tres pasos breves. Podés volver atrás en cualquier momento sin perder lo que ya completaste.</p>
+      <p class="intro" id="caseFormIntro">Tres pasos breves. Podés volver atrás en cualquier momento sin perder lo que ya completaste.</p>
     </div>
     <div class="form-card reveal d1" style="max-width:760px">
       <div class="stepper-progress" id="stepperProgress">
@@ -1154,6 +1161,46 @@
           <label class="consent"><input type="checkbox" name="newsletter"> Quiero recibir novedades sobre productos, pruebas y avances de Ache.</label>
           <div class="stepper-nav"><button type="button" class="btn-back btn" data-back="2">Volver</button><button type="submit" class="btn btn-pri btn-lg">Enviar el caso</button></div>
           <div class="form-err" id="formErr"></div>
+        </div>
+
+        <!-- Vista corta — consulta por prótesis (8 campos visibles) -->
+        <div id="protesisSimple">
+          <div class="row2">
+            <div class="field"><label>Nombre y apellido</label><input type="text" name="nombre" required placeholder="Tu nombre y apellido"></div>
+            <div class="field"><label>WhatsApp</label><input type="text" name="whatsapp" required placeholder="Tu WhatsApp"></div>
+          </div>
+          <div class="field"><label>Ciudad o localidad</label><input type="text" name="ciudad" required placeholder="Ciudad o localidad"></div>
+          <div class="field">
+            <label>Tipo de consulta</label>
+            <div class="opt-grid">
+              <label><input type="radio" name="estado_actual" value="Mi perro ya tiene una amputación" required> Mi perro ya tiene una amputación.</label>
+              <label><input type="radio" name="estado_actual" value="Mi perro podría ser amputado"> Mi perro podría ser amputado.</label>
+              <label><input type="radio" name="estado_actual" value="Otra consulta"> Otra consulta.</label>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Email <span style="font-weight:400;color:var(--muted)">(opcional)</span></label><input type="email" name="email" placeholder="Tu email"></div>
+            <div class="field"><label>Tiempo transcurrido aproximado <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+              <select name="tiempo_transcurrido">
+                <option value="">Preferí no decir / no sé</option>
+                <option value="Menos de 1 mes">Menos de 1 mes</option>
+                <option value="1 a 6 meses">1 a 6 meses</option>
+                <option value="Más de 6 meses">Más de 6 meses</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>¿Fue evaluado por un veterinario? <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+            <div class="opt-grid">
+              <label><input type="radio" name="evaluado_vet" value="Sí"> Sí.</label>
+              <label><input type="radio" name="evaluado_vet" value="No"> No.</label>
+            </div>
+          </div>
+          <div class="field"><label>Comentario breve <span style="font-weight:400;color:var(--muted)">(opcional)</span></label><textarea name="descripcion" placeholder="Contanos brevemente qué pasó"></textarea></div>
+          <label class="consent"><input type="checkbox" name="consentimiento" required> Autorizo a Ache a utilizar la información enviada para responder la consulta y evaluar el caso.</label>
+          <p class="field-note">Con esta información podremos contactarte y realizar una primera orientación. La evaluación inicial no reemplaza una consulta veterinaria.</p>
+          <div class="stepper-nav"><span></span><button type="submit" class="btn btn-pri btn-lg">Enviar consulta</button></div>
+          <div class="form-err" id="formErrSimple"></div>
         </div>
       </form>
 
@@ -1694,6 +1741,22 @@
     document.querySelectorAll('#caseForm .cond-block').forEach(b=>{
       b.classList.toggle('active', map[prod.value]===b.dataset.cond);
     });
+    // vista corta de 8 campos: solo para el camino de Prótesis, no afecta a los demás productos
+    const contactoCaso=document.getElementById('contacto-caso');
+    const isSimple = prod.value==='Prótesis';
+    if(contactoCaso) contactoCaso.classList.toggle('simple-mode', isSimple);
+    // La vista corta reutiliza algunos "name" del wizard completo (nombre, whatsapp, ciudad,
+    // descripcion, estado_actual). Si ambos lados quedan habilitados a la vez, FormData los
+    // pisa entre sí (gana el último en el DOM). Se deshabilita el lado que no está visible
+    // para que no viaje en el payload — así los demás productos no se ven afectados.
+    const simplePanel=document.getElementById('protesisSimple');
+    if(simplePanel) simplePanel.querySelectorAll('input,select,textarea').forEach(el=>{ el.disabled = !isSimple; });
+    document.querySelectorAll('#caseForm .step-panel').forEach(p=>{
+      p.querySelectorAll('input,select,textarea').forEach(el=>{
+        if (el.id === 'productoSel') return; // el producto siempre tiene que viajar
+        el.disabled = isSimple;
+      });
+    });
   }
   const productoSel=document.getElementById('productoSel');
   if(productoSel){ productoSel.addEventListener('change', toggleProductoCond); toggleProductoCond(); }
@@ -1709,14 +1772,29 @@
 
   if(caseForm) caseForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    if(!validStep(3)){
+    const simpleMode = document.getElementById('productoSel') && document.getElementById('productoSel').value === 'Prótesis';
+    const formErrSimple = document.getElementById('formErrSimple');
+    if(simpleMode){
+      const sp = document.getElementById('protesisSimple');
+      const reqOk = sp.querySelector('[name="nombre"]').value.trim()
+        && sp.querySelector('[name="whatsapp"]').value.trim()
+        && sp.querySelector('[name="ciudad"]').value.trim()
+        && [...sp.querySelectorAll('[name="estado_actual"]')].some(r=>r.checked)
+        && sp.querySelector('[name="consentimiento"]').checked;
+      if(!reqOk){
+        if(formErrSimple){ formErrSimple.textContent = 'Faltan campos obligatorios: nombre, WhatsApp, ciudad, tipo de consulta y la autorización para evaluar el caso.'; formErrSimple.style.display = 'block'; }
+        return;
+      }
+    } else if(!validStep(3)){
       if(formErr){ formErr.textContent = 'Faltan campos obligatorios: nombre, WhatsApp y la autorización para evaluar el caso.'; formErr.style.display = 'block'; }
       return;
     }
-    const btn = caseForm.querySelector('button[type="submit"]');
+    // ev.submitter: el botón realmente clickeado (step 3 o la vista corta de prótesis)
+    const btn = ev.submitter || caseForm.querySelector('button[type="submit"]');
     const btnTxt = btn.textContent;
     btn.disabled = true; btn.textContent = 'Enviando...';
     if (formErr) formErr.style.display = 'none';
+    if (formErrSimple) formErrSimple.style.display = 'none';
 
     const fd = new FormData(caseForm);
     const payload = Object.fromEntries(fd.entries());
@@ -1732,7 +1810,15 @@
     Object.keys(condFieldsByProduct).forEach(prod => {
       if (prod !== payload.producto) condFieldsByProduct[prod].forEach(field => delete payload[field]);
     });
-    payload.consentimiento = caseForm.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
+    if (simpleMode) {
+      // la vista corta no pregunta estos campos (quedan para el segundo relevamiento por
+      // WhatsApp/email); se limpian para no mandar el valor default del <select> oculto del
+      // stepper completo, que el usuario nunca vio ni eligió. fotos_disponibles también se
+      // limpia acá: mantiene su significado original (fotos/estudios) y queda vacío para este
+      // formulario corto — el tiempo transcurrido ahora viaja en su propia columna.
+      ['etapa','extremidad_afectada','amputacion_realizada','munon','medio_contacto','intencion','fotos_disponibles'].forEach(f => { payload[f] = ''; });
+    }
+    payload.consentimiento = (simpleMode ? document.getElementById('protesisSimple') : caseForm).querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
     payload.consentimiento_compartir = caseForm.querySelector('input[name="consentimiento_compartir"]').checked ? 'Sí' : 'No';
     payload.newsletter = caseForm.querySelector('input[name="newsletter"]').checked ? 'Sí' : 'No';
     payload.contacto = payload.whatsapp || payload.email || '';
@@ -1762,15 +1848,18 @@
       caseForm.style.display = 'none';
       document.getElementById('stepperProgress').style.display='none';
       document.querySelector('.stepper-label').style.display='none';
-      let msg = 'Recibimos el caso de ' + (payload.nombre_perro || 'tu perro') + '. Vamos a revisar la información y nos pondremos en contacto para confirmar si necesitamos fotos, medidas o documentación adicional. El envío no implica una compra ni garantiza que el caso pueda avanzar con un dispositivo.';
+      let msg = simpleMode
+        ? 'Recibimos tu consulta. Vamos a contactarte dentro de las próximas 48 horas para conocer mejor el caso.'
+        : 'Recibimos el caso de ' + (payload.nombre_perro || 'tu perro') + '. Vamos a revisar la información y nos pondremos en contacto para confirmar si necesitamos fotos, medidas o documentación adicional. El envío no implica una compra ni garantiza que el caso pueda avanzar con un dispositivo.';
       if(productConfirm[payload.producto]) msg += ' ' + productConfirm[payload.producto];
       formOk.innerHTML = msg + '<br><br><a class="btn btn-pri" style="margin-top:6px" target="_blank" rel="noopener" href="https://wa.me/5491123199500?text=Hola%20Mat%C3%ADas%2C%20llegu%C3%A9%20desde%20la%20web%20de%20Ache%20y%20quer%C3%ADa%20consultar%20por%20el%20caso%20de%20mi%20perro." onclick="acheTrack(\'whatsapp_matias_click\')">Hablar con Matías por WhatsApp</a>';
       formOk.style.display = 'block';
     } catch (err) {
       btn.disabled = false; btn.textContent = btnTxt;
-      if (formErr) {
-        formErr.innerHTML = 'No pudimos enviar tu consulta desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20un%20producto." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
-        formErr.style.display = 'block';
+      const errTarget = simpleMode ? formErrSimple : formErr;
+      if (errTarget) {
+        errTarget.innerHTML = 'No pudimos enviar tu consulta desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20un%20producto." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
+        errTarget.style.display = 'block';
       }
     }
   });

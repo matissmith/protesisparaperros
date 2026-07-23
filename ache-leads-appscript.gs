@@ -106,7 +106,9 @@ const FIELD_LIMITS = Object.freeze({
   fab_capacidad: 120,
   fab_zona: 200,
   fab_formatos: 200,
-  fab_interes_studio: 60
+  fab_interes_studio: 60,
+  // Formulario corto de prótesis (vista de 8 campos)
+  tiempo_transcurrido: 60
 });
 
 function doPost(e) {
@@ -180,7 +182,9 @@ function doPost(e) {
       sanitizeForSheet(data.fab_capacidad),
       sanitizeForSheet(data.fab_zona),
       sanitizeForSheet(data.fab_formatos),
-      sanitizeForSheet(data.fab_interes_studio)
+      sanitizeForSheet(data.fab_interes_studio),
+      // --- columna nueva, aditiva: formulario corto de prótesis ---
+      sanitizeForSheet(data.tiempo_transcurrido)
     ]);
 
     try {
@@ -290,7 +294,8 @@ function getOrCreateSheet() {
       'Interés: probar plataforma', 'Interés: derivar casos', 'Interés: asesor',
       'Interés: fabricar', 'Interés: alianza', 'Interés: demo',
       'Fabricante: dispositivos', 'Fabricante: materiales', 'Fabricante: capacidad',
-      'Fabricante: zona de cobertura', 'Fabricante: formatos técnicos', 'Fabricante: interés en Studio'
+      'Fabricante: zona de cobertura', 'Fabricante: formatos técnicos', 'Fabricante: interés en Studio',
+      'Tiempo transcurrido aproximado'
     ]);
     sheet.setFrozenRows(1);
   }
