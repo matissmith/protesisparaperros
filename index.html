@@ -880,7 +880,7 @@
       <a href="#profesionales">Para profesionales</a>
       <a href="#sobre-ache">Sobre Ache</a>
     </nav>
-    <a href="#contacto-caso" class="btn btn-pri" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
+    <a href="#contacto-caso" class="btn btn-pri" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
     <button class="burger" aria-label="Menú"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -900,7 +900,7 @@
       </h1>
       <p class="lead">Desarrollamos prótesis, órtesis, carros ortopédicos y arneses a partir de la anatomía, la condición clínica y las necesidades reales de cada caso.</p>
       <div class="hero-cta">
-        <a href="#contacto-caso" class="btn btn-pri btn-lg" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
+        <a href="#contacto-caso" class="btn btn-pri btn-lg" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
         <a href="#profForm" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
       </div>
       <div class="hero-stats">
@@ -1025,19 +1025,19 @@
       <div class="stepper-label">Paso <b id="stepperCurrent">1</b> de 3</div>
       <form id="caseForm" novalidate>
         <input type="hidden" name="tipo" value="caso">
+        <div class="field"><label>Producto de interés</label>
+          <select name="producto" id="productoSel">
+            <option value="Aún no sé">Aún no sé qué dispositivo necesita</option>
+            <option value="Prótesis">Prótesis</option>
+            <option value="Órtesis">Órtesis</option>
+            <option value="Arnés">Arnés de rehabilitación</option>
+            <option value="Carro">Carro ortopédico</option>
+          </select>
+        </div>
 
         <!-- PASO 1 — Animal y necesidad -->
         <div class="step-panel active" data-step="1">
           <h3 class="form-card-h">Animal y necesidad</h3>
-          <div class="field"><label>Producto de interés</label>
-            <select name="producto" id="productoSel">
-              <option value="Aún no sé">Aún no sé qué dispositivo necesita</option>
-              <option value="Prótesis">Prótesis</option>
-              <option value="Arnés">Arnés de rehabilitación</option>
-              <option value="Órtesis">Órtesis</option>
-              <option value="Carro">Carro ortopédico</option>
-            </select>
-          </div>
           <div class="row2">
             <div class="field"><label>Nombre del perro</label><input type="text" name="nombre_perro" placeholder="Nombre del perro"></div>
             <div class="field"><label>Edad aproximada</label><input type="text" name="edad" placeholder="Ej: 4 años"></div>
@@ -1491,12 +1491,12 @@
       <h2 class="display">Cada caso puede ser el comienzo de una mejor solución.</h2>
       <p>Contanos qué necesita el animal o conocé cómo participar en la validación profesional de Biomechanics Studio.</p>
       <div class="close-actions reveal">
-        <a href="#contacto-caso" class="btn btn-pri btn-lg">Evaluar un caso</a>
+        <a href="#contacto-caso" class="btn btn-pri btn-lg" data-producto="Aún no sé">Evaluar un caso</a>
         <a href="#profForm" class="btn btn-ghost btn-lg" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
       </div>
     </div>
     <div class="close-grid retire-block">
-      <div class="close-card reveal"><h4>Evaluar el caso de un perro</h4><p>Para prótesis, órtesis o una orientación inicial.</p><a href="#contacto-caso" class="btn btn-pri">Evaluar un caso</a></div>
+      <div class="close-card reveal"><h4>Evaluar el caso de un perro</h4><p>Para prótesis, órtesis o una orientación inicial.</p><a href="#contacto-caso" class="btn btn-pri" data-producto="Aún no sé">Evaluar un caso</a></div>
       <div class="close-card reveal d1"><h4>Sumarse a la preventa del arnés</h4><p>Para registrar interés y recibir información cuando se definan precio, compatibilidad y entrega.</p><a href="#contacto-caso" class="btn btn-pri" onclick="document.getElementById('productoSel').value='Arnés';if(window.toggleProductoCond)toggleProductoCond();acheTrack('product_arnes_click')">Sumarme a la preventa</a></div>
       <div class="close-card reveal d2"><h4>Participar como profesional</h4><p>Para demos, pilotos, derivación de casos o alianzas de fabricación.</p><a href="#profesionales" class="btn btn-pri">Participar como profesional</a></div>
     </div>
