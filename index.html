@@ -1722,7 +1722,7 @@
     </div>
     <div class="row2">
       <div class="field"><label for="nombreConsulta">Nombre completo</label><input type="text" name="nombre" id="nombreConsulta" maxlength="120" required autocomplete="name" placeholder="Tu nombre y apellido"></div>
-      <div class="field"><label for="whatsappConsulta">WhatsApp</label><input type="tel" name="whatsapp" id="whatsappConsulta" maxlength="120" required autocomplete="tel" placeholder="Tu WhatsApp"></div>
+      <div class="field"><label for="whatsappConsulta">WhatsApp</label><input type="tel" inputmode="tel" name="whatsapp" id="whatsappConsulta" maxlength="120" required autocomplete="tel" placeholder="Tu WhatsApp"></div>
     </div>
     <div class="row2">
       <div class="field"><label for="emailConsulta">Email</label><input type="email" name="email" id="emailConsulta" maxlength="200" required autocomplete="email" placeholder="Tu email"></div>
@@ -1845,11 +1845,50 @@
     'Carro ortopédico':'carro_research_submit'
   };
 
+  function normalizeWhatsapp(value){
+    return value.trim().replace(/[\s()-]/g,'');
+  }
+
+  function isValidWhatsapp(value){
+    if(!value||! /^\+?[\d\s()-]+$/.test(value)) return false;
+    const normalized=normalizeWhatsapp(value);
+    if(!/^\+?\d+$/.test(normalized)) return false;
+    const digits=normalized.replace('+','');
+    return digits.length>=8&&digits.length<=15&&!/^(\d)\1+$/.test(digits);
+  }
+
   function getCaseFormError(){
+    const producto=caseForm.querySelector('[name="producto_interes"]');
+    if(!productDetails[producto.value]){
+      return {field:producto,message:'Seleccioná un producto de interés.'};
+    }
+
     const situacion=caseForm.querySelector('[name="situacion_perro"]');
     const situacionLength=situacion.value.trim().length;
     if(situacionLength<10||situacionLength>300){
       return {field:situacion,message:'La situación del perro debe tener entre 10 y 300 caracteres.'};
+    }
+
+    const evaluacion=caseForm.querySelector('[name="evaluacion_veterinaria"]');
+    if(!['Sí','No','Está en evaluación'].includes(evaluacion.value)){
+      return {field:evaluacion,message:'Indicá si el perro tuvo una evaluación veterinaria.'};
+    }
+
+    const detalle=caseForm.querySelector('[name="detalle_producto"]');
+    const allowedDetails=productDetails[producto.value].options;
+    if(!allowedDetails.includes(detalle.value)){
+      return {field:detalle,message:'Seleccioná el detalle correspondiente al producto.'};
+    }
+
+    const nombre=caseForm.querySelector('[name="nombre"]');
+    const nameValue=nombre.value.trim();
+    if(nameValue.length<3||!/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(nameValue)){
+      return {field:nombre,message:'Revisá el nombre y apellido.'};
+    }
+
+    const whatsapp=caseForm.querySelector('[name="whatsapp"]');
+    if(!isValidWhatsapp(whatsapp.value)){
+      return {field:whatsapp,message:'Revisá el WhatsApp. Ingresá un número válido, por ejemplo +54 11 1234 5678.'};
     }
 
     const email=caseForm.querySelector('[name="email"]');
@@ -1858,19 +1897,18 @@
       return {field:email,message:'Revisá el email. Ingresá una dirección válida, por ejemplo nombre@dominio.com.'};
     }
 
-    const requiredFields=[
-      ['producto_interes','Seleccioná un producto de interés.'],
-      ['evaluacion_veterinaria','Indicá si el perro tuvo una evaluación veterinaria.'],
-      ['detalle_producto','Seleccioná el detalle correspondiente al producto.'],
-      ['nombre','Ingresá tu nombre completo.'],
-      ['whatsapp','Ingresá un número de WhatsApp.'],
-      ['ciudad','Ingresá tu ciudad.'],
-      ['provincia','Seleccioná una provincia.']
-    ];
-    for(const [name,message] of requiredFields){
-      const field=caseForm.querySelector('[name="'+name+'"]');
-      if(!field||!field.value.trim()) return {field,message};
+    const ciudad=caseForm.querySelector('[name="ciudad"]');
+    const cityValue=ciudad.value.trim();
+    if(cityValue.length<2||!/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(cityValue)){
+      return {field:ciudad,message:'Revisá la ciudad o localidad.'};
     }
+
+    const provincia=caseForm.querySelector('[name="provincia"]');
+    const allowedProvinces=[...provincia.options].filter(option=>!option.disabled).map(option=>option.value);
+    if(!allowedProvinces.includes(provincia.value)){
+      return {field:provincia,message:'Seleccioná una provincia.'};
+    }
+
     const consentimiento=caseForm.querySelector('[name="consentimiento"]');
     if(!consentimiento.checked){
       return {field:consentimiento,message:'Necesitamos tu autorización para responder la consulta y evaluar el caso.'};
@@ -1893,6 +1931,7 @@
 
     const fd = new FormData(caseForm);
     const payload = Object.fromEntries(fd.entries());
+    payload.whatsapp = normalizeWhatsapp(payload.whatsapp);
     payload.consentimiento = caseForm.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
     payload.producto = payload.producto_interes;
     payload.descripcion = payload.situacion_perro;
@@ -1921,7 +1960,7 @@
 
       caseForm.style.display = 'none';
       const msg = 'Recibimos tu consulta. Vamos a contactarte dentro de las próximas 48 horas para conocer mejor el caso y orientarte sobre el próximo paso.';
-      formOk.innerHTML = msg + '<br><br><a class="btn btn-pri" style="margin-top:6px" target="_blank" rel="noopener" href="https://wa.me/5491123199500?text=Hola%20Mat%C3%ADas%2C%20llegu%C3%A9%20desde%20la%20web%20de%20Ache%20y%20quer%C3%ADa%20consultar%20por%20el%20caso%20de%20mi%20perro." onclick="acheTrack(\'whatsapp_matias_click\')">Hablar con Matías por WhatsApp</a>';
+      formOk.innerHTML = '<p>'+msg+'</p><p>Podés cerrar esta página. No es necesario que vuelvas a enviar el formulario.</p>';
       formOk.style.display = 'block';
     } catch (err) {
       btn.disabled = false; btn.textContent = btnTxt;
