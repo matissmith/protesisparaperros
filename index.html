@@ -1845,12 +1845,45 @@
     'Carro ortopédico':'carro_research_submit'
   };
 
+  function getCaseFormError(){
+    const situacion=caseForm.querySelector('[name="situacion_perro"]');
+    const situacionLength=situacion.value.trim().length;
+    if(situacionLength<10||situacionLength>300){
+      return {field:situacion,message:'La situación del perro debe tener entre 10 y 300 caracteres.'};
+    }
+
+    const email=caseForm.querySelector('[name="email"]');
+    const emailPattern=/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/;
+    if(!email.value||email.value!==email.value.trim()||!emailPattern.test(email.value)){
+      return {field:email,message:'Revisá el email. Ingresá una dirección válida, por ejemplo nombre@dominio.com.'};
+    }
+
+    const requiredFields=[
+      ['producto_interes','Seleccioná un producto de interés.'],
+      ['evaluacion_veterinaria','Indicá si el perro tuvo una evaluación veterinaria.'],
+      ['detalle_producto','Seleccioná el detalle correspondiente al producto.'],
+      ['nombre','Ingresá tu nombre completo.'],
+      ['whatsapp','Ingresá un número de WhatsApp.'],
+      ['ciudad','Ingresá tu ciudad.'],
+      ['provincia','Seleccioná una provincia.']
+    ];
+    for(const [name,message] of requiredFields){
+      const field=caseForm.querySelector('[name="'+name+'"]');
+      if(!field||!field.value.trim()) return {field,message};
+    }
+    const consentimiento=caseForm.querySelector('[name="consentimiento"]');
+    if(!consentimiento.checked){
+      return {field:consentimiento,message:'Necesitamos tu autorización para responder la consulta y evaluar el caso.'};
+    }
+    return null;
+  }
+
   if(caseForm) caseForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const situacion=caseForm.querySelector('[name="situacion_perro"]');
-    if(!caseForm.checkValidity()||situacion.value.trim().length<10){
-      if(formErr){ formErr.textContent = 'Revisá los campos obligatorios. La situación del perro debe tener entre 10 y 300 caracteres.'; formErr.style.display = 'block'; }
-      caseForm.reportValidity();
+    const validationError=getCaseFormError();
+    if(validationError){
+      if(formErr){ formErr.textContent=validationError.message; formErr.style.display='block'; }
+      if(validationError.field) validationError.field.focus();
       return;
     }
     const btn = ev.submitter || caseForm.querySelector('button[type="submit"]');
