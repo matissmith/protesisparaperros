@@ -1014,16 +1014,11 @@
     <div class="reveal" style="max-width:680px;margin-bottom:10px">
       <span class="sec-tag">Formulario de caso</span>
       <h2 class="display">Contanos el caso de tu perro</h2>
-      <p class="intro" id="caseFormIntro">Tres pasos breves. Podés volver atrás en cualquier momento sin perder lo que ya completaste.</p>
+      <p class="intro" id="caseFormIntro">Contanos brevemente el caso. Con esta información podremos orientarte y definir el próximo paso.</p>
     </div>
     <div class="form-card reveal d1" style="max-width:760px">
-      <div class="stepper-progress" id="stepperProgress">
-        <div class="stepper-dot active" data-dot="1"></div>
-        <div class="stepper-dot" data-dot="2"></div>
-        <div class="stepper-dot" data-dot="3"></div>
-      </div>
-      <div class="stepper-label">Paso <b id="stepperCurrent">1</b> de 3</div>
       <form id="caseForm" novalidate>
+        <template id="legacyCaseFormMarkup">
         <input type="hidden" name="tipo" value="caso">
         <div class="field"><label>Producto de interés</label>
           <select name="producto" id="productoSel">
@@ -1202,6 +1197,7 @@
           <div class="stepper-nav"><span></span><button type="submit" class="btn btn-pri btn-lg">Enviar consulta</button></div>
           <div class="form-err" id="formErrSimple"></div>
         </div>
+        </template>
       </form>
 
       <datalist id="razasList">
@@ -1667,16 +1663,21 @@
 
   // consultar por producto: precarga el producto en el formulario y baja al paso 1
   document.querySelectorAll('[data-producto]').forEach(b=>{
-    b.addEventListener('click',()=>{const s=document.getElementById('productoSel');if(s)s.value=b.dataset.producto;toggleProductoCond();});
+    b.addEventListener('click',()=>{
+      const s=document.getElementById('productoSel');
+      const aliases={'Aún no sé':'No estoy seguro','Arnés':'Arnés de rehabilitación','Carro':'Carro ortopédico'};
+      if(s)s.value=aliases[b.dataset.producto]||b.dataset.producto;
+      toggleProductoCond();
+    });
   });
 
   // orientador: preselecciona la situación y el producto sugerido en el formulario de caso
   const orientMap={
     'Le falta parte de una extremidad.':'Prótesis',
     'Necesita soporte en una articulación.':'Órtesis',
-    'Tiene dificultad para caminar.':'Arnés',
-    'Necesita asistencia durante la rehabilitación.':'Arnés',
-    'Todavía no cuenta con un diagnóstico.':'Aún no sé'
+    'Tiene dificultad para caminar.':'Arnés de rehabilitación',
+    'Necesita asistencia durante la rehabilitación.':'Arnés de rehabilitación',
+    'Todavía no cuenta con un diagnóstico.':'No estoy seguro'
   };
   document.querySelectorAll('input[name="orientSit"]').forEach(r=>{
     r.addEventListener('change',()=>{
@@ -1688,6 +1689,63 @@
 
   // ---- stepper del formulario de caso ----
   const caseForm=document.getElementById('caseForm');
+  if(caseForm) caseForm.innerHTML=`
+    <input type="hidden" name="tipo" value="caso">
+    <input type="hidden" name="audience" value="tutor">
+    <div class="field">
+      <label for="productoSel">Producto de interés</label>
+      <select name="producto_interes" id="productoSel" required>
+        <option value="Prótesis">Prótesis</option>
+        <option value="Órtesis">Órtesis</option>
+        <option value="Arnés de rehabilitación">Arnés de rehabilitación</option>
+        <option value="Carro ortopédico">Carro ortopédico</option>
+        <option value="No estoy seguro" selected>No estoy seguro</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="situacionPerro">Situación del perro</label>
+      <textarea name="situacion_perro" id="situacionPerro" minlength="10" maxlength="300" required placeholder="Contanos qué está pasando actualmente"></textarea>
+      <p class="field-note">Entre 10 y 300 caracteres.</p>
+    </div>
+    <div class="field">
+      <label for="evaluacionVeterinaria">Evaluación veterinaria</label>
+      <select name="evaluacion_veterinaria" id="evaluacionVeterinaria" required>
+        <option value="" selected disabled>Elegí una opción</option>
+        <option value="Sí">Sí</option>
+        <option value="No">No</option>
+        <option value="Está en evaluación">Está en evaluación</option>
+      </select>
+    </div>
+    <div class="field" id="detalleProductoField">
+      <label for="detalleProducto" id="detalleProductoLabel">Detalle según producto</label>
+      <select name="detalle_producto" id="detalleProducto" required></select>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="nombreConsulta">Nombre completo</label><input type="text" name="nombre" id="nombreConsulta" maxlength="120" required autocomplete="name" placeholder="Tu nombre y apellido"></div>
+      <div class="field"><label for="whatsappConsulta">WhatsApp</label><input type="tel" name="whatsapp" id="whatsappConsulta" maxlength="120" required autocomplete="tel" placeholder="Tu WhatsApp"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="emailConsulta">Email</label><input type="email" name="email" id="emailConsulta" maxlength="200" required autocomplete="email" placeholder="Tu email"></div>
+      <div class="field"><label for="ciudadConsulta">Ciudad</label><input type="text" name="ciudad" id="ciudadConsulta" maxlength="120" required autocomplete="address-level2" placeholder="Ciudad o localidad"></div>
+    </div>
+    <div class="field">
+      <label for="provinciaConsulta">Provincia</label>
+      <select name="provincia" id="provinciaConsulta" required autocomplete="address-level1">
+        <option value="" selected disabled>Elegí una provincia</option>
+        <option>Buenos Aires</option><option>Catamarca</option><option>Chaco</option><option>Chubut</option>
+        <option>Ciudad Autónoma de Buenos Aires</option><option>Córdoba</option><option>Corrientes</option>
+        <option>Entre Ríos</option><option>Formosa</option><option>Jujuy</option><option>La Pampa</option>
+        <option>La Rioja</option><option>Mendoza</option><option>Misiones</option><option>Neuquén</option>
+        <option>Río Negro</option><option>Salta</option><option>San Juan</option><option>San Luis</option>
+        <option>Santa Cruz</option><option>Santa Fe</option><option>Santiago del Estero</option>
+        <option>Tierra del Fuego, Antártida e Islas del Atlántico Sur</option><option>Tucumán</option>
+      </select>
+    </div>
+    <label class="consent"><input type="checkbox" name="consentimiento" required> Autorizo a Ache a utilizar la información enviada para responder la consulta y evaluar el caso.</label>
+    <p class="field-note">Esta primera orientación no reemplaza una evaluación veterinaria. Si el caso requiere revisión clínica, te pediremos después fotografías, videos, estudios y otros datos específicos.</p>
+    <div class="stepper-nav"><span></span><button type="submit" class="btn btn-pri btn-lg">Enviar consulta</button></div>
+    <div class="form-err" id="formErr"></div>
+  `;
   const stepPanels=[...document.querySelectorAll('#caseForm .step-panel')];
   const stepperDots=[...document.querySelectorAll('.stepper-dot')];
   const stepperCurrent=document.getElementById('stepperCurrent');
@@ -1733,30 +1791,46 @@
     });
   }
 
-  // condicionales por producto (paso 2)
+  const productAliases={
+    'Aún no sé':'No estoy seguro',
+    'Arnés':'Arnés de rehabilitación',
+    'Carro':'Carro ortopédico'
+  };
+  const productDetails={
+    'Prótesis':{
+      question:'¿En qué situación se encuentra la amputación?',
+      options:['La amputación ya fue realizada','La amputación está indicada o en evaluación','Nació sin parte de una extremidad','No estoy seguro']
+    },
+    'Órtesis':{
+      question:'¿Qué zona necesita soporte?',
+      options:['Pata delantera','Pata trasera','Rodilla','Codo','Carpo o tarso','Columna o cuello','No estoy seguro']
+    },
+    'Arnés de rehabilitación':{
+      question:'¿Qué ayuda necesita principalmente?',
+      options:['Ayuda para levantarse','Ayuda para caminar','Soporte de la parte trasera','Soporte de la parte delantera','Recuperación posoperatoria','Soporte general','No estoy seguro']
+    },
+    'Carro ortopédico':{
+      question:'¿Dónde presenta la mayor dificultad de movilidad?',
+      options:['Patas traseras','Patas delanteras','Las cuatro patas','No estoy seguro']
+    },
+    'No estoy seguro':{
+      question:'¿Cuál de estas situaciones se parece más al caso?',
+      options:['Le falta total o parcialmente una extremidad','Necesita soporte en una pata o articulación','Necesita ayuda para levantarse o caminar','Tiene dificultades para usar dos o más patas','Ninguna de estas','No estoy seguro']
+    }
+  };
+
+  // Cambia solo la pregunta específica; los campos comunes conservan sus valores.
   function toggleProductoCond(){
     const prod=document.getElementById('productoSel');
-    if(!prod) return;
-    const map={'Prótesis':'Prótesis','Arnés':'Arnés','Órtesis':'Órtesis','Carro':'Carro'};
-    document.querySelectorAll('#caseForm .cond-block').forEach(b=>{
-      b.classList.toggle('active', map[prod.value]===b.dataset.cond);
-    });
-    // vista corta de 8 campos: solo para el camino de Prótesis, no afecta a los demás productos
-    const contactoCaso=document.getElementById('contacto-caso');
-    const isSimple = prod.value==='Prótesis';
-    if(contactoCaso) contactoCaso.classList.toggle('simple-mode', isSimple);
-    // La vista corta reutiliza algunos "name" del wizard completo (nombre, whatsapp, ciudad,
-    // descripcion, estado_actual). Si ambos lados quedan habilitados a la vez, FormData los
-    // pisa entre sí (gana el último en el DOM). Se deshabilita el lado que no está visible
-    // para que no viaje en el payload — así los demás productos no se ven afectados.
-    const simplePanel=document.getElementById('protesisSimple');
-    if(simplePanel) simplePanel.querySelectorAll('input,select,textarea').forEach(el=>{ el.disabled = !isSimple; });
-    document.querySelectorAll('#caseForm .step-panel').forEach(p=>{
-      p.querySelectorAll('input,select,textarea').forEach(el=>{
-        if (el.id === 'productoSel') return; // el producto siempre tiene que viajar
-        el.disabled = isSimple;
-      });
-    });
+    const detail=document.getElementById('detalleProducto');
+    const label=document.getElementById('detalleProductoLabel');
+    if(!prod||!detail||!label) return;
+    const canonical=productAliases[prod.value]||prod.value;
+    if(canonical!==prod.value) prod.value=canonical;
+    const config=productDetails[canonical]||productDetails['No estoy seguro'];
+    label.textContent=config.question;
+    detail.innerHTML='<option value="" selected disabled>Elegí una opción</option>'+
+      config.options.map(option=>'<option value="'+option+'">'+option+'</option>').join('');
   }
   const productoSel=document.getElementById('productoSel');
   if(productoSel){ productoSel.addEventListener('change', toggleProductoCond); toggleProductoCond(); }
@@ -1764,67 +1838,34 @@
   // envío del formulario de caso
   const formOk=document.getElementById('formOk');
   const formErr=document.getElementById('formErr');
-  const productConfirm={
-    'Arnés':'Tu interés quedó registrado para la preventa. Antes de solicitar cualquier pago te informaremos precio, compatibilidad y condiciones de entrega.',
-    'Carro':'Tu caso quedó registrado como parte de la investigación de esta línea. El producto todavía no se encuentra disponible.'
+  const productEventMap={
+    'Prótesis':'protesis_case_submit',
+    'Arnés de rehabilitación':'arnes_preorder_submit',
+    'Órtesis':'ortesis_case_submit',
+    'Carro ortopédico':'carro_research_submit'
   };
-  const productEventMap={'Prótesis':'protesis_case_submit','Arnés':'arnes_preorder_submit','Órtesis':'ortesis_case_submit','Carro':'carro_research_submit'};
 
   if(caseForm) caseForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const simpleMode = document.getElementById('productoSel') && document.getElementById('productoSel').value === 'Prótesis';
-    const formErrSimple = document.getElementById('formErrSimple');
-    if(simpleMode){
-      const sp = document.getElementById('protesisSimple');
-      const reqOk = sp.querySelector('[name="nombre"]').value.trim()
-        && sp.querySelector('[name="whatsapp"]').value.trim()
-        && sp.querySelector('[name="ciudad"]').value.trim()
-        && [...sp.querySelectorAll('[name="estado_actual"]')].some(r=>r.checked)
-        && sp.querySelector('[name="consentimiento"]').checked;
-      if(!reqOk){
-        if(formErrSimple){ formErrSimple.textContent = 'Faltan campos obligatorios: nombre, WhatsApp, ciudad, tipo de consulta y la autorización para evaluar el caso.'; formErrSimple.style.display = 'block'; }
-        return;
-      }
-    } else if(!validStep(3)){
-      if(formErr){ formErr.textContent = 'Faltan campos obligatorios: nombre, WhatsApp y la autorización para evaluar el caso.'; formErr.style.display = 'block'; }
+    const situacion=caseForm.querySelector('[name="situacion_perro"]');
+    if(!caseForm.checkValidity()||situacion.value.trim().length<10){
+      if(formErr){ formErr.textContent = 'Revisá los campos obligatorios. La situación del perro debe tener entre 10 y 300 caracteres.'; formErr.style.display = 'block'; }
+      caseForm.reportValidity();
       return;
     }
-    // ev.submitter: el botón realmente clickeado (step 3 o la vista corta de prótesis)
     const btn = ev.submitter || caseForm.querySelector('button[type="submit"]');
     const btnTxt = btn.textContent;
     btn.disabled = true; btn.textContent = 'Enviando...';
     if (formErr) formErr.style.display = 'none';
-    if (formErrSimple) formErrSimple.style.display = 'none';
 
     const fd = new FormData(caseForm);
     const payload = Object.fromEntries(fd.entries());
-    // los 4 cond-block quedan siempre en el DOM (solo se ocultan por CSS), así que FormData
-    // manda los 4 juntos; acá se descartan los campos de los bloques que no correspondan al
-    // producto elegido para no mandar valores default de <select> que el usuario nunca vio.
-    const condFieldsByProduct = {
-      'Prótesis': ['extremidad_afectada', 'amputacion_realizada', 'munon', 'fotos_disponibles'],
-      'Órtesis': ['zona', 'diagnostico', 'soporte_actual'],
-      'Arnés': ['dificultad_principal', 'apoya_4_patas', 'asistencia'],
-      'Carro': ['extremidades_afectadas', 'movilidad_parcial', 'solucion_actual']
-    };
-    Object.keys(condFieldsByProduct).forEach(prod => {
-      if (prod !== payload.producto) condFieldsByProduct[prod].forEach(field => delete payload[field]);
-    });
-    if (simpleMode) {
-      // la vista corta no pregunta estos campos (quedan para el segundo relevamiento por
-      // WhatsApp/email); se limpian para no mandar el valor default del <select> oculto del
-      // stepper completo, que el usuario nunca vio ni eligió. fotos_disponibles también se
-      // limpia acá: mantiene su significado original (fotos/estudios) y queda vacío para este
-      // formulario corto — el tiempo transcurrido ahora viaja en su propia columna.
-      ['etapa','extremidad_afectada','amputacion_realizada','munon','medio_contacto','intencion','fotos_disponibles'].forEach(f => { payload[f] = ''; });
-    }
-    payload.consentimiento = (simpleMode ? document.getElementById('protesisSimple') : caseForm).querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
-    payload.consentimiento_compartir = caseForm.querySelector('input[name="consentimiento_compartir"]').checked ? 'Sí' : 'No';
-    payload.newsletter = caseForm.querySelector('input[name="newsletter"]').checked ? 'Sí' : 'No';
+    payload.consentimiento = caseForm.querySelector('input[name="consentimiento"]').checked ? 'Sí' : 'No';
+    payload.producto = payload.producto_interes;
+    payload.descripcion = payload.situacion_perro;
+    payload.evaluado_vet = payload.evaluacion_veterinaria;
     payload.contacto = payload.whatsapp || payload.email || '';
-    payload.mensaje = payload.descripcion || '';
-    payload.tamano = payload.peso || '';
-    payload.audience = 'tutor';
+    payload.mensaje = payload.situacion_perro;
     payload.pagina = location.href;
     const qs = new URLSearchParams(location.search);
     payload.utm_source = qs.get('utm_source') || '';
@@ -1846,20 +1887,14 @@
       if(productEventMap[payload.producto]) acheTrack(productEventMap[payload.producto], {product: payload.producto, audience: 'tutor'});
 
       caseForm.style.display = 'none';
-      document.getElementById('stepperProgress').style.display='none';
-      document.querySelector('.stepper-label').style.display='none';
-      let msg = simpleMode
-        ? 'Recibimos tu consulta. Vamos a contactarte dentro de las próximas 48 horas para conocer mejor el caso.'
-        : 'Recibimos el caso de ' + (payload.nombre_perro || 'tu perro') + '. Vamos a revisar la información y nos pondremos en contacto para confirmar si necesitamos fotos, medidas o documentación adicional. El envío no implica una compra ni garantiza que el caso pueda avanzar con un dispositivo.';
-      if(productConfirm[payload.producto]) msg += ' ' + productConfirm[payload.producto];
+      const msg = 'Recibimos tu consulta. Vamos a contactarte dentro de las próximas 48 horas para conocer mejor el caso y orientarte sobre el próximo paso.';
       formOk.innerHTML = msg + '<br><br><a class="btn btn-pri" style="margin-top:6px" target="_blank" rel="noopener" href="https://wa.me/5491123199500?text=Hola%20Mat%C3%ADas%2C%20llegu%C3%A9%20desde%20la%20web%20de%20Ache%20y%20quer%C3%ADa%20consultar%20por%20el%20caso%20de%20mi%20perro." onclick="acheTrack(\'whatsapp_matias_click\')">Hablar con Matías por WhatsApp</a>';
       formOk.style.display = 'block';
     } catch (err) {
       btn.disabled = false; btn.textContent = btnTxt;
-      const errTarget = simpleMode ? formErrSimple : formErr;
-      if (errTarget) {
-        errTarget.innerHTML = 'No pudimos enviar tu consulta desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20un%20producto." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
-        errTarget.style.display = 'block';
+      if (formErr) {
+        formErr.innerHTML = 'No pudimos enviar tu consulta desde acá. Escribinos directo por <a href="https://wa.me/5491123199500?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20un%20producto." target="_blank" rel="noopener">WhatsApp</a> y te respondemos igual.';
+        formErr.style.display = 'block';
       }
     }
   });

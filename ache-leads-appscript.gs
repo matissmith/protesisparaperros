@@ -107,8 +107,13 @@ const FIELD_LIMITS = Object.freeze({
   fab_zona: 200,
   fab_formatos: 200,
   fab_interes_studio: 60,
-  // Formulario corto de prótesis (vista de 8 campos)
-  tiempo_transcurrido: 60
+  // Formulario corto de prótesis (vista histórica)
+  tiempo_transcurrido: 60,
+  // Formulario definitivo de consultas (columnas aditivas al final)
+  producto_interes: 120,
+  situacion_perro: 300,
+  evaluacion_veterinaria: 40,
+  detalle_producto: 200
 });
 
 function doPost(e) {
@@ -183,8 +188,13 @@ function doPost(e) {
       sanitizeForSheet(data.fab_zona),
       sanitizeForSheet(data.fab_formatos),
       sanitizeForSheet(data.fab_interes_studio),
-      // --- columna nueva, aditiva: formulario corto de prótesis ---
-      sanitizeForSheet(data.tiempo_transcurrido)
+      // --- columnas aditivas: formulario definitivo de consultas ---
+      sanitizeForSheet(data.tiempo_transcurrido),
+      sanitizeForSheet(data.producto_interes),
+      sanitizeForSheet(data.situacion_perro),
+      sanitizeForSheet(data.evaluacion_veterinaria),
+      sanitizeForSheet(data.provincia),
+      sanitizeForSheet(data.detalle_producto)
     ]);
 
     try {
@@ -241,8 +251,61 @@ function validateAndNormalize(raw) {
   if (!data.nombre) throw new Error('Nombre requerido.');
   if (!data.contacto) throw new Error('Contacto requerido.');
   if (!isValidConsent(raw.consentimiento)) throw new Error('Consentimiento requerido.');
+  if (data.tipo === 'caso') validateCaseInquiry(data, raw);
 
   return data;
+}
+
+function validateCaseInquiry(data, raw) {
+  const detailsByProduct = {
+    'Prótesis': [
+      'La amputación ya fue realizada',
+      'La amputación está indicada o en evaluación',
+      'Nació sin parte de una extremidad',
+      'No estoy seguro'
+    ],
+    'Órtesis': [
+      'Pata delantera', 'Pata trasera', 'Rodilla', 'Codo',
+      'Carpo o tarso', 'Columna o cuello', 'No estoy seguro'
+    ],
+    'Arnés de rehabilitación': [
+      'Ayuda para levantarse', 'Ayuda para caminar', 'Soporte de la parte trasera',
+      'Soporte de la parte delantera', 'Recuperación posoperatoria',
+      'Soporte general', 'No estoy seguro'
+    ],
+    'Carro ortopédico': [
+      'Patas traseras', 'Patas delanteras', 'Las cuatro patas', 'No estoy seguro'
+    ],
+    'No estoy seguro': [
+      'Le falta total o parcialmente una extremidad',
+      'Necesita soporte en una pata o articulación',
+      'Necesita ayuda para levantarse o caminar',
+      'Tiene dificultades para usar dos o más patas',
+      'Ninguna de estas',
+      'No estoy seguro'
+    ]
+  };
+  const provinces = [
+    'Buenos Aires', 'Catamarca', 'Chaco', 'Chubut', 'Ciudad Autónoma de Buenos Aires',
+    'Córdoba', 'Corrientes', 'Entre Ríos', 'Formosa', 'Jujuy', 'La Pampa', 'La Rioja',
+    'Mendoza', 'Misiones', 'Neuquén', 'Río Negro', 'Salta', 'San Juan', 'San Luis',
+    'Santa Cruz', 'Santa Fe', 'Santiago del Estero',
+    'Tierra del Fuego, Antártida e Islas del Atlántico Sur', 'Tucumán'
+  ];
+  const situationLength = String(raw.situacion_perro || '').trim().length;
+
+  if (!detailsByProduct[data.producto_interes]) throw new Error('Producto de interés inválido.');
+  if (situationLength < 10 || situationLength > 300) throw new Error('Situación del perro inválida.');
+  if (['Sí', 'No', 'Está en evaluación'].indexOf(data.evaluacion_veterinaria) === -1) {
+    throw new Error('Evaluación veterinaria inválida.');
+  }
+  if (!data.whatsapp) throw new Error('WhatsApp requerido.');
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) throw new Error('Email inválido.');
+  if (!data.ciudad) throw new Error('Ciudad requerida.');
+  if (provinces.indexOf(data.provincia) === -1) throw new Error('Provincia inválida.');
+  if (detailsByProduct[data.producto_interes].indexOf(data.detalle_producto) === -1) {
+    throw new Error('Detalle según producto inválido.');
+  }
 }
 
 function limitText(value, maxLength) {
@@ -295,11 +358,34 @@ function getOrCreateSheet() {
       'Interés: fabricar', 'Interés: alianza', 'Interés: demo',
       'Fabricante: dispositivos', 'Fabricante: materiales', 'Fabricante: capacidad',
       'Fabricante: zona de cobertura', 'Fabricante: formatos técnicos', 'Fabricante: interés en Studio',
-      'Tiempo transcurrido aproximado'
+      'Tiempo transcurrido aproximado',
+      'Producto de interés', 'Situación del perro', 'Evaluación veterinaria',
+      'Provincia', 'Detalle según producto'
     ]);
     sheet.setFrozenRows(1);
+  } else {
+    ensureQueryHeaders(sheet);
   }
   return sheet;
+}
+
+function ensureQueryHeaders(sheet) {
+  const required = [
+    'Producto de interés',
+    'Situación del perro',
+    'Evaluación veterinaria',
+    'Provincia',
+    'Detalle según producto'
+  ];
+  const lastColumn = Math.max(sheet.getLastColumn(), 1);
+  const existing = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const tail = existing.slice(-required.length);
+  const alreadyAppended = required.every(function(header, index) {
+    return tail[index] === header;
+  });
+  if (!alreadyAppended) {
+    sheet.getRange(1, lastColumn + 1, 1, required.length).setValues([required]);
+  }
 }
 
 function notify(data, notifyEmail) {
