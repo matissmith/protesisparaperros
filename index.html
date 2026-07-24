@@ -34,7 +34,7 @@
     --ease:cubic-bezier(.16,1,.3,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:auto}
+  html{scroll-behavior:smooth}
   body{font-family:'Barlow',sans-serif;color:var(--txt);background:var(--navy-900);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
   h1,h2,h3{color:var(--ink);line-height:1.05}
@@ -46,7 +46,10 @@
   /* grain + reduced motion */
   body::before{content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.035;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
-  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation:none!important;transition:none!important}
+  }
 
   /* ---------- NAV ---------- */
   .nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .35s var(--ease),border-color .35s,padding .35s}
@@ -61,6 +64,7 @@
   .nav-links a{font-size:14px;font-weight:600;color:rgba(255,255,255,.72);transition:color .2s;position:relative}
   .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--amber);transition:width .3s var(--ease)}
   .nav-links a:hover{color:#fff}.nav-links a:hover::after{width:100%}
+  .nav-links .nav-mobile-cta{display:none}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:'Barlow',sans-serif;font-weight:700;cursor:pointer;border:none;border-radius:10px;transition:all .25s var(--ease);font-size:14px;letter-spacing:.2px}
   .btn-pri{background:var(--amber);color:var(--navy-900);padding:12px 22px}
   .btn-pri:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(239,169,44,.6)}
@@ -123,6 +127,17 @@
   /* ---------- SECTIONS ---------- */
   .section{position:relative;scroll-margin-top:82px}
   #profForm{scroll-margin-top:82px}
+  #nav-dispositivos,
+  #nav-como-funciona,
+  #nav-studio,
+  #nav-sobre-ache,
+  #nav-consulta{scroll-margin-top:90px}
+  #nav-dispositivos.anchor-ready,
+  #nav-como-funciona.anchor-ready,
+  #nav-studio.anchor-ready,
+  #nav-sobre-ache.anchor-ready,
+  #nav-consulta.anchor-ready,
+  .reveal.anchor-ready{opacity:1;transform:none;transition:none}
   .light{background:var(--bg);color:var(--txt);padding:110px 0}
   .dark{background:var(--navy-900);color:rgba(255,255,255,.7);padding:110px 0}
   .sec-tag{font-size:12px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:16px;display:block}
@@ -395,6 +410,9 @@
     .nav-in > a.btn.btn-pri{display:none}
     .nav.open .nav-links{display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;background:rgba(15,27,49,.98);backdrop-filter:blur(14px);padding:20px 26px 26px;gap:20px;border-bottom:1px solid rgba(255,255,255,.1);border-radius:0 0 18px 18px}
     .nav.open .nav-links a{font-size:16px;color:#fff}
+    .nav.open .nav-links .nav-mobile-cta{display:inline-flex;width:100%;color:var(--navy-900)}
+    .nav.open .nav-links .nav-mobile-cta::after{display:none}
+    body.menu-open{overflow:hidden}
   }
   @media(max-width:520px){
     .wrap{padding:0 18px}
@@ -626,8 +644,37 @@
   .team-card h4{font-size:18px;color:var(--ink);margin-bottom:2px}
   .team-card .role{font-size:13px;font-weight:700;color:var(--amber-dk);text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px}
   .team-card p{font-size:14px;color:var(--muted)}
-  .program-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-  .program-badges span{font-size:13px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px}
+  .program-banner{
+    display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;
+    margin-top:36px;background:var(--navy-900);border:1px solid rgba(255,255,255,.1);
+    border-radius:18px;overflow:hidden;box-shadow:0 18px 42px -28px rgba(15,27,49,.55)
+  }
+  .program-banner-label{
+    color:var(--amber);font-size:11px;font-weight:800;letter-spacing:1.7px;
+    line-height:1.35;text-transform:uppercase;padding:18px 22px;
+    border-right:1px solid rgba(255,255,255,.12);white-space:nowrap
+  }
+  .program-marquee{
+    min-width:0;overflow:hidden;padding:15px 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)
+  }
+  .program-track{display:flex;width:200%;animation:program-scroll 28s linear infinite;will-change:transform}
+  .program-set{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;
+    flex:0 0 50%;min-width:0
+  }
+  .program-set span{
+    position:relative;display:flex;align-items:center;justify-content:center;
+    color:rgba(255,255,255,.88);text-align:center;
+    font-size:14px;font-weight:700;letter-spacing:.25px;white-space:nowrap
+  }
+  .program-set span::after{
+    content:"";position:absolute;top:50%;right:-2px;width:4px;height:4px;
+    border-radius:50%;background:var(--amber);opacity:.75;transform:translateY(-50%)
+  }
+  .program-banner:hover .program-track{animation-play-state:paused}
+  @keyframes program-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* FAQ accordion nativo */
   #faq h2.display{font-family:'Barlow Condensed',sans-serif;text-transform:none;font-size:clamp(30px,2.8vw,40px)!important;font-weight:800}
@@ -713,8 +760,9 @@
   #sobre-ache{padding-top:56px;padding-bottom:0}
   #equipo{padding-top:1px}
   #equipo .team-grid{margin-top:32px}
-  #equipo{padding-bottom:72px}
+  #equipo{padding-bottom:0}
   #equipo .sec-tag{display:none}
+  #faq{padding-top:84px;padding-bottom:96px;border-top:1px solid rgba(15,27,49,.07)}
 
   @media(max-width:768px){
     html,body{max-width:100%;overflow-x:clip}
@@ -722,6 +770,11 @@
     html::-webkit-scrollbar{display:none}
     .wrap{width:100%;max-width:100%}
     .section,#profesionales,#profForm{scroll-margin-top:70px}
+    #nav-dispositivos,
+    #nav-como-funciona,
+    #nav-studio,
+    #nav-sobre-ache,
+    #nav-consulta{scroll-margin-top:80px}
 
     .nav-in{height:56px}
     .nav.scrolled{top:8px;left:8px;right:8px}
@@ -795,7 +848,16 @@
     details#profForm[open],details#profForm[open] form,
     details#profForm[open] .row2,details#profForm[open] .field{min-width:0;max-width:100%}
     #sobre-ache{padding-top:48px}
-    #equipo{padding-bottom:56px}
+    #equipo{padding-bottom:0}
+    #faq{padding-top:64px;padding-bottom:72px}
+    .program-banner{grid-template-columns:1fr;border-radius:15px;margin-top:30px}
+    .program-banner-label{
+      white-space:normal;padding:15px 18px 12px;border-right:0;
+      border-bottom:1px solid rgba(255,255,255,.1)
+    }
+    .program-marquee{padding:13px 0}
+    .program-track{animation-duration:32s}
+    .program-set span{font-size:clamp(10.5px,3.25vw,12px);letter-spacing:.1px}
     #sobre-ache h2.display,#equipo h2.display,
     .section h2.display{
       width:100%;max-width:100%;
@@ -824,6 +886,11 @@
   .hero .glow,.hero .glow2{animation:none}
   .hero .emblem-wm{animation:none}
   .cursor-ring{display:none!important}
+  @media(prefers-reduced-motion:reduce){
+    .program-track{width:100%}
+    .program-set{flex-basis:100%}
+    .program-set[aria-hidden="true"]{display:none}
+  }
 </style>
 
 <!-- =====================================================================
@@ -878,24 +945,24 @@
 <!-- NAV -->
 <header class="nav" id="nav">
   <div class="wrap nav-in">
-    <a href="#" class="logo">
+    <a href="#inicio" class="logo">
       <svg class="mark" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg>
       <span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span>
     </a>
-    <nav class="nav-links">
-      <a href="#dispositivos">Dispositivos</a>
-      <a href="#como">Cómo trabajamos</a>
-      <a href="#tecnologia">Biomechanics Studio</a>
-      <a href="#profesionales">Para profesionales</a>
-      <a href="#sobre-ache">Sobre Ache</a>
+    <nav class="nav-links" id="primary-nav">
+      <a href="#nav-dispositivos">Dispositivos</a>
+      <a href="#nav-como-funciona">Cómo funciona</a>
+      <a href="#nav-studio">Biomechanics Studio</a>
+      <a href="#nav-sobre-ache">Sobre Ache</a>
+      <a href="#nav-consulta" class="nav-mobile-cta btn btn-pri" data-producto="Aún no sé">Evaluar un caso</a>
     </nav>
-    <a href="#contacto-caso" class="btn btn-pri" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
-    <button class="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+    <a href="#nav-consulta" class="btn btn-pri" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
+    <button class="burger" aria-label="Menú" aria-controls="primary-nav" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="inicio">
   <div class="glow"></div>
   <div class="glow2"></div>
   <div class="grid-bg"></div>
@@ -909,7 +976,7 @@
       </h1>
       <p class="lead">Desarrollamos prótesis, órtesis, carros ortopédicos y arneses a partir de la anatomía, la condición clínica y las necesidades reales de cada caso.</p>
       <div class="hero-cta">
-        <a href="#contacto-caso" class="btn btn-pri btn-lg" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
+        <a href="#nav-consulta" class="btn btn-pri btn-lg" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
         <a href="#profForm" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
       </div>
       <div class="hero-stats">
@@ -965,16 +1032,16 @@
 <!-- DISPOSITIVOS -->
 <section id="dispositivos" class="section dark">
   <div class="wrap">
-    <div class="reveal" style="max-width:680px">
+    <div class="reveal" id="nav-dispositivos" style="max-width:680px">
       <span class="sec-tag">Soluciones de movilidad</span>
       <h2 class="display">Dispositivos de movilidad para distintas necesidades</h2>
       <p class="sol-intro">Cada línea se encuentra en una etapa diferente. Algunas ya reciben casos piloto, otras están en preventa y otras continúan en desarrollo.</p>
     </div>
     <div class="sol-grid">
-      <article class="tilt sol reveal" data-audience="tutor" data-product="protesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis canina Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Prótesis caninas</h3><p>Diseñadas para reemplazar parte de una extremidad cuando el caso permite recuperar apoyo y mejorar el patrón de marcha.</p><a href="#contacto-caso" class="sol-cta" data-producto="Prótesis" onclick="acheTrack('product_protesis_click')">Postular un caso de prótesis</a><p class="sol-note">La viabilidad depende de la anatomía, el estado clínico y la evaluación profesional.</p></div></article>
-      <article class="tilt sol reveal d1" data-audience="tutor" data-product="arnes"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-preventa">Preventa</span><h3>Arnés de rehabilitación</h3><p>Permite asistir la marcha, descargar parte del peso y acompañar al perro durante rehabilitación o pérdida de movilidad.</p><a href="#contacto-caso" class="sol-cta" data-producto="Arnés" onclick="acheTrack('product_arnes_click')">Sumarse a la preventa</a><p class="sol-note">Te contactaremos antes de confirmar precio, disponibilidad o cualquier pago.</p></div></article>
-      <article class="tilt sol reveal d2" data-audience="tutor" data-product="ortesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Órtesis personalizadas</h3><p>Brindan soporte a una articulación o extremidad para estabilizarla y acompañar la rehabilitación.</p><a href="#contacto-caso" class="sol-cta" data-producto="Órtesis" onclick="acheTrack('product_ortesis_click')">Consultar por una órtesis</a><p class="sol-note">La indicación y el tipo de soporte se definen junto con el profesional tratante.</p></div></article>
-      <article class="tilt sol reveal d3" data-audience="tutor" data-product="carro"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-desarrollo">En desarrollo</span><h3>Carros ortopédicos</h3><p>Pensados para asistir la movilidad cuando una o más extremidades no pueden sostener o impulsar correctamente al animal.</p><a href="#contacto-caso" class="sol-cta" data-producto="Carro" onclick="acheTrack('product_carro_click')">Contarnos qué necesita mi perro</a><p class="sol-note">Actualmente esta línea todavía no se encuentra disponible para compra.</p></div></article>
+      <article class="tilt sol reveal" data-audience="tutor" data-product="protesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis canina Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Prótesis caninas</h3><p>Diseñadas para reemplazar parte de una extremidad cuando el caso permite recuperar apoyo y mejorar el patrón de marcha.</p><a href="#nav-consulta" class="sol-cta" data-producto="Prótesis" onclick="acheTrack('product_protesis_click')">Postular un caso de prótesis</a><p class="sol-note">La viabilidad depende de la anatomía, el estado clínico y la evaluación profesional.</p></div></article>
+      <article class="tilt sol reveal d1" data-audience="tutor" data-product="arnes"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-preventa">Preventa</span><h3>Arnés de rehabilitación</h3><p>Permite asistir la marcha, descargar parte del peso y acompañar al perro durante rehabilitación o pérdida de movilidad.</p><a href="#nav-consulta" class="sol-cta" data-producto="Arnés" onclick="acheTrack('product_arnes_click')">Sumarse a la preventa</a><p class="sol-note">Te contactaremos antes de confirmar precio, disponibilidad o cualquier pago.</p></div></article>
+      <article class="tilt sol reveal d2" data-audience="tutor" data-product="ortesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Órtesis personalizadas</h3><p>Brindan soporte a una articulación o extremidad para estabilizarla y acompañar la rehabilitación.</p><a href="#nav-consulta" class="sol-cta" data-producto="Órtesis" onclick="acheTrack('product_ortesis_click')">Consultar por una órtesis</a><p class="sol-note">La indicación y el tipo de soporte se definen junto con el profesional tratante.</p></div></article>
+      <article class="tilt sol reveal d3" data-audience="tutor" data-product="carro"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-desarrollo">En desarrollo</span><h3>Carros ortopédicos</h3><p>Pensados para asistir la movilidad cuando una o más extremidades no pueden sostener o impulsar correctamente al animal.</p><a href="#nav-consulta" class="sol-cta" data-producto="Carro" onclick="acheTrack('product_carro_click')">Contarnos qué necesita mi perro</a><p class="sol-note">Actualmente esta línea todavía no se encuentra disponible para compra.</p></div></article>
     </div>
   </div>
 </section>
@@ -1002,7 +1069,7 @@
 <!-- CÓMO TRABAJAMOS -->
 <section id="como" class="section light">
   <div class="wrap como-grid">
-    <div class="como-left reveal">
+    <div class="como-left reveal" id="nav-como-funciona">
       <span class="sec-tag">Cómo trabajamos</span>
       <h2 class="display">Del caso a una propuesta concreta</h2>
       <p>No todos los casos avanzan de la misma manera. Primero reunimos la información necesaria, después evaluamos la viabilidad y recién entonces definimos el próximo paso.</p>
@@ -1020,7 +1087,7 @@
 <!-- FORMULARIO DE CASO -->
 <section id="contacto-caso" class="section light">
   <div class="wrap">
-    <div class="reveal" style="max-width:680px;margin-bottom:10px">
+    <div class="reveal" id="nav-consulta" style="max-width:680px;margin-bottom:10px">
       <span class="sec-tag">Formulario de caso</span>
       <h2 class="display">Contanos el caso de tu perro</h2>
       <p class="intro" id="caseFormIntro">Contanos brevemente el caso. Con esta información podremos orientarte y definir el próximo paso.</p>
@@ -1275,7 +1342,7 @@
       <div class="tf b" data-parallax="0.1"><div class="tf-media"><img src="assets/img/protesis.png" alt="Render 3D de la prótesis Ache"></div></div>
     </div>
     <div class="studio-access-card reveal d1">
-      <span class="sec-tag">Plataforma profesional</span>
+      <span class="sec-tag" id="nav-studio">Plataforma profesional</span>
       <h2 class="display">Biomechanics Studio convierte información clínica en una base técnica para diseñar mejor.</h2>
       <p style="font-weight:700;color:var(--navy)">De fotos y medidas a una propuesta técnica revisable.</p>
       <p>Biomechanics Studio organiza datos clínicos, imágenes y medidas para ayudar a documentar el caso, preparar el diseño del dispositivo y generar información que pueda revisarse antes de fabricar. La plataforma está en beta y se está validando con profesionales y casos reales.</p>
@@ -1418,7 +1485,7 @@
 <!-- SOBRE ACHE -->
 <section id="sobre-ache" class="section light">
   <div class="wrap">
-    <div class="reveal" style="max-width:760px">
+    <div class="reveal" id="nav-sobre-ache" style="max-width:760px">
       <span class="sec-tag">Sobre Ache</span>
       <h2 class="display">El equipo detrás de Ache</h2>
       <p class="intro">Ache Innovation es una startup argentina que combina diseño de producto, conocimiento veterinario y tecnología para desarrollar soluciones de movilidad y rehabilitación animal.</p>
@@ -1441,9 +1508,14 @@
     </div>
     <p class="intro reveal" style="margin-top:28px">El equipo de Ache también integra perfiles de diseño industrial, ingeniería, comunicación y desarrollo tecnológico.</p>
     <p class="intro reveal" style="font-weight:700;color:var(--ink)">Una red de más de 120 veterinarios y profesionales forma parte del ecosistema construido alrededor de Ache.</p>
-    <div class="reveal" style="margin-top:32px">
-      <span class="sec-tag" style="display:block;margin-bottom:0">Programas y espacios en los que participamos</span>
-      <div class="program-badges"><span>IncuBAte</span><span>EmprendING</span><span>NAVES IAE</span></div>
+    <div class="program-banner reveal">
+      <span class="program-banner-label">Programas y espacios en los que participamos</span>
+      <div class="program-marquee" aria-label="IncuBAte, EmprendING, NAVES IAE y Empretec">
+        <div class="program-track">
+          <div class="program-set"><span>IncuBAte</span><span>EmprendING</span><span>NAVES IAE</span><span>Empretec</span></div>
+          <div class="program-set" aria-hidden="true"><span>IncuBAte</span><span>EmprendING</span><span>NAVES IAE</span><span>Empretec</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1467,7 +1539,7 @@
 </section>
 
 <!-- PREGUNTAS FRECUENTES -->
-<section id="faq" class="section light" style="padding-top:0">
+<section id="faq" class="section light">
   <div class="wrap">
     <div class="reveal" style="max-width:680px">
       <h2 class="display">Preguntas frecuentes</h2>
@@ -1496,7 +1568,7 @@
       <h2 class="display">Cada caso puede ser el comienzo de una mejor solución.</h2>
       <p>Contanos qué necesita el animal o conocé cómo participar en la validación profesional de Biomechanics Studio.</p>
       <div class="close-actions reveal">
-        <a href="#contacto-caso" class="btn btn-pri btn-lg" data-producto="Aún no sé">Evaluar un caso</a>
+        <a href="#nav-consulta" class="btn btn-pri btn-lg" data-producto="Aún no sé">Evaluar un caso</a>
         <a href="#profForm" class="btn btn-ghost btn-lg" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
       </div>
     </div>
@@ -1615,30 +1687,45 @@
   const onProg=()=>{const h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?window.scrollY/h*100:0)+'%';};
   onProg();window.addEventListener('scroll',onProg,{passive:true});
 
-  // smooth anchor scroll con offset del nav (arregla el salto brusco a Contacto)
-  let anchorScrollFrame=null;
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  // Las anclas visuales usan el desplazamiento nativo definido en CSS.
+  // El formulario profesional conserva su apertura previa al desplazamiento.
+  document.querySelectorAll('a[href="#profForm"]').forEach(a=>{
     a.addEventListener('click',(e)=>{
-      const id=a.getAttribute('href'); if(!id||id.length<2) return;
-      const t=document.querySelector(id); if(!t) return;
+      const t=document.getElementById('profForm'); if(!t) return;
       e.preventDefault();
-      if(anchorScrollFrame){cancelAnimationFrame(anchorScrollFrame);anchorScrollFrame=null;}
-      if(id==='#profForm'){
-        t.open=true;
-        const interest=a.dataset.profInterest;
-        const interestField=interest==='pilot'
-          ? t.querySelector('[name="interes_probar"]')
-          : interest==='demo' ? t.querySelector('[name="interes_demo"]') : null;
-        if(interestField) interestField.checked=true;
-      }
-      const navH=78, startY=window.scrollY, endY=t.getBoundingClientRect().top+startY-navH, dist=endY-startY;
-      if(reduce){window.scrollTo(0,endY);return;}
-      const dur=Math.min(1100,Math.max(500,Math.abs(dist)*0.55)); let s=null;
-      const ease=x=>1-Math.pow(1-x,3);
-      const step=(ts)=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1);window.scrollTo(0,startY+dist*ease(p));if(p<1)anchorScrollFrame=requestAnimationFrame(step);else anchorScrollFrame=null;};
-      anchorScrollFrame=requestAnimationFrame(step);
+      t.open=true;
+      const interest=a.dataset.profInterest;
+      const interestField=interest==='pilot'
+        ? t.querySelector('[name="interes_probar"]')
+        : interest==='demo' ? t.querySelector('[name="interes_demo"]') : null;
+      if(interestField) interestField.checked=true;
+      history.pushState(null,'','#profForm');
+      requestAnimationFrame(()=>t.scrollIntoView({block:'start',behavior:reduce?'auto':'smooth'}));
     });
   });
+
+  const visualAnchorIds=new Set([
+    '#nav-dispositivos','#nav-como-funciona','#nav-studio','#nav-sobre-ache','#nav-consulta'
+  ]);
+  function prepareVisualAnchor(hash){
+    if(!visualAnchorIds.has(hash)) return;
+    const target=document.querySelector(hash);
+    if(target){
+      target.classList.add('in','anchor-ready');
+      const revealTarget=target.closest('.reveal');
+      if(revealTarget) revealTarget.classList.add('in','anchor-ready');
+    }
+  }
+  document.querySelectorAll('a[href^="#nav-"]').forEach(a=>{
+    a.addEventListener('click',()=>prepareVisualAnchor(a.getAttribute('href')));
+  });
+  prepareVisualAnchor(location.hash);
+  if(visualAnchorIds.has(location.hash)){
+    requestAnimationFrame(()=>{
+      const target=document.querySelector(location.hash);
+      if(target) target.scrollIntoView({block:'start',behavior:reduce?'auto':'smooth'});
+    });
+  }
 
   // botones magnéticos
   if(!reduce){
@@ -2097,8 +2184,14 @@
   // menú móvil (botón hamburguesa)
   const burger=document.querySelector('.burger');
   if(burger){
-    burger.addEventListener('click',()=>nav.classList.toggle('open'));
-    nav.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+    const setMobileMenuOpen=(open)=>{
+      nav.classList.toggle('open',open);
+      burger.setAttribute('aria-expanded',String(open));
+      document.body.classList.toggle('menu-open',open);
+    };
+    burger.addEventListener('click',()=>setMobileMenuOpen(!nav.classList.contains('open')));
+    nav.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>setMobileMenuOpen(false)));
+    window.addEventListener('resize',()=>{if(window.innerWidth>960)setMobileMenuOpen(false);});
   }
 </script>
 </body>
