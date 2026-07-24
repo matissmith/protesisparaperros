@@ -222,15 +222,51 @@
   .form-err a{color:var(--amber-dk);text-decoration:underline}
 
   /* footer */
-  footer{background:#0B1528;color:rgba(255,255,255,.6);padding:80px 0 30px;position:relative;overflow:hidden}
-  .foot-big{font-family:'Conthrax',sans-serif;text-transform:uppercase;font-size:clamp(48px,12vw,150px);color:rgba(255,255,255,.04);line-height:.8;letter-spacing:.02em;pointer-events:none;user-select:none;margin-bottom:-10px}
-  .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.1);position:relative;z-index:2}
-  .foot-brand p{font-size:14px;max-width:320px;margin-top:16px}
-  .foot-col h4{color:#fff;font-size:12.5px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px;font-weight:800}
-  .foot-col a{display:block;font-size:14px;margin-bottom:11px;color:rgba(255,255,255,.6);transition:color .2s,padding-left .2s}
-  .foot-col a:hover{color:var(--amber);padding-left:4px}
-  .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:24px;font-size:12.5px;color:rgba(255,255,255,.4)}
-  .disclaimer{max-width:var(--maxw);margin:20px auto 0;padding:0 26px;font-size:11.5px;color:rgba(255,255,255,.3);line-height:1.6}
+  footer{background:#0B1528;color:rgba(255,255,255,.68);padding:64px 0 40px;position:relative;overflow:hidden}
+  .ft-wrap{position:relative;z-index:1}
+  .ft-big{position:absolute;top:-4%;left:50%;transform:translateX(-50%);z-index:0;
+    font-family:'Conthrax',sans-serif;text-transform:uppercase;font-size:clamp(60px,14vw,170px);
+    color:rgba(255,255,255,.045);line-height:.8;letter-spacing:.02em;white-space:nowrap;pointer-events:none;user-select:none}
+  .ft-grid{position:relative;z-index:1;display:grid;grid-template-areas:"brand" "actions" "nav" "social";
+    gap:32px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .ft-brand{grid-area:brand}
+  .ft-nav{grid-area:nav;display:flex;flex-direction:column}
+  .ft-actions{grid-area:actions;display:flex;flex-direction:column}
+  .ft-social{grid-area:social}
+  .ft-desc{font-size:15px;line-height:1.6;color:rgba(255,255,255,.72);max-width:360px;margin-top:16px}
+  .ft-grid h4{color:#fff;font-size:12.5px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;font-weight:800}
+  .ft-nav a,.ft-actions .ft-link{display:flex;align-items:center;min-height:44px;font-size:14.5px;
+    color:rgba(255,255,255,.68);transition:color .2s,padding-left .2s}
+  .ft-nav a:hover,.ft-actions .ft-link:hover{color:var(--amber);padding-left:4px}
+  .ft-actions .ft-cta{align-self:flex-start;margin-bottom:8px}
+  .ft-actions .ft-link{font-weight:600}
+  footer a:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
+  .ft-bottom{position:relative;z-index:1;padding-top:28px}
+  .ft-bottom-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 20px;font-size:13px;color:rgba(255,255,255,.55)}
+  .ft-domain{color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s}
+  .ft-domain:hover{color:var(--amber)}
+  .ft-disclaimer{margin-top:16px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.68);max-width:760px}
+  .ft-legal-pending{margin-top:12px;font-size:12.5px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ft-legal-tag{border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:2px 9px;font-size:10px;
+    text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.55);font-weight:700}
+  .ft-closing{position:relative;z-index:1;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);
+    text-align:center;font-size:14.5px;font-weight:700;color:rgba(239,169,44,.85)}
+
+  @media(min-width:768px){
+    .ft-grid{grid-template-columns:1fr 1fr;grid-template-areas:"brand nav" "actions social";column-gap:48px;row-gap:36px}
+  }
+  @media(min-width:1024px){
+    .ft-grid{grid-template-columns:1.6fr 1fr 1.1fr 1fr;grid-template-areas:"brand nav actions social";column-gap:40px;row-gap:0}
+    .ft-desc{max-width:320px}
+  }
+  @media(max-width:767px){
+    footer{padding:56px 0 108px}
+    .ft-big{color:rgba(255,255,255,.028);top:15%}
+    .ft-grid{gap:16px;padding-bottom:32px}
+    .ft-actions .ft-cta{align-self:stretch;justify-content:center;width:100%;margin-bottom:4px}
+    .ft-bottom-row{font-size:12.5px}
+    .ft-closing{font-size:14px}
+  }
 
   /* reveal */
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
@@ -253,10 +289,10 @@
   .tech-visual:hover .tf::after,.sol:hover::after{left:150%}
 
   /* social */
-  .social{display:flex;gap:12px;margin-top:22px}
-  .social a{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:all .25s var(--ease)}
+  .social{display:flex;gap:12px;margin-top:2px}
+  .social a{width:44px;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:all .25s var(--ease)}
   .social a:hover{background:var(--amber);border-color:var(--amber);color:var(--navy-900);transform:translateY(-3px)}
-  .social svg{width:18px;height:18px;fill:currentColor}
+  .social svg{width:19px;height:19px;fill:currentColor}
 
   /* whatsapp float — paleta Ache */
   .wa-float{position:fixed;right:22px;bottom:22px;z-index:150;width:58px;height:58px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px -10px rgba(26,51,80,.7);transition:transform .3s var(--ease)}
@@ -402,7 +438,6 @@
 
     .band{padding:62px 0}
     .band-grid{grid-template-columns:1fr 1fr;gap:32px 18px}
-    .foot-top{grid-template-columns:1fr 1fr}
     .nav-links{display:none}.burger{display:block}
     /* El CTA del header choca con el logo en anchos chicos (~360px); el hero
        ya repite este mismo botón bien grande más abajo, así que en mobile
@@ -435,7 +470,7 @@
     .tech-visual{height:350px;margin-top:4px}
     .tf.a{width:86%;height:70%}
     .tf.b{width:72%;height:56%}
-    .band-grid,.foot-top{grid-template-columns:1fr}
+    .band-grid{grid-template-columns:1fr}
     .sol .sol-body{padding:22px 24px 24px}
     /* clamp medido contra la palabra más larga del sitio ("Parametrización", 16
        caracteres) para que jamás necesite partirse a mitad de palabra en 360-430px */
@@ -1582,40 +1617,45 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="wrap">
-    <div class="foot-big">Ache</div>
-    <div class="foot-top">
-      <div class="foot-brand">
-        <a href="#" class="logo"><svg class="mark" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span></a>
-        <p>Potenciamos la movilidad animal, porque cada paso cuenta.</p>
+  <div class="wrap ft-wrap">
+    <div class="ft-big" aria-hidden="true">Ache</div>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <a href="#inicio" class="logo"><svg class="mark" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="word"><span class="w1">Ache</span><span class="w2">Innovation</span></span></a>
+        <p class="ft-desc">Ache Innovation diseña dispositivos externos de movilidad a medida y desarrolla herramientas digitales para acompañar la evaluación, el diseño y la rehabilitación animal.</p>
+      </div>
+      <nav class="ft-nav" aria-label="Navegación del pie de página">
+        <h4>Navegación</h4>
+        <a href="#nav-dispositivos">Dispositivos</a>
+        <a href="#nav-como-funciona">Cómo funciona</a>
+        <a href="#nav-studio">Biomechanics Studio</a>
+        <a href="#nav-sobre-ache">Sobre Ache</a>
+        <a href="#faq">Preguntas frecuentes</a>
+      </nav>
+      <div class="ft-actions">
+        <h4>Acciones y recursos</h4>
+        <a href="#nav-consulta" class="btn btn-pri ft-cta">Evaluar un caso</a>
+        <a href="https://app.protesisparaperros.com.ar/" target="_blank" rel="noopener noreferrer" class="ft-link">Abrir Biomechanics Studio</a>
+        <a href="#profForm" class="ft-link">Participar o solicitar una demo</a>
+      </div>
+      <div class="ft-social">
+        <h4>Seguir a Ache</h4>
         <div class="social">
-          <a href="https://www.linkedin.com/company/ache-innovation/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24h-4V8z"/></svg></a>
-          <a href="https://www.instagram.com/ache.innovation/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.8c-3.14 0-3.51.01-4.75.07-.9.04-1.39.19-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.32-.28.81-.32 1.71-.06 1.24-.07 1.61-.07 4.75s.01 3.51.07 4.75c.04.9.19 1.39.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.13.81.28 1.71.32 1.24.06 1.61.07 4.75.07s3.51-.01 4.75-.07c.9-.04 1.39-.19 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.32.28-.81.32-1.71.06-1.24.07-1.61.07-4.75s-.01-3.51-.07-4.75c-.04-.9-.19-1.39-.32-1.71a2.86 2.86 0 0 0-.69-1.06 2.86 2.86 0 0 0-1.06-.69c-.32-.13-.81-.28-1.71-.32-1.24-.06-1.61-.07-4.75-.07zm0 3.06A4.98 4.98 0 1 1 12 17a4.98 4.98 0 0 1 0-9.98zm0 8.22A3.24 3.24 0 1 0 12 8.76a3.24 3.24 0 0 0 0 6.48zM18.4 6.34a1.16 1.16 0 1 1-2.32 0 1.16 1.16 0 0 1 2.32 0z"/></svg></a>
-          <a href="https://wa.me/5491123199500?text=Hola%2C%20estoy%20interesado%20en%20uno%20de%20sus%20productos.%20Te%20comento%20cu%C3%A1l%3A" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12 2a10 10 0 0 0-8.5 15.28L2 22l4.85-1.27A10 10 0 1 0 12 2z"/></svg></a>
+          <a href="https://www.linkedin.com/company/ache-innovation/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (abre en una pestaña nueva)"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24h-4V8z"/></svg></a>
+          <a href="https://www.instagram.com/ache.innovation/" target="_blank" rel="noopener noreferrer" aria-label="Instagram (abre en una pestaña nueva)"><svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.8c-3.14 0-3.51.01-4.75.07-.9.04-1.39.19-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.32-.28.81-.32 1.71-.06 1.24-.07 1.61-.07 4.75s.01 3.51.07 4.75c.04.9.19 1.39.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.13.81.28 1.71.32 1.24.06 1.61.07 4.75.07s3.51-.01 4.75-.07c.9-.04 1.39-.19 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.32.28-.81.32-1.71.06-1.24.07-1.61.07-4.75s-.01-3.51-.07-4.75c-.04-.9-.19-1.39-.32-1.71a2.86 2.86 0 0 0-.69-1.06 2.86 2.86 0 0 0-1.06-.69c-.32-.13-.81-.28-1.71-.32-1.24-.06-1.61-.07-4.75-.07zm0 3.06A4.98 4.98 0 1 1 12 17a4.98 4.98 0 0 1 0-9.98zm0 8.22A3.24 3.24 0 1 0 12 8.76a3.24 3.24 0 0 0 0 6.48zM18.4 6.34a1.16 1.16 0 1 1-2.32 0 1.16 1.16 0 0 1 2.32 0z"/></svg></a>
         </div>
       </div>
-      <div class="foot-col">
-        <h4>Ache Innovation</h4>
-        <a href="#dispositivos">Dispositivos</a>
-        <a href="#como">Cómo trabajamos</a>
-        <a href="#tecnologia">Biomechanics Studio</a>
-        <a href="#profesionales">Para profesionales</a>
-      </div>
-      <div class="foot-col">
-        <h4>Más</h4>
-        <a href="#sobre-ache">Sobre Ache</a>
-        <a href="#contacto-caso">Contacto</a>
-        <a href="#" onclick="return false" aria-disabled="true">Política de privacidad</a>
-        <a href="#" onclick="return false" aria-disabled="true">Términos de uso</a>
-      </div>
     </div>
-    <div class="foot-bottom">
-      <span>© 2026 Ache Innovation. Todos los derechos reservados.</span>
-      <span>protesisparaperros.com.ar</span>
+    <div class="ft-bottom">
+      <div class="ft-bottom-row">
+        <span>© 2026 Ache Innovation. Todos los derechos reservados.</span>
+        <a href="https://protesisparaperros.com.ar/" class="ft-domain">protesisparaperros.com.ar</a>
+      </div>
+      <p class="ft-disclaimer">Ache desarrolla dispositivos y herramientas de apoyo para la movilidad y rehabilitación animal. La información de este sitio no reemplaza la evaluación, el diagnóstico ni la indicación de un profesional veterinario.</p>
+      <p class="ft-legal-pending"><span>Política de privacidad</span><span aria-hidden="true">·</span><span>Términos de uso</span><span class="ft-legal-tag">En preparación</span></p>
     </div>
+    <p class="ft-closing">El futuro de la movilidad animal empieza acá.</p>
   </div>
-  <p class="disclaimer">Ache Innovation desarrolla herramientas y dispositivos de apoyo para movilidad y rehabilitación animal. La información del sitio no reemplaza la evaluación ni la indicación de un profesional veterinario.</p>
-  <p class="disclaimer" style="margin-top:8px;font-weight:700;color:rgba(255,255,255,.45)">El futuro de la movilidad animal empieza acá.</p>
 </footer>
 
 <a class="wa-float" href="https://wa.me/5491123199500?text=Hola%2C%20estoy%20interesado%20en%20uno%20de%20sus%20productos.%20Te%20comento%20cu%C3%A1l%3A" aria-label="Escribinos por WhatsApp" target="_blank" rel="noopener">
