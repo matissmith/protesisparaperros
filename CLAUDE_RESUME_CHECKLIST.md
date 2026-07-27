@@ -2,6 +2,12 @@
 
 Fuente principal: `HANDOFF_CLAUDE_2026-07-24.md`.
 
+> **Actualización 2026-07-27:** el footer ya fue rediseñado, commiteado (`ae0a006`
+> — "Finalize responsive footer design"), pusheado y verificado en producción.
+> El "primer trabajo pendiente" de este checklist (rediseño del footer) queda
+> **superado**. No volver a rediseñar el footer salvo un bug real aprobado por
+> Matías. El primer bloque pendiente ahora es la auditoría legal y de datos.
+
 ## Inicio
 
 ```bash
@@ -17,20 +23,25 @@ git rev-parse origin/main
 
 - [ ] `HANDOFF_CLAUDE_2026-07-24.md` completo.
 - [ ] `AGENTS.md` completo.
-- [ ] `footer-audit-ache-v1.md` para el próximo bloque.
+- [ ] `footer-audit-ache-v1.md` como registro histórico del bloque ya cerrado
+      (footer implementado en `ae0a006`).
 - [ ] `navigation-audit-ache-v1.md` solo como diagnóstico histórico.
 - [ ] `SESSION_STATUS.md` únicamente si hace falta rastrear una decisión antigua.
 
 ## Estado que debe confirmarse
 
 - [ ] Rama `main`.
-- [ ] HEAD esperado al crear este handoff: `c2d8de5`.
-- [ ] `origin/main` esperado: `c2d8de5`.
+- [ ] HEAD esperado: `ae0a006` ("Finalize responsive footer design").
+- [ ] `origin/main` esperado: `ae0a006`.
 - [ ] No hay cambios tracked o staged inesperados.
-- [ ] `.claude/` permanece sin trackear.
+- [ ] `.claude/` permanece sin trackear (incluye `launch.json`).
 - [ ] Los documentos de auditoría/handoff pueden estar sin trackear hasta que
       Matías autorice un commit.
-- [ ] Cloudflare sirve el commit esperado antes de atribuirle estado de producción.
+- [ ] Publicación verificada por contenido servido en la URL pública, no por el
+      panel de Cloudflare, antes de atribuirle estado de producción.
+- [ ] El footer ya está cerrado (ver handoff sección G); verificar que los
+      legales sigan mostrándose como texto "En preparación", no como enlaces
+      reales ni falsos.
 
 ## URLs
 
@@ -42,26 +53,37 @@ git rev-parse origin/main
 ## Prohibiciones
 
 - [ ] No tocar `ache-leads-appscript.gs` por cambios visuales.
-- [ ] No tocar formularios, payloads, analytics ni endpoints en el bloque footer.
+- [ ] No tocar formularios, payloads, analytics ni endpoints.
 - [ ] No crear una sección Profesionales independiente.
 - [ ] No cambiar catálogo, Studio, FAQ o navegación superior.
 - [ ] No crear enlaces legales falsos.
 - [ ] No afirmar prueba física si solo hubo emulación.
 - [ ] No incluir `.claude/`.
 - [ ] No hacer commit, push o deploy sin orden explícita.
+- [ ] **No volver a rediseñar el footer salvo un bug real aprobado por Matías**
+      (bloque cerrado en `ae0a006`).
 
 ## Primer trabajo pendiente
 
-Rediseñar únicamente el footer según `footer-audit-ache-v1.md`:
+El footer ya fue rediseñado, commiteado y pusheado en `ae0a006` — **no es más
+el primer trabajo pendiente**. El primer bloque pendiente ahora es la
+auditoría legal y de datos:
 
-- [ ] anclas aprobadas;
-- [ ] CTA de caso;
-- [ ] acceso a Studio y recorrido profesional;
-- [ ] FAQ;
-- [ ] redes sin duplicar WhatsApp;
-- [ ] contraste, foco y áreas táctiles;
-- [ ] responsive;
-- [ ] reemplazo futuro por Política de privacidad y Términos reales.
+- [ ] formularios;
+- [ ] Apps Script;
+- [ ] Google Sheets;
+- [ ] analytics;
+- [ ] Meta Pixel;
+- [ ] Google;
+- [ ] Cloudflare;
+- [ ] Biomechanics Studio.
+
+Del footer solo queda pendiente, como tarea aparte:
+
+- [ ] redactar y publicar Política de privacidad y Términos de uso reales
+      (hoy: texto no interactivo "En preparación", verificar que siga así);
+- [ ] probar el footer y la navegación en un dispositivo físico real (todavía
+      solo hay validación por emulación).
 
 ## ¿Debe tocarse Apps Script?
 

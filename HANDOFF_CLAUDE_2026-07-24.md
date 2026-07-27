@@ -3,6 +3,14 @@
 Fuente principal de continuidad para Claude Code y futuros agentes. Leer completo
 antes de modificar el proyecto.
 
+> **Actualización 2026-07-27:** el bloque de footer que este handoff describía
+> como "próximo bloque inmediato" (sección J original) ya fue implementado,
+> commiteado, pusheado y verificado en producción en el commit `ae0a006`
+> ("Finalize responsive footer design"). Todas las menciones a un footer
+> pendiente en este documento quedan **superadas**; ver sección B (estado de
+> producción) y la nueva sección G (Footer — bloque cerrado) para el estado
+> real. El siguiente bloque de trabajo es la auditoría legal y de datos.
+
 ## A. Resumen del proyecto
 
 Ache Innovation es una startup argentina de movilidad y rehabilitación animal.
@@ -34,14 +42,19 @@ software.
 
 ## B. Estado actual de producción
 
-- Último commit en `main`: `c2d8de5` — *Finalize responsive ticker and mobile
-  navigation polish*.
-- `origin/main`: `c2d8de5`; no hay commits locales por enviar.
+- Último commit en `main`: `ae0a006` — *Finalize responsive footer design*.
+- `origin/main`: `ae0a006`; coincide exactamente con `HEAD`. No hay commits
+  locales por enviar.
+- Commits intermedios desde el corte anterior (`c2d8de5`): `dd2f515` (documentó
+  el handoff y las auditorías) y `ae0a006` (rediseño integral del footer,
+  incluido el ajuste de compactado mobile). Ver sección C y sección G.
 - Landing esperada en producción: `https://protesisparaperros.com.ar/`.
 - Software: `https://app.protesisparaperros.com.ar/`.
-- Cloudflare recibe automáticamente cada push. Este handoff no volvió a abrir
-  producción ni el panel; confirmar el deployment `c2d8de5` antes de afirmar
-  que Cloudflare lo sirve.
+- Cloudflare recibe automáticamente cada push. **Publicación verificada:** se
+  consultó la URL pública y el footer en vivo coincide texto por texto con
+  `ae0a006` (navegación, descripción de marca y rótulo "En preparación" de los
+  legales). No se abrió el panel de Cloudflare; la verificación fue por
+  contenido servido, no por el dashboard.
 - Último código de Apps Script versionado: commit `d795760`.
 - Versión activa de Apps Script: **no confirmada desde el repo**. Requiere mirar
   “Gestionar implementaciones” en el proyecto de Google.
@@ -83,6 +96,12 @@ Orden cronológico de esta etapa:
 - `76a3dfa` — revirtió completamente `c3f7e72`.
 - `c2d8de5` — dejó la navegación visual definitiva, menú mobile, anclas y ticker
   responsive de programas.
+- `dd2f515` — documentó el handoff maestro y agregó las auditorías de
+  navegación y footer como referencia para el bloque siguiente.
+- `ae0a006` — *Finalize responsive footer design*: reemplazó integralmente el
+  footer (HTML y CSS) según `footer-audit-ache-v1.md`, y en la misma revisión
+  ajustó el compactado vertical y la marca de agua del footer mobile. Es el
+  commit vigente en `main` y `origin/main`. Ver sección G.
 
 Contexto visual anterior relevante:
 
@@ -255,7 +274,79 @@ Validación responsive realizada por emulación: iPhone 320/375/390/414/430;
 Android 360/393/412; tablets 768/800/820/1024; desktop 1280/1440. No afirmar que
 esto equivale a una prueba en iPhone físico.
 
-## G. Banner de programas y FAQ
+## G. Footer — bloque cerrado (`ae0a006`)
+
+El footer fue rediseñado por completo, commiteado y pusheado en `ae0a006`, y
+verificado como publicado en la URL pública. **Este bloque está cerrado.** No
+debe reabrirse salvo un bug real aprobado por Matías.
+
+### Arquitectura final
+
+Cuatro bloques + banda inferior, usando exclusivamente las anclas visuales
+aprobadas:
+
+- **Marca:** logo → `#inicio`, descripción institucional ("Ache Innovation
+  diseña dispositivos externos de movilidad a medida y desarrolla herramientas
+  digitales para acompañar la evaluación, el diseño y la rehabilitación
+  animal."). El slogan anterior ("Potenciamos la movilidad animal...") fue
+  retirado.
+- **Navegación:** Dispositivos (`#nav-dispositivos`), Cómo funciona
+  (`#nav-como-funciona`), Biomechanics Studio (`#nav-studio`), Sobre Ache
+  (`#nav-sobre-ache`), Preguntas frecuentes (`#faq`).
+- **Acciones y recursos:** CTA principal "Evaluar un caso" (`#nav-consulta`,
+  con tratamiento de botón) + dos enlaces destacados: "Abrir Biomechanics
+  Studio" (externo, `rel="noopener noreferrer"`) y "Participar o solicitar una
+  demo" (`#profForm`).
+- **Redes:** LinkedIn e Instagram únicamente, íconos de 44×44 px.
+- **Banda inferior:** copyright, dominio (`protesisparaperros.com.ar`,
+  clickeable), aclaración veterinaria con contraste corregido, y los legales
+  (ver abajo). Frase final ("El futuro de la movilidad animal empieza acá.")
+  separada por un divisor propio.
+
+"Para profesionales" ya no existe como entrada de navegación. Los ids viejos
+(`#dispositivos`, `#como`, `#tecnologia`, `#sobre-ache`, `#contacto-caso`) no
+se usan más en el footer.
+
+### Estado por viewport
+
+- **Desktop (≥1024 px):** una fila de 4 columnas (Marca | Navegación | Acciones
+  y recursos | Redes).
+- **Tablet (768–1023 px):** grid 2×2 (Marca+Navegación arriba, Acciones+Redes
+  abajo).
+- **Mobile (≤767 px):** una columna, orden logo+descripción → Acciones y
+  recursos → Navegación → Redes → Banda inferior → Frase final. Ajuste
+  posterior de compactado: gaps entre bloques reducidos (28px → 16px), CTA con
+  menos margen respecto al primer enlace secundario (8px → 4px), padding del
+  footer ajustado (`64px 0 40px` desktop / `56px 0 108px` mobile, este último
+  para dejar espacio de seguridad al botón flotante). La palabra decorativa
+  "Ache" se mantuvo como textura (`aria-hidden="true"`), reposicionada y con
+  opacidad reducida en mobile para no competir con el logo y la descripción.
+
+### WhatsApp
+
+Se eliminó el enlace de WhatsApp que estaba duplicado dentro del footer. Se
+conserva únicamente el botón flotante (`.wa-float`), fuera del `<footer>`, sin
+cambios en su comportamiento ni en su número.
+
+### Legales
+
+Política de privacidad y Términos de uso **no son enlaces** (ni reales ni
+falsos): se muestran como texto plano no interactivo, sin `href`, con un
+rótulo "En preparación". No hay `href="#"` ni `onclick="return false"`
+restantes en el footer. Esta es una solución transitoria explícita, no la
+decisión final: cuando existan las páginas reales de Política de privacidad y
+Términos de uso, deben reemplazar este texto por enlaces reales.
+
+### Pendiente de este bloque
+
+- Redactar y publicar las páginas reales de Política de privacidad y Términos
+  de uso, y convertir el texto "En preparación" en enlaces reales.
+- **Prueba en dispositivo físico todavía pendiente.** Toda la validación
+  responsive de este bloque (320–1440 px) se hizo por emulación de viewport en
+  navegador de escritorio. No se probó en un iPhone ni Android físico; no
+  afirmar equivalencia con una prueba física.
+
+## H. Banner de programas y FAQ
 
 El banner está al final de Sobre Ache/equipo y funciona como transición hacia FAQ.
 Mantiene un rótulo fijo sobre azul oscuro y una pista animada con:
@@ -278,7 +369,7 @@ como fallback Safari, pero no hubo prueba en dispositivo iOS físico.
 FAQ conserva preguntas y acordeones. Su separación es 64/72 px en mobile y
 84/96 px en desktop (arriba/abajo).
 
-## H. Decisiones rechazadas o errores anteriores
+## I. Decisiones rechazadas o errores anteriores
 
 - No crear una sección “Profesionales” artificial.
 - No poner IDs en el `<section>` antes del padding como destino visual.
@@ -294,7 +385,7 @@ FAQ conserva preguntas y acordeones. Su separación es 64/72 px en mobile y
   tarea separada.
 - No reabrir catálogo, Studio o formulario por detalles menores ya aprobados.
 
-## I. Archivos rectores y auditorías existentes
+## J. Archivos rectores y auditorías existentes
 
 - `AGENTS.md` — reglas operativas obligatorias del repo. Vigente.
 - `SESSION_STATUS.md` — historial largo de sesiones. Útil como referencia, pero
@@ -312,32 +403,29 @@ FAQ conserva preguntas y acordeones. Su separación es 64/72 px en mobile y
 - `navigation-audit-ache-v1.md` — auditoría que diagnosticó anclas y arquitectura.
   Es referencia histórica: su propuesta de mantener “Profesionales” en el header
   fue descartada; la navegación definitiva es la sección F.
-- `footer-audit-ache-v1.md` — auditoría vigente para el próximo bloque. La
-  recomendación de retirar enlaces legales es solo transitoria: deben reemplazarse
-  por documentos reales.
+- `footer-audit-ache-v1.md` — auditoría que diagnosticó el footer anterior y
+  definió la arquitectura implementada en `ae0a006`. Sus hallazgos P0 ya fueron
+  resueltos (ver sección G); el documento agrega al comienzo una sección
+  "Estado de implementación" y se conserva completo como registro histórico.
+  Sigue vigente el pendiente de reemplazar el texto legal "En preparación" por
+  páginas reales cuando existan.
 - `CLAUDE_RESUME_CHECKLIST.md` — checklist operativo breve subordinado a este
   handoff.
 
 No existe `CONTINUAR_PROYECTO.md` dentro de este repo. Hay uno en la carpeta superior
 de Ache, pero corresponde a una etapa antigua y no se modificó.
 
-## J. Trabajo pendiente priorizado
+## K. Trabajo pendiente priorizado
 
-### Próximo bloque inmediato — footer
+### Completado — footer
 
-- rediseño visual y estructural;
-- navegación actualizada;
-- CTA y recursos;
-- redes y contacto sin duplicación;
-- accesibilidad y foco;
-- responsive;
-- Política de privacidad real;
-- Términos de uso reales;
-- política/cookies si corresponde.
+El rediseño visual y estructural del footer, la navegación actualizada, CTA y
+recursos, redes sin duplicación, accesibilidad/foco y responsive quedaron
+cerrados en `ae0a006` (ver sección G). Lo único que sigue abierto de ese
+bloque es la creación de Política de privacidad y Términos de uso reales
+(hoy: texto "En preparación") y la prueba en dispositivo físico.
 
-Usar `footer-audit-ache-v1.md` como base. Cambiar únicamente el footer y su CSS.
-
-### Después — auditoría legal y de datos
+### Próximo bloque inmediato — auditoría legal y de datos
 
 - formularios;
 - Apps Script;
@@ -361,7 +449,7 @@ Usar `footer-audit-ache-v1.md` como base. Cambiar únicamente el footer y su CSS
 - experiencia profesional;
 - roadmap técnico.
 
-## K. Reglas para Claude
+## L. Reglas para Claude
 
 1. Leer este handoff completo antes de modificar código.
 2. Leer `AGENTS.md` si existe.

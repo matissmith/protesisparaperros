@@ -5,6 +5,40 @@ Repo: `protesisparaperros`
 Alcance: footer actual de `index.html` y botón flotante de WhatsApp.  
 Estado: análisis y propuesta; sin cambios de código.
 
+## Estado de implementación (actualizado 2026-07-27)
+
+Esta auditoría ya fue ejecutada. El footer que describe como "actual" en las
+secciones siguientes corresponde al estado **anterior** al commit `ae0a006`
+("Finalize responsive footer design"), que reemplazó el footer por completo
+según la arquitectura recomendada en este documento.
+
+- **Auditoría ejecutada:** sí, íntegramente, en `ae0a006`.
+- **Problemas P0 resueltos:** los cinco hallazgos P0 de la sección 10 (enlaces
+  legales falsos, "Para profesionales" como navegación, anclas antiguas, logo
+  con `href="#"`, aclaración clínica/legal con contraste insuficiente) están
+  resueltos en el footer actual.
+- **Navegación vieja reemplazada:** "Cómo trabajamos", "Para profesionales",
+  "Más" y "Contacto" ya no existen en el footer. Se usan exclusivamente las
+  anclas visuales aprobadas (`#nav-dispositivos`, `#nav-como-funciona`,
+  `#nav-studio`, `#nav-sobre-ache`, `#nav-consulta`) más `#faq` y `#profForm`.
+- **Enlaces legales falsos eliminados:** ya no existe `href="#"` ni
+  `onclick="return false"` en el footer.
+- **Legales reales todavía pendientes:** Política de privacidad y Términos de
+  uso se muestran como texto plano no interactivo con el rótulo "En
+  preparación". Esto es transitorio, no la solución final — sigue pendiente
+  redactar y publicar los documentos reales y reemplazar ese texto por enlaces
+  reales (ver decisión 3 de la sección 12, ya aprobada en ese sentido).
+- **WhatsApp duplicado eliminado:** el footer ya no tiene un enlace de
+  WhatsApp propio; se conserva únicamente el botón flotante.
+- **Contraste y accesibilidad corregidos:** la aclaración clínica/legal y el
+  copyright subieron de opacidad/tamaño, se agregó `:focus-visible`, los
+  íconos sociales pasaron a 44×44 px y la palabra decorativa "Ache" quedó
+  `aria-hidden="true"`.
+- **Este documento se conserva completo como registro histórico** de la
+  auditoría original; no se borró ni resumió el análisis. El detalle técnico
+  del estado real post-implementación vive en
+  `HANDOFF_CLAUDE_2026-07-24.md`, sección G.
+
 > Aclaración posterior: retirar visualmente los enlaces legales falsos es una
 > medida transitoria, no la decisión final. Política de privacidad y Términos de
 > uso deben reemplazarse por documentos reales antes de una campaña o revisión
