@@ -34,6 +34,8 @@
  */
 
 const SHEET_NAME = 'Leads';
+const STUDIO_ACCESS_SHEET_NAME = 'Accesos Studio';
+const STUDIO_ACCESS_FORM_TYPE = 'biomechanics_studio_access';
 const GENERIC_ERROR = 'No se pudo procesar la consulta.';
 const HEADERS_SCHEMA_VERSION = 'unified-intake-notifications-v1';
 const HEADERS_SCHEMA_PROPERTY = 'LEADS_HEADERS_SCHEMA';
@@ -48,6 +50,29 @@ const QUERY_HEADERS = Object.freeze([
   'Detalle según producto'
 ]);
 const NOTIFICATION_HEADERS = Object.freeze([
+  'Estado de notificación',
+  'Fecha de notificación',
+  'Error de notificación'
+]);
+const STUDIO_ACCESS_HEADERS = Object.freeze([
+  'Fecha de recepción',
+  'Submitted at',
+  'Form type',
+  'Nombre y apellido',
+  'Correo electrónico',
+  'WhatsApp',
+  'Profesión o rol',
+  'Clínica, institución o empresa',
+  'Ciudad y país',
+  'Tiene caso potencial',
+  'Objetivo del acceso',
+  'Descripción breve',
+  'Consentimiento',
+  'Audience',
+  'Página',
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
   'Estado de notificación',
   'Fecha de notificación',
   'Error de notificación'
@@ -134,7 +159,36 @@ const FIELD_LIMITS = Object.freeze({
 
 function doPost(e) {
   try {
-    const data = validateAndNormalize(parseBody(e));
+    const raw = parseBody(e);
+    if (raw.form_type === STUDIO_ACCESS_FORM_TYPE) {
+      const accessData = validateStudioAccess(raw);
+      getOrCreateStudioAccessSheet().appendRow([
+        new Date(),
+        sanitizeForSheet(accessData.submitted_at),
+        STUDIO_ACCESS_FORM_TYPE,
+        sanitizeForSheet(accessData.nombre),
+        sanitizeForSheet(accessData.email),
+        accessData.whatsapp ? forceTextForSheet(accessData.whatsapp) : '',
+        sanitizeForSheet(accessData.rol),
+        sanitizeForSheet(accessData.institucion),
+        sanitizeForSheet(accessData.ubicacion),
+        sanitizeForSheet(accessData.tiene_caso),
+        sanitizeForSheet(accessData.objetivo),
+        sanitizeForSheet(accessData.descripcion),
+        sanitizeForSheet(accessData.consentimiento),
+        sanitizeForSheet(accessData.audience),
+        sanitizeForSheet(accessData.pagina),
+        sanitizeForSheet(accessData.utm_source),
+        sanitizeForSheet(accessData.utm_medium),
+        sanitizeForSheet(accessData.utm_campaign),
+        'Pendiente',
+        '',
+        ''
+      ]);
+      return jsonResponse({ok: true, message: 'Solicitud registrada'});
+    }
+
+    const data = validateAndNormalize(raw);
     const sheet = getOrCreateSheet();
     sheet.appendRow([
       new Date(),
@@ -268,6 +322,45 @@ function validateAndNormalize(raw) {
   return data;
 }
 
+function validateStudioAccess(raw) {
+  const data = {
+    submitted_at: limitText(raw.submitted_at, 40),
+    nombre: limitText(raw.nombre, 120),
+    email: limitText(raw.email, 200),
+    whatsapp: limitText(raw.whatsapp, 120),
+    rol: limitText(raw.rol, 80),
+    institucion: limitText(raw.institucion, 200),
+    ubicacion: limitText(raw.ubicacion, 200),
+    tiene_caso: limitText(raw.tiene_caso, 40),
+    objetivo: limitText(raw.objetivo, 80),
+    descripcion: limitText(raw.descripcion, 1000),
+    consentimiento: isValidConsent(raw.consentimiento) ? 'Sí' : 'No',
+    audience: limitText(raw.audience, 40),
+    pagina: limitText(raw.pagina, 500),
+    utm_source: limitText(raw.utm_source, 200),
+    utm_medium: limitText(raw.utm_medium, 200),
+    utm_campaign: limitText(raw.utm_campaign, 200)
+  };
+  const roles = [
+    'Veterinario/a', 'Rehabilitador/a', 'Cirujano/a',
+    'Técnico/a o fabricante', 'Clínica o institución', 'Otro'
+  ];
+  const caseOptions = ['Sí', 'No', 'Estoy evaluándolo'];
+  const objectives = [
+    'Evaluar un caso real', 'Probar la plataforma',
+    'Participar de la validación', 'Explorar una colaboración'
+  ];
+
+  if (data.nombre.length < 3) throw new Error('Nombre requerido.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) throw new Error('Email inválido.');
+  if (roles.indexOf(data.rol) === -1) throw new Error('Rol inválido.');
+  if (data.ubicacion.length < 2) throw new Error('Ubicación requerida.');
+  if (caseOptions.indexOf(data.tiene_caso) === -1) throw new Error('Estado de caso inválido.');
+  if (objectives.indexOf(data.objetivo) === -1) throw new Error('Objetivo inválido.');
+  if (!isValidConsent(raw.consentimiento)) throw new Error('Consentimiento requerido.');
+  return data;
+}
+
 function validateCaseInquiry(data, raw) {
   const detailsByProduct = {
     'Prótesis': [
@@ -384,6 +477,30 @@ function getOrCreateSheet() {
   return sheet;
 }
 
+function getOrCreateStudioAccessSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(STUDIO_ACCESS_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(STUDIO_ACCESS_SHEET_NAME);
+    sheet.appendRow(STUDIO_ACCESS_HEADERS.slice());
+    sheet.setFrozenRows(1);
+    return sheet;
+  }
+
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(STUDIO_ACCESS_HEADERS.slice());
+    sheet.setFrozenRows(1);
+    return sheet;
+  }
+
+  const existing = sheet.getRange(1, 1, 1, STUDIO_ACCESS_HEADERS.length).getValues()[0];
+  const compatible = STUDIO_ACCESS_HEADERS.every(function(header, index) {
+    return existing[index] === header;
+  });
+  if (!compatible) throw new Error('La hoja Accesos Studio tiene encabezados incompatibles.');
+  return sheet;
+}
+
 function headersAreMarkedReady() {
   return PropertiesService.getScriptProperties().getProperty(HEADERS_SCHEMA_PROPERTY) === HEADERS_SCHEMA_VERSION;
 }
@@ -416,50 +533,57 @@ function procesarNotificacionesPendientes() {
   if (!lock.tryLock(1000)) return;
 
   try {
-    const sheet = getOrCreateSheet();
-    const lastRow = sheet.getLastRow();
-    if (lastRow < 2) return;
-
-    const lastColumn = sheet.getLastColumn();
-    const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
-    const columns = mapHeaderColumns(headers);
-    const statusColumn = columns['Estado de notificación'];
-    const dateColumn = columns['Fecha de notificación'];
-    const errorColumn = columns['Error de notificación'];
-    if (statusColumn === undefined || dateColumn === undefined || errorColumn === undefined) {
-      throw new Error('Faltan columnas de notificación.');
-    }
-
     const notifyEmail = NOTIFY_EMAIL;
-    const rows = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
-    let processed = 0;
-
-    for (let index = 0; index < rows.length && processed < NOTIFICATION_BATCH_SIZE; index += 1) {
-      const row = rows[index];
-      if (String(row[statusColumn] || '').trim() !== 'Pendiente') continue;
-
-      const rowNumber = index + 2;
-      sheet.getRange(rowNumber, statusColumn + 1).setValue('Procesando');
-      SpreadsheetApp.flush();
-
-      try {
-        if (!notifyEmail || !notifyEmail.trim()) {
-          throw new Error('NOTIFY_EMAIL no está configurado.');
-        }
-        enviarNotificacionLead(row, columns, notifyEmail.trim());
-        sheet.getRange(rowNumber, statusColumn + 1, 1, 3)
-          .setValues([['Enviado', new Date(), '']]);
-      } catch (err) {
-        const errorMessage = String(err && err.message ? err.message : err).slice(0, 200);
-        sheet.getRange(rowNumber, statusColumn + 1, 1, 3)
-          .setValues([['Error', '', sanitizeForSheet(errorMessage)]]);
-        console.error('No se pudo enviar la notificación de la fila ' + rowNumber + '.', err);
-      }
-      processed += 1;
+    let remaining = NOTIFICATION_BATCH_SIZE;
+    remaining -= procesarNotificacionesDeHoja(getOrCreateSheet(), notifyEmail, remaining);
+    if (remaining > 0) {
+      procesarNotificacionesDeHoja(getOrCreateStudioAccessSheet(), notifyEmail, remaining);
     }
   } finally {
     lock.releaseLock();
   }
+}
+
+function procesarNotificacionesDeHoja(sheet, notifyEmail, limit) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2 || limit < 1) return 0;
+
+  const lastColumn = sheet.getLastColumn();
+  const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const columns = mapHeaderColumns(headers);
+  const statusColumn = columns['Estado de notificación'];
+  const dateColumn = columns['Fecha de notificación'];
+  const errorColumn = columns['Error de notificación'];
+  if (statusColumn === undefined || dateColumn === undefined || errorColumn === undefined) {
+    throw new Error('Faltan columnas de notificación.');
+  }
+
+  const rows = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
+  let processed = 0;
+  for (let index = 0; index < rows.length && processed < limit; index += 1) {
+    const row = rows[index];
+    if (String(row[statusColumn] || '').trim() !== 'Pendiente') continue;
+
+    const rowNumber = index + 2;
+    sheet.getRange(rowNumber, statusColumn + 1).setValue('Procesando');
+    SpreadsheetApp.flush();
+
+    try {
+      if (!notifyEmail || !notifyEmail.trim()) {
+        throw new Error('NOTIFY_EMAIL no está configurado.');
+      }
+      enviarNotificacionLead(row, columns, notifyEmail.trim());
+      sheet.getRange(rowNumber, statusColumn + 1, 1, 3)
+        .setValues([['Enviado', new Date(), '']]);
+    } catch (err) {
+      const errorMessage = String(err && err.message ? err.message : err).slice(0, 200);
+      sheet.getRange(rowNumber, statusColumn + 1, 1, 3)
+        .setValues([['Error', '', sanitizeForSheet(errorMessage)]]);
+      console.error('No se pudo enviar la notificación de la fila ' + rowNumber + '.', err);
+    }
+    processed += 1;
+  }
+  return processed;
 }
 
 function mapHeaderColumns(headers) {
@@ -479,6 +603,10 @@ function rowValue(row, columns, preferredHeaders) {
 }
 
 function enviarNotificacionLead(row, columns, notifyEmail) {
+  if (rowValue(row, columns, ['Form type']) === STUDIO_ACCESS_FORM_TYPE) {
+    enviarNotificacionAccesoStudio(row, columns, notifyEmail);
+    return;
+  }
   const product = rowValue(row, columns, ['Producto de interés', 'Producto']);
   const name = rowValue(row, columns, ['Nombre']);
   const subject = 'Nuevo lead — ' + product + ' (' + name + ')';
@@ -499,6 +627,29 @@ function enviarNotificacionLead(row, columns, notifyEmail) {
   MailApp.sendEmail({
     to: notifyEmail,
     subject: subject,
+    body: body
+  });
+}
+
+function enviarNotificacionAccesoStudio(row, columns, notifyEmail) {
+  const name = rowValue(row, columns, ['Nombre y apellido']);
+  const body = [
+    'Nombre: ' + name,
+    'Email: ' + rowValue(row, columns, ['Correo electrónico']),
+    'WhatsApp: ' + rowValue(row, columns, ['WhatsApp']),
+    'Rol: ' + rowValue(row, columns, ['Profesión o rol']),
+    'Institución: ' + rowValue(row, columns, ['Clínica, institución o empresa']),
+    'Ubicación: ' + rowValue(row, columns, ['Ciudad y país']),
+    'Tiene caso potencial: ' + rowValue(row, columns, ['Tiene caso potencial']),
+    'Objetivo: ' + rowValue(row, columns, ['Objetivo del acceso']),
+    'Descripción: ' + rowValue(row, columns, ['Descripción breve']),
+    '',
+    'Página: ' + rowValue(row, columns, ['Página'])
+  ].join('\n');
+
+  MailApp.sendEmail({
+    to: notifyEmail,
+    subject: 'Nueva solicitud de acceso a Biomechanics Studio — ' + name,
     body: body
   });
 }
