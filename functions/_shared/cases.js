@@ -30,11 +30,26 @@ export function validateStatus(status) {
   return status;
 }
 
+export function resolveAppsScriptConfig(env) {
+  const neutralConfigured = Boolean(env.APPS_SCRIPT_URL || env.APPS_SCRIPT_SECRET);
+  if (neutralConfigured) {
+    if (!env.APPS_SCRIPT_URL || !env.APPS_SCRIPT_SECRET) throw new Error('La configuración APPS_SCRIPT_URL/APPS_SCRIPT_SECRET está incompleta.');
+    return { url: env.APPS_SCRIPT_URL, secret: env.APPS_SCRIPT_SECRET, secretField: 'integrationSecret' };
+  }
+  const previewConfigured = Boolean(env.PREVIEW_APPS_SCRIPT_URL || env.PREVIEW_APPS_SCRIPT_SECRET);
+  if (previewConfigured) {
+    if (!env.PREVIEW_APPS_SCRIPT_URL || !env.PREVIEW_APPS_SCRIPT_SECRET) throw new Error('La configuración legacy de Apps Script está incompleta.');
+    return { url: env.PREVIEW_APPS_SCRIPT_URL, secret: env.PREVIEW_APPS_SCRIPT_SECRET, secretField: 'previewSecret' };
+  }
+  return null;
+}
+
 export async function syncPreviewLead(env, eventType, record) {
-  if (!env.PREVIEW_APPS_SCRIPT_URL || !env.PREVIEW_APPS_SCRIPT_SECRET) return { configured: false };
-  const response = await fetch(env.PREVIEW_APPS_SCRIPT_URL, {
+  const config = resolveAppsScriptConfig(env);
+  if (!config) return { configured: false };
+  const response = await fetch(config.url, {
     method: 'POST', headers: { 'content-type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ ...record, eventType, previewSecret: env.PREVIEW_APPS_SCRIPT_SECRET })
+    body: JSON.stringify({ ...record, eventType, [config.secretField]: config.secret })
   });
   if (!response.ok) throw new Error(`Apps Script respondió ${response.status}`);
   const result = await response.json().catch(() => ({ ok: false }));

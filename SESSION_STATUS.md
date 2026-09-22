@@ -1,5 +1,57 @@
 # SESSION_STATUS — Ache web institucional
 
+## 2026-09-22 — Fase 2: infraestructura productiva del evaluador preparada
+
+### Objetivo y alcance
+- Preparar recursos productivos aislados para el nuevo evaluador sin cutover, sin
+  modificar `main`, sin desplegar sobre `protesisparaperros` y sin habilitar pagos.
+- Rama de trabajo: `codex/evaluador-preview`.
+
+### Recursos creados y configurados
+- D1 productiva `ache-evaluator-prod-db`, ID
+  `612fdcbf-23bb-4e0c-9e8c-4c580bdd3c09`, binding previsto `EVALUATOR_DB`.
+  Migración `0001_evaluator_preview.sql` aplicada; tablas `evaluator_cases`,
+  `payment_preferences` y `payment_events` validadas, todas con 0 registros.
+- Google Sheet privada `Ache Evaluador Producción`, separada de preview y del
+  formulario histórico. La prueba controlada creó la fila
+  `TEST-PROD-20260922-001` y las hojas `Evaluador Producción` /
+  `Evaluador Producción Emails`.
+- Apps Script separado `Ache Evaluador Producción`, desplegado como web app.
+  Mantiene el contrato de leads, deduplicación, reintentos y emails del preview,
+  con nombres y propiedades productivas independientes.
+- Cloudflare Pages `protesisparaperros`: se cargaron por nombre
+  `APPS_SCRIPT_URL`, `APPS_SCRIPT_SECRET`, `MP_ENV` y `CHECKOUT_ENABLED`.
+  `MP_ENV=production` y `CHECKOUT_ENABLED=false`. Los valores secretos no se
+  imprimieron ni se versionaron. No se cargaron secretos productivos de Mercado Pago.
+- `wrangler.prod.jsonc` prepara la D1 productiva y mantiene el checkout apagado;
+  no se aplicó el binding mediante deploy porque no debe activarse código nuevo aún.
+
+### Código y archivos de esta fase
+- `functions/_shared/cases.js`: configuración neutral por ambiente
+  `APPS_SCRIPT_URL` / `APPS_SCRIPT_SECRET`, con compatibilidad legacy de preview.
+- `.dev.vars.example`: nombres neutrales, solo placeholders.
+- `tests/evaluator.test.mjs`: tres pruebas mínimas de configuración Apps Script.
+- `ache-evaluator-prod-appscript.gs`: fuente productiva versionable, sin secretos.
+- `wrangler.prod.jsonc`: configuración productiva preparada, sin credenciales MP.
+
+### Validación y estado estable
+- Suite local: 16/16 tests.
+- Request seguro de prueba: `ok:true`, fila 2 creada y `emailSent:true`.
+- Email real verificado en `matiassmith98@gmail.com` con asunto marcado
+  `TEST INTERNO - NO CONTACTAR`.
+- Preview responde HTTP 200 y conserva sus recursos/secrets de preview.
+- Producción histórica responde HTTP 200; último deploy sigue siendo `e6ab584` de
+  hace un mes. `index.html`, el formulario viejo y `ache-leads-appscript.gs` no se tocaron.
+- Helpers temporales usados para la prueba fueron retirados del Apps Script después
+  de validar. La fila de prueba queda claramente marcada; no se eliminó para evitar
+  una operación destructiva innecesaria.
+- No hubo cobros, preferencias productivas, push, merge ni deploy productivo.
+
+### Próximo paso, no ejecutado
+- Cargar credenciales productivas de Mercado Pago, hacer smoke test controlado y
+  recién después planificar el cutover. Requiere una fase explícita posterior.
+
+
 Última actualización: 2026-07-21 (Claude)
 
 ## Objetivo activo

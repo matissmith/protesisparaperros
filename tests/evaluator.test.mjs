@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PRODUCT_CATALOG, followUpFor } from '../functions/_shared/catalog.js';
-import { validateCase } from '../functions/_shared/cases.js';
+import { resolveAppsScriptConfig, validateCase } from '../functions/_shared/cases.js';
 import { mapStatus, verifySignature } from '../functions/api/mercadopago/webhook.js';
 import { assertCheckoutEnabled, checkoutUrlForEnvironment, validateMpEnvironment } from '../functions/api/checkout.js';
 
@@ -100,4 +100,21 @@ test('CHECKOUT_ENABLED=false bloquea el checkout', () => {
 
 test('CHECKOUT_ENABLED=true permite continuar', () => {
   assert.equal(assertCheckoutEnabled('true'),true);
+});
+
+test('configuración neutra de Apps Script se usa en producción', () => {
+  assert.deepEqual(resolveAppsScriptConfig({APPS_SCRIPT_URL:'https://prod.example/exec',APPS_SCRIPT_SECRET:'secret'}),{
+    url:'https://prod.example/exec',secret:'secret',secretField:'integrationSecret'
+  });
+});
+
+test('configuración legacy de Apps Script mantiene compatibilidad con preview', () => {
+  assert.deepEqual(resolveAppsScriptConfig({PREVIEW_APPS_SCRIPT_URL:'https://preview.example/exec',PREVIEW_APPS_SCRIPT_SECRET:'secret'}),{
+    url:'https://preview.example/exec',secret:'secret',secretField:'previewSecret'
+  });
+});
+
+test('Apps Script incompleto falla cerrado', () => {
+  assert.throws(()=>resolveAppsScriptConfig({APPS_SCRIPT_URL:'https://prod.example/exec'}),/incompleta/);
+  assert.throws(()=>resolveAppsScriptConfig({PREVIEW_APPS_SCRIPT_SECRET:'secret'}),/incompleta/);
 });

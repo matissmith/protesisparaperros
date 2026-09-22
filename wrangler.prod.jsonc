@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "protesisparaperros",
+  "compatibility_date": "2026-09-21",
+  "pages_build_output_dir": "./dist",
+  "vars": {
+    "MP_ENV": "production",
+    "CHECKOUT_ENABLED": "false"
+  },
+  "d1_databases": [
+    {
+      "binding": "EVALUATOR_DB",
+      "database_name": "ache-evaluator-prod-db",
+      "database_id": "612fdcbf-23bb-4e0c-9e8c-4c580bdd3c09"
+    }
+  ]
+}
