@@ -1121,3 +1121,81 @@ Se retiró de la vista el bloque introductorio “Una plataforma que se valida c
 profesionales” dentro de `#profesionales`. El formulario profesional y toda su lógica
 quedaron intactos; se verificó localmente que sigue visible como control colapsado.
 Se validaron `git diff --check` y `bash build.sh`. No hubo push ni deploy.
+
+## 2026-09-21 — Evaluador/comprador en rama local de preview
+
+Objetivo: construir el nuevo evaluador comercial y la arquitectura de cobro en un
+preview aislado, sin modificar producción. Repo: `protesisparaperros`. Rama:
+`codex/evaluador-preview`, creada desde `e6ab584` (rollback conservado).
+
+### Hecho
+- Se recuperó del historial de sesión la base visual anterior al cambio de branding
+  del 12/09: fondo `#081425`, paneles `#10213a/#172b47`, logo sin caja, botones
+  ámbar y tipografía anterior. Se reconstruyó como `/evaluador/`, sin `file://`,
+  data URI ni cambios al `index.html` productivo.
+- Se implementó el recorrido de seis pasos y resultado: siete productos, edades,
+  recomendación/selección separadas, alternativas reversibles, precios/reservas,
+  comprador/no comprador, contacto internacional, persistencia en `sessionStorage`
+  y post-pago clínico u operativo.
+- Se agregaron Pages Functions (`cases`, `checkout`, `orders`, webhook y simulador),
+  catálogo cerrado server-side, idempotencia, validación HMAC y D1 local.
+- Se agregó un Apps Script separado para preview (`ache-evaluator-preview-appscript.gs`),
+  destinado a un proyecto/hoja nuevos; el Apps Script productivo no se tocó.
+- Se preparó Checkout Pro de prueba. Localmente se usa `MP_MOCK_MODE=true`; faltan
+  credenciales test y webhook test para ejecutar el checkout externo real.
+- Se documentaron pendientes legales en `legal/PRE_CUTOVER_LEGAL_CHECKLIST.md`.
+
+### QA realizado
+- 7/7 productos con recomendación y precio correctos.
+- Alternativa y vuelta al recomendado; comprador y no comprador; lead antes del
+  checkout; pendiente y aprobado simulados; post-pago operativo y clínico.
+- Idempotencia de caso/checkout; importes manipulados ignorados por el servidor;
+  firma HMAC y mapeo de estados cubiertos por tests.
+- Persistencia tras refresh y navegación atrás.
+- Sin overflow en 360, 390, 412, 430, 768, 1024, 1200 y 1440.
+- `npm test`: 7 pruebas aprobadas. `git diff --check` y `bash build.sh`: OK.
+
+### Pendiente externo
+- Crear D1 remoto de preview y reemplazar el UUID cero en `wrangler.jsonc`.
+- Crear un proyecto Apps Script/Sheet exclusivo de preview, configurar
+  `PREVIEW_SECRET` y `NOTIFY_EMAIL`, desplegarlo y cargar URL/secreto en Cloudflare.
+- Cargar `MP_ACCESS_TOKEN` de prueba y `MP_WEBHOOK_SECRET`, desactivar mock y probar
+  aprobado/rechazado/pendiente con Mercado Pago real de prueba.
+- Resolver/revisar textos legales antes de cualquier cobro real.
+
+### Protección de producción
+`index.html`, sus CTA y `ache-leads-appscript.gs` permanecen sin cambios. No hubo
+commit, push, deploy, cutover, credenciales productivas, cobros ni reintegros.
+El servidor local queda disponible en `http://localhost:8788/evaluador/` mientras
+permanezca activo el proceso de Wrangler de esta sesión.
+
+## 2026-09-21 — Preparación de integración externa de preview
+
+Se mantuvo la rama `codex/evaluador-preview` y el rollback `e6ab584`. Antes de pedir
+accesos externos se corrigieron únicamente requisitos de integración: decisión
+`information_only`, idempotencia estable al reintentar casos, reintento de pago sin
+perder el caso, sincronización de todos los estados de Mercado Pago hacia la hoja,
+deduplicación de emails/eventos, y campos de reembolso expuestos por la API de
+órdenes. El Apps Script de preview ahora hace upsert por `caseId`, conserva historial
+y evita emails duplicados.
+
+Validación local: migración D1 limpia aplicada, 8/8 tests aprobados, caso duplicado
+devuelve el mismo `caseId`, doble checkout devuelve la misma preferencia, el monto
+alterado del navegador se ignora y la API devuelve seguimiento/reembolso. El proceso
+temporal de Wrangler usado para esta validación fue cerrado. Falta autenticar los
+tres servicios externos (Cloudflare, Google y Mercado Pago TEST) para crear y probar
+recursos remotos. No hubo commit, push, deploy ni cambio en producción.
+
+## 2026-09-22 — Saneamiento técnico previo a producción
+
+Se reconcilió el trabajo no versionado del evaluador y se preparó para un único
+commit en `codex/evaluador-preview`. `wrangler.jsonc` quedó alineado con la D1 remota
+de preview `ache-evaluator-preview-db` (`d73c3878-aab9-474b-ac77-a9fa86a4e462`),
+binding `EVALUATOR_DB`. Se agregaron las variables no secretas `MP_ENV=test` y
+`CHECKOUT_ENABLED=true` para el proyecto aislado.
+
+El checkout ahora falla cerrado si está deshabilitado o si `MP_ENV` no es `test` o
+`production`; test utiliza exclusivamente `sandbox_init_point` y production
+exclusivamente `init_point`. No se cargaron ni cambiaron credenciales. QA: 13/13
+tests, chequeo de sintaxis y compilación de Pages Functions correctos. No hubo push,
+deploy, cobro real, cambio de CTA, modificación de `main` ni cambio productivo.

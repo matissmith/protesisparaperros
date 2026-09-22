@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ache-evaluator-preview",
+  "compatibility_date": "2026-09-21",
+  "pages_build_output_dir": "./dist",
+  "vars": {
+    "MP_ENV": "test",
+    "CHECKOUT_ENABLED": "true"
+  },
+  "d1_databases": [
+    {
+      "binding": "EVALUATOR_DB",
+      "database_name": "ache-evaluator-preview-db",
+      "database_id": "d73c3878-aab9-474b-ac77-a9fa86a4e462"
+    }
+  ]
+}

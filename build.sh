@@ -9,6 +9,7 @@ rm -rf -- dist
 mkdir -- dist
 cp -- index.html dist/
 cp -R -- assets dist/
+cp -R -- evaluador dist/
 
 # Sacar del build público lo que no es parte de la web servida: docs internas,
 # previews descartados, archivos ocultos/de sistema y scripts que no son frontend.

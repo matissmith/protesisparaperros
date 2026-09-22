@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Evaluador de movilidad | Ache Innovation</title>
+  <meta name="description" content="Encontrá una solución de movilidad para tu perro y conocé su precio.">
+  <link rel="icon" href="../assets/ache-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/evaluador.css">
+</head>
+<body>
+  <main id="ache-evaluator" class="ache-evaluator">
+    <div class="ache-shell">
+      <header class="ache-header">
+        <a class="ache-brand" href="../index.html" aria-label="Ache Innovation">
+          <img src="../assets/ache-logo.svg" alt="Ache Innovation">
+        </a>
+        <p class="ache-kicker">Soluciones de movilidad animal</p>
+        <h1 id="page-title">Evaluá la movilidad de tu perro</h1>
+        <p class="ache-intro" id="step-context">Contanos los datos básicos de tu perro para comenzar.</p>
+        <div class="ache-progress-meta">
+          <span id="step-label">Paso 1 de 6</span><span id="step-name">El perro</span>
+        </div>
+        <div class="ache-progress" role="progressbar" aria-label="Progreso" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1"><span id="progress-bar"></span></div>
+      </header>
+
+      <section class="ache-panel" id="evaluator-panel" aria-live="polite">
+        <div class="ache-step" data-step="1">
+          <h2>Primero, contanos sobre tu perro</h2>
+          <p class="ache-help">El peso permite orientar el tamaño del producto. No define por sí solo la solución.</p>
+          <div class="ache-choice-grid" id="weight-options">
+            <button class="ache-choice" type="button" data-weight="Hasta 8 kg"><strong>Pequeño</strong><span>Hasta 8 kg</span></button>
+            <button class="ache-choice" type="button" data-weight="9 a 18 kg"><strong>Mediano</strong><span>9 a 18 kg</span></button>
+            <button class="ache-choice" type="button" data-weight="19 a 32 kg"><strong>Grande</strong><span>19 a 32 kg</span></button>
+            <button class="ache-choice" type="button" data-weight="Más de 32 kg"><strong>Muy grande</strong><span>Más de 32 kg</span></button>
+          </div>
+          <div class="ache-fields">
+            <label>Nombre del perro<input id="dog-name" type="text" minlength="2" maxlength="60" autocomplete="off" placeholder="Por ejemplo, Mora"></label>
+            <label>Edad<select id="dog-age"><option value="">Seleccionar</option></select></label>
+          </div>
+        </div>
+
+        <div class="ache-step" data-step="2" hidden>
+          <h2>¿Qué necesita principalmente?</h2>
+          <p class="ache-help">Elegí la opción que mejor describa lo que necesita tu perro.</p>
+          <div class="ache-choice-grid" id="need-options"></div>
+        </div>
+
+        <div class="ache-step" data-step="3" hidden>
+          <h2>Tu solución</h2>
+          <p class="ache-help">Según lo que nos contaste, esta es la solución que más se acerca a la necesidad de tu perro.</p>
+          <div class="ache-recommendation">
+            <article class="ache-result">
+              <div class="ache-product-visual">
+                <span class="ache-recommended-badge" id="primary-badge">Recomendado</span>
+                <img id="product-image" alt="Producto colocado en un perro">
+                <p>Así se ve el producto colocado.</p>
+              </div>
+              <p class="ache-result-label" id="product-status">Solución recomendada</p>
+              <h3 id="product-name"></h3>
+              <p id="product-description"></p>
+            </article>
+            <aside class="ache-side">
+              <div class="ache-summary">
+                <div><span>Perro</span><strong id="summary-dog"></strong></div>
+                <div><span>Peso</span><strong id="summary-weight"></strong></div>
+                <div><span>Edad</span><strong id="summary-age"></strong></div>
+              </div>
+              <div class="ache-related" id="related-products" hidden>
+                <h3>Otros productos de esta categoría</h3>
+                <p>Podés elegir otra opción. La recomendación original seguirá identificada.</p>
+                <div class="ache-related-grid" id="related-grid"></div>
+              </div>
+            </aside>
+          </div>
+          <p class="ache-note">El talle o la configuración se confirma con los datos necesarios antes de preparar el pedido.</p>
+        </div>
+
+        <div class="ache-step" data-step="4" hidden>
+          <h2>Precio y forma de iniciar la compra</h2>
+          <p class="ache-help">Revisá el producto elegido y cómo se inicia el pedido.</p>
+          <div class="ache-result">
+            <p class="ache-result-label" id="price-product"></p>
+            <div class="ache-terms-grid">
+              <div class="ache-term"><span id="total-label">Precio total</span><strong id="total-price"></strong></div>
+              <div class="ache-term"><span>Pagás hoy</span><strong id="pay-now"></strong></div>
+              <div class="ache-term" id="balance-term"><span>Saldo</span><strong id="balance"></strong></div>
+            </div>
+            <div class="ache-purchase-how">
+              <h3>¿Cómo funciona?</h3>
+              <ol>
+                <li>Pagás una reserva para iniciar el pedido.</li>
+                <li>Confirmamos los datos necesarios de talle o configuración.</li>
+                <li>La reserva se descuenta íntegramente del precio final.</li>
+                <li>Si Ache no puede confirmar el pedido, la reserva se reintegra.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="ache-intent" id="intent-options">
+            <label><input type="radio" name="intent" value="purchase"><span><strong>Comprar ahora</strong><small id="purchase-copy"></small></span></label>
+            <label><input type="radio" name="intent" value="information_only"><span><strong>Solo quería conocer la solución</strong><small>No quiero avanzar con la compra por ahora.</small></span></label>
+          </div>
+        </div>
+
+        <div class="ache-step" data-step="5" hidden>
+          <h2 id="contact-title">Datos para la compra</h2>
+          <p class="ache-help" id="contact-help">Completá tus datos para continuar con la compra.</p>
+          <div class="ache-contact-economy" id="contact-economy">
+            <div class="ache-term"><span>Producto</span><strong id="contact-product"></strong></div>
+            <div class="ache-term"><span id="contact-total-label">Precio total</span><strong id="contact-total"></strong></div>
+            <div class="ache-term"><span>Pagás hoy</span><strong id="contact-pay-now"></strong></div>
+          </div>
+          <div class="ache-fields ache-contact-fields">
+            <label>Nombre y apellido<input id="buyer-name" type="text" autocomplete="name" minlength="3" maxlength="100"></label>
+            <label>País<select id="country"></select></label>
+            <label>Código internacional<select id="country-code"></select></label>
+            <label>WhatsApp<input id="whatsapp" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="11 1234 5678"></label>
+            <label>Email<input id="email" type="email" autocomplete="email" maxlength="160"></label>
+            <label>Ciudad o localidad<input id="city" type="text" autocomplete="address-level2" minlength="2" maxlength="80"></label>
+          </div>
+          <p class="ache-note" id="contact-note">Usaremos estos datos para gestionar el pedido y comunicarnos con vos.</p>
+        </div>
+
+        <div class="ache-step" data-step="6" hidden>
+          <h2>Revisá antes de pagar</h2>
+          <p class="ache-help">Confirmá el producto, el importe y tus datos.</p>
+          <div class="ache-result">
+            <p class="ache-result-label">Producto</p>
+            <h3 id="checkout-product"></h3>
+            <div class="ache-terms-grid">
+              <div class="ache-term"><span id="checkout-total-label">Precio total</span><strong id="checkout-total"></strong></div>
+              <div class="ache-term"><span>Pagás ahora</span><strong id="checkout-pay-now"></strong></div>
+              <div class="ache-term" id="checkout-balance-term"><span>Saldo</span><strong id="checkout-balance"></strong></div>
+            </div>
+          </div>
+          <div class="ache-summary ache-checkout-person">
+            <div><span>Comprador</span><strong id="checkout-buyer"></strong></div>
+            <div><span>Perro</span><strong id="checkout-dog"></strong></div>
+            <div><span>País</span><strong id="checkout-country"></strong></div>
+            <div><span>Ciudad</span><strong id="checkout-city"></strong></div>
+          </div>
+          <p class="ache-note">La reserva se descuenta íntegramente del precio final. Si Ache no puede confirmar el pedido, se reintegra.</p>
+        </div>
+
+        <div class="ache-step" data-step="7" hidden>
+          <div class="ache-finish">
+            <div class="ache-finish-mark" aria-hidden="true">OK</div>
+            <h2 id="finish-title">Solicitud registrada</h2>
+            <p id="finish-message"></p>
+            <p class="ache-status-pill" id="finish-status"></p>
+            <div class="ache-post-payment" id="post-payment" hidden></div>
+            <button type="button" class="ache-btn ache-btn-primary" id="retry-payment" hidden>Volver a intentar el pago</button>
+            <button type="button" class="ache-btn" id="restart">Probar otro caso</button>
+          </div>
+        </div>
+
+        <p class="ache-error" id="form-error" role="alert"></p>
+        <div class="ache-actions" id="actions">
+          <button type="button" class="ache-btn" id="back" hidden>Volver</button>
+          <button type="button" class="ache-btn ache-btn-primary" id="next">Continuar</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="../assets/js/evaluador.js"></script>
+</body>
+</html>
