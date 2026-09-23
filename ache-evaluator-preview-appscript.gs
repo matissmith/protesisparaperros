@@ -70,14 +70,25 @@ function previewEmailSheet_(properties) {
 function previewNotifyOnce_(data, properties) {
   const destination = properties.getProperty('NOTIFY_EMAIL');
   if (!destination) throw new Error('Falta la propiedad NOTIFY_EMAIL');
+  // Nombre humano del producto, nunca el slug interno (walk/lift/ivdd/...).
+  // El backend ya resuelve productName/recommendedProductName/previousProductName
+  // contra el catálogo compartido antes de llamar a este script; data.selectedProduct
+  // solo se usa como último fallback si por algún motivo no llegara productName.
+  const productDisplay = data.productName || data.selectedProduct || '';
   const subjects = {
-    lead_without_purchase: `LEAD SIN COMPRA — ${data.selectedProduct || ''} — ${data.buyerName || ''}`,
-    purchase_intent_unconfirmed: `INTENCIÓN DE COMPRA — PAGO NO CONFIRMADO — ${data.selectedProduct || ''} — ${data.buyerName || ''}`,
-    reservation_paid: `RESERVA PAGADA — ${data.productName || data.selectedProduct || ''} — ${data.buyerName || ''}`
+    lead_without_purchase: `LEAD SIN COMPRA — ${productDisplay} — ${data.buyerName || ''}`,
+    purchase_intent_unconfirmed: `INTENCIÓN DE COMPRA — PAGO NO CONFIRMADO — ${productDisplay} — ${data.buyerName || ''}`,
+    purchase_intent_updated: `INTENCIÓN DE COMPRA ACTUALIZADA — ${productDisplay}`,
+    information_only_updated: `SOLICITÓ INFORMACIÓN — ${productDisplay} — ${data.buyerName || ''}`,
+    reservation_paid: `RESERVA PAGADA — ${productDisplay} — ${data.buyerName || ''}`
   };
   const subject = subjects[data.eventType];
   if (!subject) return false;
-  const emailKey = `${data.caseId}:${data.eventType}:${data.eventType === 'reservation_paid' ? data.paymentId || '' : ''}`;
+  // Los eventos de actualización de intención (mismo caso, decisión/producto
+  // nuevos) usan la revisión para distinguir sucesivas actualizaciones del
+  // mismo caso; los demás mantienen su clave original sin cambios.
+  const isUpdateEvent = data.eventType === 'purchase_intent_updated' || data.eventType === 'information_only_updated';
+  const emailKey = `${data.caseId}:${data.eventType}:${data.eventType === 'reservation_paid' ? (data.paymentId || '') : isUpdateEvent ? (data.revision || '') : ''}`;
   const emailSheet = previewEmailSheet_(properties);
   const existing = emailSheet.getRange(2, 1, Math.max(emailSheet.getLastRow() - 1, 1), 1).createTextFinder(emailKey).matchEntireCell(true).findNext();
   if (existing) return false;
@@ -86,14 +97,26 @@ function previewNotifyOnce_(data, properties) {
       ? '\nACCIÓN: COORDINAR REUNIÓN DE 15 MINUTOS\n'
       : '\nACCIÓN: CONTACTAR PARA CONTINUAR PEDIDO / MEDIDAS / CONFIGURACIÓN\n'
     : '';
+  const updateNote = data.eventType === 'purchase_intent_updated'
+    ? '\nESTE CASO YA EXISTÍA — es una actualización de intención de compra, no un lead nuevo. Contactar según la decisión ACTUAL, no la anterior.\n'
+    : data.eventType === 'information_only_updated' && data.previousDecision === 'purchase'
+      ? '\nESTE CASO TUVO PREVIAMENTE INTENCIÓN DE COMPRA, pero la decisión actual es solicitar información. No contactar como si todavía quisiera comprar.\n'
+      : '';
   const body = [
     `Tipo: ${data.eventType || ''}`, `Case ID: ${data.caseId || ''}`, `Comprador: ${data.buyerName || ''}`, `WhatsApp: ${data.whatsappNormalized || ''}`, `Email: ${data.email || ''}`,
     `País: ${data.country || ''}`, `Ciudad: ${data.city || ''}`, `Perro: ${data.dogName || ''}`, `Edad: ${data.dogAgeValue || ''} ${data.dogAgeUnit || ''}`, `Peso: ${data.dogWeightRange || ''}`,
-    `Necesidad: ${data.needSelected || ''}`, `Producto recomendado: ${data.recommendedProduct || ''}`, `Producto elegido: ${data.productName || data.selectedProduct || ''}`,
+    `Necesidad: ${data.needSelected || ''}`, `Producto recomendado: ${data.recommendedProductName || data.recommendedProduct || ''}`,
+    isUpdateEvent ? `Producto elegido anteriormente: ${data.previousProductName || data.previousProduct || ''}` : '',
+    `Producto elegido actualmente: ${productDisplay}`,
     `Precio total: ${data.priceDisplay || `${data.priceMin || ''}${data.priceMax && data.priceMax !== data.priceMin ? `–${data.priceMax}` : ''}`}`, `Reserva: ${data.reservationAmount || ''}`,
-    `Payment ID: ${data.paymentId || ''}`, `Estado: ${data.paymentStatus || data.status || ''}`,
-    `followUpType: ${data.followUpType || ''}`, `followUpStatus: ${data.followUpStatus || ''}`, action
-  ].join('\n');
+    `Payment ID: ${data.paymentId || ''}`,
+    // caseStatus (data.status), currentIntent (data.intentLabel) y paymentStatus
+    // son tres conceptos distintos: "Estado actual" es SIEMPRE la intención
+    // comercial actual, nunca el estado técnico interno del caso.
+    `Estado actual: ${data.intentLabel || data.paymentStatus || data.status || ''}`,
+    data.intentLabel ? `Pago: ${data.paymentLabel || ''}` : '',
+    `followUpType: ${data.followUpType || ''}`, `followUpStatus: ${data.followUpStatus || ''}`, updateNote, action
+  ].filter(Boolean).join('\n');
   MailApp.sendEmail({ to: destination, subject: subject, body: body });
   emailSheet.appendRow([emailKey, new Date().toISOString(), subject]);
   return true;

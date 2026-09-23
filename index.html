@@ -158,15 +158,15 @@
   .step p{font-size:15px;color:var(--muted)}
 
   /* soluciones: overlapping tilt cards */
-  .sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:60px}
-  .sol{position:relative;border-radius:18px;overflow:hidden;min-height:520px;background:linear-gradient(155deg,var(--navy-600),var(--navy-800));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
+  .sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:48px}
+  .sol{position:relative;border-radius:18px;overflow:hidden;min-height:365px;background:linear-gradient(155deg,var(--navy-600),var(--navy-800));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease);transform-style:preserve-3d;will-change:transform}
   .sol::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:28px 28px;opacity:.5}
   .sol .emb-wm{position:absolute;right:-30px;top:-20px;width:190px;opacity:.08;transition:transform .6s var(--ease);z-index:0}
   .sol:hover .emb-wm{transform:rotate(12deg) scale(1.08)}
-  .sol .sol-body{position:absolute;inset:auto 0 0 0;padding:26px 32px 28px;z-index:2;text-shadow:0 1px 10px rgba(9,16,32,.7)}
+  .sol .sol-body{position:absolute;inset:auto 0 0 0;padding:20px 24px 21px;z-index:2;text-shadow:0 1px 10px rgba(9,16,32,.7)}
   .sol .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
-  .sol h3{color:#fff;font-size:24px;margin-bottom:10px}
-  .sol p{color:rgba(255,255,255,.84);font-size:14.5px;max-width:390px}
+  .sol h3{color:#fff;font-size:20px;margin-bottom:7px}
+  .sol p{color:rgba(255,255,255,.84);font-size:13.5px;line-height:1.45;max-width:450px}
   .sol .ph-tag{position:absolute;top:24px;left:28px;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;z-index:2}
 
   /* tecnología: overlapping frames + parallax emblem */
@@ -247,6 +247,8 @@
   .ft-domain:hover{color:var(--amber)}
   .ft-disclaimer{margin-top:16px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.68);max-width:760px}
   .ft-legal-pending{margin-top:12px;font-size:12.5px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ft-legal-pending a{transition:color .2s}
+  .ft-legal-pending a:hover{color:var(--amber)}
   .ft-legal-tag{border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:2px 9px;font-size:10px;
     text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.55);font-weight:700}
   .ft-closing{position:relative;z-index:1;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);
@@ -324,6 +326,16 @@
   .hv-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;z-index:2}
   .sol-media{position:absolute;inset:0;z-index:1;overflow:hidden}
   .sol-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .sol-carousel img{position:absolute;inset:0;opacity:0}
+  .sol-carousel[data-carousel="assistance"] img{animation:solCarouselThree 12s ease-in-out infinite}
+  .sol-carousel[data-carousel="assistance"] img:nth-child(2){animation-delay:4s}
+  .sol-carousel[data-carousel="assistance"] img:nth-child(3){animation-delay:8s}
+  .sol-carousel[data-carousel="mobility"] img{animation:solCarouselTwo 8s ease-in-out infinite}
+  .sol-carousel[data-carousel="mobility"] img:first-child{animation-delay:-2s}
+  .sol-carousel[data-carousel="mobility"] img:nth-child(2){animation-delay:2s}
+  .sol-carousel:hover img,.sol-carousel:focus img{animation-play-state:paused}
+  @keyframes solCarouselThree{0%,29%{opacity:1}34%,96%{opacity:0}100%{opacity:1}}
+  @keyframes solCarouselTwo{0%,44%{opacity:1}51%,94%{opacity:0}100%{opacity:1}}
   .sol-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,27,49,0) 0%,rgba(15,27,49,.38) 32%,rgba(15,27,49,.94) 70%,rgba(15,27,49,.99) 100%)}
   .sol.has-img .ph-tag{display:none}
   .sol.has-img .emb-wm{opacity:.12}
@@ -354,6 +366,11 @@
   .problem-proof b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:34px;line-height:1;color:var(--amber)}
   .problem-proof span{display:block;margin-top:6px;font-size:12px;line-height:1.25;text-transform:uppercase;letter-spacing:.7px;color:#5F6E80;font-weight:800}
   .sol-intro{margin-top:16px;color:rgba(255,255,255,.68);font-size:16.5px;max-width:720px}
+  .solutions-transition,.how-transition{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px;margin-top:34px;padding:27px 30px;border-radius:18px}
+  .solutions-transition{background:var(--navy-800);border:1px solid rgba(255,255,255,.12)}
+  .how-transition{grid-column:1/-1;margin-top:10px;color:#fff;background:var(--navy-900);border:1px solid rgba(26,51,80,.24)}
+  .transition-copy .sec-tag{margin-bottom:6px}.transition-copy h3{margin-bottom:6px;color:#fff;font-size:23px}.transition-copy p{max-width:680px;color:rgba(255,255,255,.68);font-size:14.5px;line-height:1.5}
+  #dispositivos{padding-bottom:64px}#como{padding-top:68px;padding-bottom:68px}#tecnologia{padding-top:72px}
   .hero .lead b{letter-spacing:.01em}
 
   /* responsive */
@@ -428,6 +445,7 @@
 
     .light,.dark,.cta{padding:100px 0 62px}
     .sol-grid,.row2{grid-template-columns:1fr}
+    .solutions-transition,.how-transition{grid-template-columns:1fr;align-items:start}.solutions-transition .btn,.how-transition .btn{justify-self:start}
 
     /* Tecnología: mantener fotos superpuestas tipo 3D, sin que tapen el texto */
     .tech-grid{gap:48px}
@@ -471,7 +489,7 @@
     .tf.a{width:86%;height:70%}
     .tf.b{width:72%;height:56%}
     .band-grid{grid-template-columns:1fr}
-    .sol .sol-body{padding:22px 24px 24px}
+    .sol .sol-body{padding:18px 20px 20px}
     /* clamp medido contra la palabra más larga del sitio ("Parametrización", 16
        caracteres) para que jamás necesite partirse a mitad de palabra en 360-430px */
     .section h2.display{padding-bottom:10px;font-size:clamp(24px,6.8vw,34px);line-height:1.1;max-width:100%;overflow-wrap:break-word}
@@ -622,6 +640,7 @@
   .status-desarrollo{background:rgba(122,131,151,.16);color:#5F6E80}
   .sol .status-desarrollo{background:rgba(255,255,255,.1);color:rgba(255,255,255,.75)}
   .sol p.sol-note{font-size:12.5px;color:rgba(255,255,255,.68);margin-top:12px;line-height:1.45}
+  @media(prefers-reduced-motion:reduce){.sol-carousel img{animation:none;opacity:0}.sol-carousel img:first-child{opacity:1}}
 
   /* orientador */
   .orient-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:30px 0 26px}
@@ -1104,9 +1123,9 @@
       <a href="#nav-como-funciona">Cómo funciona</a>
       <a href="#nav-studio">Biomechanics Studio</a>
       <a href="#nav-sobre-ache">Sobre Ache</a>
-      <a href="#nav-consulta" class="nav-mobile-cta btn btn-pri" data-producto="Aún no sé">Evaluar un caso</a>
+      <a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="nav-mobile-cta btn btn-pri" data-producto="Aún no sé">Evaluar un caso</a>
     </nav>
-    <a href="#nav-consulta" class="btn btn-pri" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
+    <a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="btn btn-pri" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar un caso</a>
     <button class="burger" aria-label="Menú" aria-controls="primary-nav" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -1126,12 +1145,12 @@
       </h1>
       <p class="lead">Desarrollamos prótesis, órtesis, carros ortopédicos y arneses a partir de la anatomía, la condición clínica y las necesidades reales de cada caso.</p>
       <div class="hero-cta">
-        <a href="#nav-consulta" class="btn btn-pri btn-lg" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
-        <a href="#profForm" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
+        <a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="btn btn-pri btn-lg" data-producto="Aún no sé" onclick="acheTrack('hero_owner_click')">Evaluar el caso de mi perro</a>
+        <a href="#nav-studio" class="btn btn-ghost btn-lg" onclick="acheTrack('hero_professional_click')">Soy veterinario o fabricante</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="n"><b>+120</b></div><div class="l">Veterinarios y profesionales en red</div></div>
-        <div class="stat"><div class="n">4</div><div class="l">Líneas de movilidad</div></div>
+        <div class="stat"><div class="n">7</div><div class="l">Líneas de movilidad</div></div>
         <div class="stat"><div class="n">AR · LATAM</div><div class="l">Cobertura de casos</div></div>
       </div>
     </div>
@@ -1184,15 +1203,16 @@
   <div class="wrap">
     <div class="reveal" id="nav-dispositivos" style="max-width:680px">
       <span class="sec-tag">Soluciones de movilidad</span>
-      <h2 class="display">Dispositivos de movilidad para distintas necesidades</h2>
-      <p class="sol-intro">Cada línea se encuentra en una etapa diferente. Algunas ya reciben casos piloto, otras están en preventa y otras continúan en desarrollo.</p>
+      <h2 class="display">Una solución empieza por lo que tu perro necesita</h2>
+      <p class="sol-intro">No hace falta conocer el nombre del dispositivo. Contanos qué le cuesta hacer y el evaluador te va a orientar hacia la solución más cercana a su necesidad.</p>
     </div>
     <div class="sol-grid">
-      <article class="tilt sol reveal" data-audience="tutor" data-product="protesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/protesis.png" alt="Prótesis canina Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Prótesis caninas</h3><p>Diseñadas para reemplazar parte de una extremidad cuando el caso permite recuperar apoyo y mejorar el patrón de marcha.</p><a href="#nav-consulta" class="sol-cta" data-producto="Prótesis" onclick="acheTrack('product_protesis_click')">Postular un caso de prótesis</a><p class="sol-note">La viabilidad depende de la anatomía, el estado clínico y la evaluación profesional.</p></div></article>
-      <article class="tilt sol reveal d1" data-audience="tutor" data-product="arnes"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/arnes.png" alt="Arnés de rehabilitación Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-preventa">Preventa</span><h3>Arnés de rehabilitación</h3><p>Permite asistir la marcha, descargar parte del peso y acompañar al perro durante rehabilitación o pérdida de movilidad.</p><a href="#nav-consulta" class="sol-cta" data-producto="Arnés" onclick="acheTrack('product_arnes_click')">Sumarse a la preventa</a><p class="sol-note">Te contactaremos antes de confirmar precio, disponibilidad o cualquier pago.</p></div></article>
-      <article class="tilt sol reveal d2" data-audience="tutor" data-product="ortesis"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/ortesis.png" alt="Órtesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Casos piloto abiertos</span><h3>Órtesis personalizadas</h3><p>Brindan soporte a una articulación o extremidad para estabilizarla y acompañar la rehabilitación.</p><a href="#nav-consulta" class="sol-cta" data-producto="Órtesis" onclick="acheTrack('product_ortesis_click')">Consultar por una órtesis</a><p class="sol-note">La indicación y el tipo de soporte se definen junto con el profesional tratante.</p></div></article>
-      <article class="tilt sol reveal d3" data-audience="tutor" data-product="carro"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><span class="ph-tag">Foto / render</span><div class="sol-media"><img src="assets/img/carro.png" alt="Carro ortopédico Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-desarrollo">En desarrollo</span><h3>Carros ortopédicos</h3><p>Pensados para asistir la movilidad cuando una o más extremidades no pueden sostener o impulsar correctamente al animal.</p><a href="#nav-consulta" class="sol-cta" data-producto="Carro" onclick="acheTrack('product_carro_click')">Contarnos qué necesita mi perro</a><p class="sol-note">Actualmente esta línea todavía no se encuentra disponible para compra.</p></div></article>
+      <article class="tilt sol reveal" data-audience="tutor"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><div class="sol-media sol-carousel" data-carousel="assistance" tabindex="0" aria-label="Arnés de caminata, eslinga de elevación y faja de soporte IVDD"><img src="assets/img/evaluador/arnes-caminata.png" alt="Perro con arnés de caminata asistida" onload="this.closest('.sol').classList.add('has-img')"><img src="assets/img/evaluador/eslinga-elevacion.png" alt="Perro con eslinga de elevación" onload="this.closest('.sol').classList.add('has-img')"><img src="assets/img/evaluador/faja-ivdd.png" alt="Perro con faja de soporte IVDD" onload="this.closest('.sol').classList.add('has-img')"></div><div class="sol-body"><span class="status-badge status-piloto">Asistencia y soporte corporal</span><h3>Acompañar sus movimientos cotidianos</h3><p>Ayuda para caminar, incorporarse, acompañar traslados o dar soporte al cuerpo según lo que el perro necesita.</p><a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="sol-cta" onclick="acheTrack('need_daily_mobility_click')">Evaluar qué asistencia necesita</a></div></article>
+      <article class="tilt sol reveal d1" data-audience="tutor"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><div class="sol-media sol-carousel" data-carousel="mobility" tabindex="0" aria-label="Silla de ruedas ajustable y carro ortopédico doble rueda"><img src="assets/img/evaluador/silla-ruedas.png" alt="Perro con silla de ruedas ajustable" onload="this.closest('.sol').classList.add('has-img')"><img src="assets/img/evaluador/carro-ortopedico.png" alt="Perro con carro ortopédico doble rueda" onload="this.closest('.sol').classList.add('has-img')"></div><div class="sol-body"><span class="status-badge status-piloto">Movilidad y sujeción</span><h3>Recuperar desplazamiento asistido</h3><p>Apoyo para desplazarse cuando las patas traseras no sostienen o impulsan correctamente y el cuerpo necesita acompañamiento.</p><a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="sol-cta" onclick="acheTrack('need_supported_mobility_click')">Evaluar qué movilidad necesita</a></div></article>
+      <article class="tilt sol reveal d2" data-audience="tutor"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><div class="sol-media"><img src="assets/img/evaluador/ortesis.png" alt="Perro con órtesis tipo bota Walker" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Órtesis personalizada</span><h3>Estabilizar una extremidad o articulación</h3><p>Un dispositivo adaptado puede acompañar una zona puntual cuando el caso requiere soporte y estabilidad adicional.</p><a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="sol-cta" onclick="acheTrack('need_support_click')">Evaluar la zona a asistir</a></div></article>
+      <article class="tilt sol reveal d3" data-audience="tutor"><svg class="emb-wm" viewBox="0 0 568 470"><use href="#ache-emblem"/></svg><div class="sol-media"><img src="assets/img/evaluador/protesis.png" alt="Prótesis personalizada Ache" onload="this.closest('.sol').classList.add('has-img')" onerror="this.closest('.sol-media').remove()"></div><div class="sol-body"><span class="status-badge status-piloto">Prótesis personalizada</span><h3>Recuperar apoyo de una extremidad</h3><p>Diseño adaptado para reemplazar funcionalmente una parte de la extremidad cuando las condiciones del caso lo permiten.</p><a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="sol-cta" onclick="acheTrack('need_prosthesis_click')">Evaluar el caso</a></div></article>
     </div>
+    <div class="solutions-transition reveal"><div class="transition-copy"><span class="sec-tag">Orientación inicial</span><h3>¿No sabés cuál necesita tu perro?</h3><p>Respondé unas preguntas simples y conocé la alternativa más cercana a su necesidad.</p></div><a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="btn btn-pri btn-lg" onclick="acheTrack('solutions_evaluator_click')">Evaluar el caso de mi perro</a></div>
   </div>
 </section>
 
@@ -1221,21 +1241,21 @@
   <div class="wrap como-grid">
     <div class="como-left reveal" id="nav-como-funciona">
       <span class="sec-tag">Cómo trabajamos</span>
-      <h2 class="display">Del caso a una propuesta concreta</h2>
-      <p>No todos los casos avanzan de la misma manera. Primero reunimos la información necesaria, después evaluamos la viabilidad y recién entonces definimos el próximo paso.</p>
+      <h2 class="display">De la necesidad a una solución concreta</h2>
+      <p>El evaluador ordena la información esencial y te acompaña hasta una recomendación clara, sin que tengas que conocer el producto de antemano.</p>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="num">01</div><div><h3>Nos contás el caso</h3><p>Seleccionás el tipo de dispositivo y completás algunos datos básicos sobre el animal, su condición y tu ubicación.</p></div></div>
-      <div class="step reveal d1"><div class="num">02</div><div><h3>Revisamos la información</h3><p>El equipo de Ache analiza el caso y, cuando hace falta, solicita fotos, medidas o documentación adicional.</p></div></div>
-      <div class="step reveal d2"><div class="num">03</div><div><h3>Definimos cómo avanzar</h3><p>Podemos coordinar una evaluación, preparar una propuesta, sumar el caso a un piloto o trabajar junto con un proveedor especializado.</p></div></div>
-      <div class="step reveal d3"><div class="num">04</div><div><h3>Confirmamos las condiciones</h3><p>Antes de cualquier pago, te explicamos el alcance, los próximos pasos, la disponibilidad y las condiciones necesarias para avanzar.</p></div></div>
+      <div class="step reveal"><div class="num">01</div><div><h3>Evaluás la movilidad</h3><p>Contestás unas preguntas simples sobre tu perro.</p></div></div>
+      <div class="step reveal d1"><div class="num">02</div><div><h3>Recibís una recomendación</h3><p>Te mostramos el producto más adecuado, con alternativas.</p></div></div>
+      <div class="step reveal d2"><div class="num">03</div><div><h3>Conocés el precio</h3><p>Recién después de la recomendación ves el valor y las condiciones para avanzar.</p></div></div>
+      <div class="step reveal d3"><div class="num">04</div><div><h3>Decidís el próximo paso</h3><p>Podés iniciar el pedido o dejar tus datos para recibir más información.</p></div></div>
     </div>
-    <p class="como-note reveal">El envío del caso no implica una compra. Después de revisar la información te indicaremos si podemos avanzar, si necesitamos más datos o si corresponde otra alternativa.</p>
+    <div class="how-transition reveal"><div class="transition-copy"><h3>Conocé la alternativa y el precio antes de decidir</h3><p>Completar la evaluación no te obliga a comprar. La decisión aparece después de revisar la recomendación.</p></div><a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="btn btn-pri btn-lg" onclick="acheTrack('how_evaluator_click')">Empezar la evaluación</a></div>
   </div>
 </section>
 
 <!-- FORMULARIO DE CASO -->
-<section id="contacto-caso" class="section light">
+<section id="contacto-caso" class="section light retire-block" hidden aria-hidden="true" inert>
   <div class="wrap">
     <div class="reveal" id="nav-consulta" style="max-width:680px;margin-bottom:10px">
       <span class="sec-tag">Formulario de caso</span>
@@ -1504,7 +1524,7 @@
       </div>
       <div class="studio-cta-group" id="profesionales">
         <a class="btn btn-pri btn-lg" href="https://app.protesisparaperros.com.ar" target="_blank" rel="noopener noreferrer" onclick="acheTrack('studio_open_click')">Abrir Biomechanics Studio</a>
-        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" onclick="acheTrack('professional_demo_click')">Participar o solicitar una demo</a>
+        <a class="btn btn-ghost btn-lg" style="color:var(--navy);border-color:var(--navy)" href="#profForm" onclick="acheTrack('professional_demo_click')">Soy veterinario o fabricante</a>
       </div>
     </div>
   </div>
@@ -1543,7 +1563,7 @@
       <span class="sec-tag">Programa profesional</span>
       <h2 class="display">Una plataforma que se valida con profesionales</h2>
       <p class="intro">Buscamos veterinarios, rehabilitadores y fabricantes de Argentina y Latinoamérica para demos guiadas, pilotos y alianzas.</p>
-      <a href="#profForm" class="btn btn-pri btn-lg" style="margin-top:22px" onclick="document.getElementById('profForm').open=true;acheTrack('professional_demo_click')">Solicitar una demo o participar del piloto</a>
+      <a href="#profForm" class="btn btn-pri btn-lg" style="margin-top:22px" onclick="document.getElementById('profForm').open=true;acheTrack('professional_demo_click')">Soy veterinario o fabricante</a>
     </div>
     <div class="grid3 retire-block">
       <div class="info-card reveal"><h4>Veterinarios</h4><p>Para documentar casos, reunir la información necesaria y revisar propuestas antes de avanzar.</p><a href="#profForm" class="sol-cta" style="margin-top:14px;display:inline-flex" onclick="acheTrack('veterinarian_pilot_click')">Participar como veterinario piloto</a></div>
@@ -1664,11 +1684,12 @@
       <h2 class="display">Preguntas frecuentes</h2>
     </div>
     <div class="faq-list reveal">
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:1})"><summary>¿Ache ya vende todos los dispositivos?</summary><p>No. El arnés de rehabilitación está en preventa, las prótesis y órtesis reciben casos piloto y la línea de carros ortopédicos continúa en desarrollo. En cada sección indicamos el estado actual.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:2})"><summary>¿Cómo sé qué dispositivo necesita mi perro?</summary><p>No hace falta saberlo antes de consultar. Podés contarnos qué está pasando y revisaremos qué línea podría corresponder o qué información profesional hace falta.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:1})"><summary>¿Con qué necesidades de movilidad trabaja Ache?</summary><p>Ache desarrolla soluciones para asistir la marcha, ayudar a levantarse, sostener la espalda, estabilizar articulaciones, acompañar la movilidad posterior y reemplazar parte de una extremidad.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:2})"><summary>¿Cómo sé qué dispositivo necesita mi perro?</summary><p>Usá el evaluador: respondés unas preguntas simples sobre tu perro y te mostramos una recomendación clara, con alternativas.</p></details>
       <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:3})"><summary>¿La evaluación inicial tiene costo?</summary><p>Depende del tipo de caso y de la instancia necesaria. Antes de avanzar, te informaremos con claridad si alguna evaluación, medición o intervención requiere un costo.</p></details>
-      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:4})"><summary>¿Cuánto cuesta un dispositivo?</summary><p>El valor depende del tipo de solución, las medidas, la complejidad del caso y el proceso de fabricación. Después de la revisión inicial podemos indicar si es posible avanzar y preparar una estimación.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:4})"><summary>¿Cuándo voy a conocer el precio?</summary><p>Después de contarnos los datos básicos de tu perro y su necesidad, el evaluador muestra una recomendación y recién entonces presenta el precio y las condiciones para avanzar.</p></details>
       <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:5})"><summary>¿Trabajan en todo el país?</summary><p>Recibimos consultas de toda la Argentina. La forma de evaluación, toma de medidas y entrega depende del dispositivo, la ubicación y las condiciones de cada caso.</p></details>
+      <details class="faq-item" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:15})"><summary>¿Qué pasa con las órtesis y prótesis personalizadas?</summary><p>Son soluciones a medida y requieren revisar la viabilidad del caso antes de confirmar la fabricación. El evaluador explica las condiciones correspondientes antes de que decidas avanzar.</p></details>
       <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:6})"><summary>¿Necesito la indicación de un veterinario?</summary><p>Depende del producto y del estado del animal. En prótesis, órtesis y situaciones clínicas complejas puede ser necesario contar con la evaluación o participación del profesional tratante.</p></details>
       <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:7})"><summary>¿Ache fabrica directamente los dispositivos?</summary><p>Ache desarrolla y coordina cada solución y trabaja con proveedores especializados según el tipo de producto y las necesidades del caso.</p></details>
       <details class="faq-item retire-block" ontoggle="if(this.open) acheTrack('faq_open',{faq_id:8})"><summary>¿Qué es Biomechanics Studio?</summary><p>Es la plataforma profesional de Ache para organizar datos clínicos, fotos y medidas, generar parámetros de diseño y producir documentación técnica revisable.</p></details>
@@ -1687,8 +1708,8 @@
       <h2 class="display">Cada caso puede ser el comienzo de una mejor solución.</h2>
       <p>Contanos qué necesita el animal o conocé cómo participar en la validación profesional de Biomechanics Studio.</p>
       <div class="close-actions reveal">
-        <a href="#nav-consulta" class="btn btn-pri btn-lg" data-producto="Aún no sé">Evaluar un caso</a>
-        <a href="#profForm" class="btn btn-ghost btn-lg" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Solicitar una demo</a>
+        <a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="btn btn-pri btn-lg" data-producto="Aún no sé">Evaluar un caso</a>
+        <a href="#nav-studio" class="btn btn-ghost btn-lg" data-prof-interest="demo" onclick="acheTrack('professional_demo_click')">Soy veterinario o fabricante</a>
       </div>
     </div>
     <div class="close-grid retire-block">
@@ -1718,9 +1739,9 @@
       </nav>
       <div class="ft-actions">
         <h4>Acciones y recursos</h4>
-        <a href="#nav-consulta" class="btn btn-pri ft-cta">Evaluar un caso</a>
+        <a href="https://evaluador.protesisparaperros.com.ar/evaluador/" class="btn btn-pri ft-cta">Evaluar un caso</a>
         <a href="https://app.protesisparaperros.com.ar/" target="_blank" rel="noopener noreferrer" class="ft-link">Abrir Biomechanics Studio</a>
-        <a href="#profForm" class="ft-link">Participar o solicitar una demo</a>
+        <a href="#nav-studio" class="ft-link">Soy veterinario o fabricante</a>
       </div>
       <div class="ft-social">
         <h4>Seguir a Ache</h4>
@@ -1736,7 +1757,7 @@
         <a href="https://protesisparaperros.com.ar/" class="ft-domain">protesisparaperros.com.ar</a>
       </div>
       <p class="ft-disclaimer">Ache desarrolla dispositivos y herramientas de apoyo para la movilidad y rehabilitación animal. La información de este sitio no reemplaza la evaluación, el diagnóstico ni la indicación de un profesional veterinario.</p>
-      <p class="ft-legal-pending"><span>Política de privacidad</span><span aria-hidden="true">·</span><span>Términos de uso</span><span class="ft-legal-tag">En preparación</span></p>
+      <p class="ft-legal-pending"><a href="/legal/privacidad.html">Política de privacidad</a><span aria-hidden="true">·</span><a href="/legal/terminos.html">Términos y condiciones de reserva</a></p>
     </div>
     <p class="ft-closing">El futuro de la movilidad animal empieza acá.</p>
   </div>
@@ -1748,6 +1769,19 @@
 </a>
 
 <script>
+  // ---- Resolución de destino del evaluador por ambiente ----
+  // Único punto de verdad: si el sitio se sirve desde un dominio de preview
+  // (*.pages.dev), el evaluador debe apuntar a ESA MISMA preview, nunca a
+  // producción. En cualquier otro dominio (protesisparaperros.com.ar), apunta
+  // al evaluador productivo. Evita URLs de producción hardcodeadas en preview.
+  (function wireEvaluadorLinks() {
+    const isPreviewHost = /\.pages\.dev$/.test(window.location.hostname);
+    const target = isPreviewHost
+      ? `${window.location.origin}/evaluador/`
+      : 'https://evaluador.protesisparaperros.com.ar/evaluador/';
+    document.querySelectorAll('a[href="https://evaluador.protesisparaperros.com.ar/evaluador/"]').forEach(a => { a.href = target; });
+  })();
+
   // ---- Config de integraciones ----
   // URL del Google Apps Script (Web App) que guarda los leads en el Sheet.
   // Se completa al desplegar ache-leads-appscript.gs. Ver ese archivo para el paso a paso.

@@ -1,5 +1,56 @@
 # SESSION_STATUS — Ache web institucional
 
+## 2026-09-23 — Home CRO + UX del evaluador en preview TEST
+
+### Objetivo y alcance
+- Unificar el recorrido comercial entre la home y el evaluador sin tocar producción.
+- Corregir la restauración del Paso 6 al volver con Back desde Mercado Pago.
+- Rama: `codex/evaluador-preview`.
+
+### Archivos modificados
+- `index.html`: soluciones agrupadas por necesidades, sin precios ni reservas;
+  enlaces al evaluador del mismo preview; copy de recorrido y FAQ; formulario viejo
+  `#contacto-caso` oculto con `hidden`, `aria-hidden`, `inert` y `.retire-block`.
+- `evaluador/index.html`: identificador visual de la card principal.
+- `assets/css/evaluador.css`: fondo exterior claro, panel principal navy y jerarquía
+  visual menos saturada; estado seleccionado diferenciado.
+- `assets/js/evaluador.js`: distinción `RECOMENDADO` / `ELEGIDO POR VOS`, corrección
+  `information_only` y recuperación de bfcache mediante `pageshow`.
+- `assets/js/evaluador-state.js`: helpers puros y testeables para decisión y Back.
+- `tests/evaluator.test.mjs`: regresiones de information-only y restauración.
+
+### Validaciones
+- Suite local: 18/18.
+- Build: `npm run build`, correcto.
+- Responsive sin overflow: 360, 390, 412, 430, 768, 1024 y 1440.
+- Home preview: 0 precios/reservas, formulario viejo no visible, 0 CTA públicos
+  hacia `#contacto-caso` y 9 enlaces al evaluador.
+- Recomendación: al elegir Eslinga, la card principal mostró `ELEGIDO POR VOS` y
+  Arnés conservó `RECOMENDADO` en alternativas.
+- Information-only real en preview: caseId
+  `bd61eece-5e21-46bd-b79d-09f53dedc564`, `information_only_selected=1`,
+  `buy_now_selected=0`, `payment_started=0`, 0 preferencias.
+- Back desde Mercado Pago Sandbox:
+  - caseId `275c8184-afa8-4624-93f4-dd1c67a92401`;
+  - checkout abierto en `sandbox.mercadopago.com.ar`;
+  - al volver, Paso 6 y datos conservados;
+  - botones Pagar y Volver habilitados;
+  - error vacío y sin mensaje de rechazo;
+  - exactamente 1 preferencia antes y después de Back, sin llamada automática nueva.
+
+### Preview y seguridad
+- URL: `https://96ecdde3.ache-evaluator-preview.pages.dev/`
+- Proyecto aislado: `ache-evaluator-preview`.
+- Configuración remota verificada: `MP_ENV=test`, `CHECKOUT_ENABLED=true`.
+- No hubo pago real, credenciales productivas ni cambios en producción.
+- No se tocaron backend, webhook, D1 schema, Apps Script, secrets ni `#profForm`.
+- Sin commit, push o deploy productivo en esta tanda.
+
+### Punto estable y siguiente paso
+- Preview lista para revisión visual de Matías.
+- Frenar antes de cualquier despliegue productivo. Aplicar correcciones visuales
+  sobre preview y solicitar aprobación explícita antes del cutover.
+
 ## 2026-09-22 — Fase 2: infraestructura productiva del evaluador preparada
 
 ### Objetivo y alcance
@@ -1251,3 +1302,44 @@ El checkout ahora falla cerrado si está deshabilitado o si `MP_ENV` no es `test
 exclusivamente `init_point`. No se cargaron ni cambiaron credenciales. QA: 13/13
 tests, chequeo de sintaxis y compilación de Pages Functions correctos. No hubo push,
 deploy, cobro real, cambio de CTA, modificación de `main` ni cambio productivo.
+
+## 2026-09-23 — Segunda iteración UX/CRO y caso A→B en preview
+
+Objetivo: corregir únicamente la preview no aprobada, sin cutover. Repo:
+`protesisparaperros`, rama `codex/evaluador-preview`. Se modificaron `index.html`,
+`evaluador/index.html`, `assets/css/evaluador.css`, `assets/js/evaluador.js`,
+`assets/js/evaluador-state.js`, `functions/_shared/cases.js`,
+`functions/api/cases.js`, `tests/evaluator.test.mjs` y este estado.
+
+### Hecho
+- La home presenta cuatro tarjetas de soluciones más compactas y con copy concreto;
+  arneses y carros rotan únicamente entre imágenes reales ya aprobadas. Se sumaron
+  CTA del evaluador después de Soluciones y Cómo funciona.
+- Los CTA profesionales públicos fuera de Studio dicen “Soy veterinario o
+  fabricante” y llevan primero a `#nav-studio`. El CTA interno de Studio conserva
+  el acceso a `#profForm`. El formulario anterior continúa `hidden`, `inert` y sin
+  acceso público.
+- El evaluador usa el SVG oficial con su relación de aspecto real. El paso 3 cambia
+  entre “Tu solución / Recomendado” y “Producto elegido / Elegido por vos”; la
+  recomendación original permanece identificada entre las alternativas.
+- Las selecciones dentro de un paso conservan exactamente el scroll. Solo los
+  cambios de paso hacen el desplazamiento controlado.
+- Un caso no pagado puede actualizar su producto seleccionado sin modificar la
+  recomendación original. La idempotencia de checkout incluye el producto, por lo
+  que A y B crean preferencias distintas con importes validados por catálogo.
+
+### QA y preview
+- `npm test`: 21/21; `npm run build`, sintaxis y `git diff --check`: OK.
+- Sin overflow horizontal en 360, 390, 412, 430, 768, 1024, 1200 y 1440 para home
+  y evaluador. Logo con proporción correcta; formulario viejo no visible.
+- Preview desplegada: `https://49244a49.ache-evaluator-preview.pages.dev/`.
+- Prueba real TEST A→B: Arnés ($27.500) → Back sin pagar → Eslinga ($47.500).
+  D1 conserva `recommended_product=walk`, actualiza `selected_product=lift`, guarda
+  $95.000/$47.500 para B y registra dos preferencias TEST independientes. Hubo
+  cero eventos de pago; ningún pago real.
+- Volver desde ambos checkouts dejó Pagar y Volver habilitados, comprador/caso
+  conservados y sin error falso. La vuelta no creó preferencias adicionales.
+
+Producción, `main`, credenciales productivas, webhook productivo y CTA productivos
+no fueron tocados. No hubo push ni commit en esta iteración. La preview sigue en
+TEST y todavía no está aprobada para producción.

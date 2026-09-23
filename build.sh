@@ -10,6 +10,7 @@ mkdir -- dist
 cp -- index.html dist/
 cp -R -- assets dist/
 cp -R -- evaluador dist/
+cp -R -- legal dist/
 
 # Sacar del build público lo que no es parte de la web servida: docs internas,
 # previews descartados, archivos ocultos/de sistema y scripts que no son frontend.

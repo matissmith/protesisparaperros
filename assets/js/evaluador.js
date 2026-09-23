@@ -1,3 +1,5 @@
+import { INFORMATION_ONLY_DECISION, checkoutIdempotencyKey, decisionSignals, shouldRecoverCheckoutPage, shouldRepositionStep } from './evaluador-state.js';
+
 const PRODUCTS = {
   walk: { name: 'Arnés de caminata asistida', description: 'Acompaña la marcha cuando el perro todavía puede apoyar, pero necesita ayuda y mayor estabilidad.', image: '../assets/img/evaluador/arnes-caminata.png', priceMin: 55000, priceMax: 55000, reservation: 27500, group: 'harness' },
   lift: { name: 'Eslinga de elevación de cuerpo', description: 'Ayuda a levantar y acompañar al perro durante traslados y movimientos cotidianos.', image: '../assets/img/evaluador/eslinga-elevacion.png', priceMin: 95000, priceMax: 95000, reservation: 47500, group: 'harness' },
@@ -86,7 +88,29 @@ function render() {
   if (state.step >= 3 && state.selectedProduct) renderProduct();
   if (state.step === 5) renderContact();
   if (state.step === 6) renderCheckout();
-  showError(); saveState(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  showError(); saveState();
+}
+
+function renderInlineSelection() {
+  const currentScroll = window.scrollY;
+  document.documentElement.style.overflowAnchor = 'none';
+  render();
+  window.scrollTo({ top: currentScroll, behavior: 'auto' });
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: currentScroll, behavior: 'auto' });
+    document.documentElement.style.removeProperty('overflow-anchor');
+  });
+}
+
+function renderStepChange() {
+  render();
+  requestAnimationFrame(() => {
+    const heading = $(`.ache-step[data-step="${state.step}"] h2`);
+    if (!heading) return;
+    const rect = heading.getBoundingClientRect();
+    if (!shouldRepositionStep({ top: rect.top, bottom: rect.bottom, viewportHeight: window.innerHeight })) return;
+    heading.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
 }
 
 function renderProduct() {
@@ -96,8 +120,13 @@ function renderProduct() {
   $('#product-image').alt = `${product.name} colocado en un perro`;
   $('#product-name').textContent = product.name;
   $('#product-description').textContent = product.description;
-  $('#primary-badge').hidden = !isRecommended;
-  $('#product-status').textContent = isRecommended ? 'Solución recomendada' : 'Producto elegido';
+  $('#primary-badge').hidden = false;
+  $('#primary-badge').textContent = isRecommended ? 'Recomendado' : 'Elegido por vos';
+  $('#product-step-title').textContent = isRecommended ? 'Tu solución' : 'Producto elegido';
+  $('#product-step-help').textContent = isRecommended
+    ? 'Según lo que nos contaste, esta es la solución que más se acerca a la necesidad de tu perro.'
+    : 'Elegiste esta alternativa para continuar. La recomendación original de Ache sigue identificada para que puedas compararlas.';
+  $('#primary-product-card').classList.toggle('is-user-selected', !isRecommended);
   $('#summary-dog').textContent = state.dogName;
   $('#summary-weight').textContent = state.dogWeightRange;
   $('#summary-age').textContent = ageDisplay();
@@ -194,7 +223,7 @@ async function createCase() {
 
 async function startCheckout() {
   state.paymentStarted = true; saveState();
-  const response = await fetch('../api/checkout', { method: 'POST', headers: { 'content-type': 'application/json', 'idempotency-key': `${state.caseId}:checkout:v1` }, body: JSON.stringify({ caseId: state.caseId, selectedProduct: state.selectedProduct }) });
+  const response = await fetch('../api/checkout', { method: 'POST', headers: { 'content-type': 'application/json', 'idempotency-key': checkoutIdempotencyKey(state.caseId, state.selectedProduct) }, body: JSON.stringify({ caseId: state.caseId, selectedProduct: state.selectedProduct }) });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || !data.ok) throw new Error(data.error || 'No pudimos iniciar el pago de prueba.');
   state.paymentStatus = data.status; saveState();
@@ -204,26 +233,33 @@ async function startCheckout() {
 async function nextStep() {
   if (busy) return;
   const error = validateStep(); if (error) return showError(error);
-  if (state.step === 2) { state.recommendedProduct = state.needSelected; state.selectedProduct = state.needSelected; }
-  if (state.step === 4) { state.priceAndTermsViewed = true; state.buyNowSelected = state.decision === 'purchase'; state.informationOnlySelected = state.decision === 'information'; }
+  if (state.step === 2) {
+    if (!state.caseId) state.recommendedProduct = state.needSelected;
+    state.selectedProduct = state.needSelected;
+    state.productChanged = state.selectedProduct !== state.recommendedProduct;
+  }
+  if (state.step === 4) {
+    state.priceAndTermsViewed = true;
+    Object.assign(state, decisionSignals(state.decision));
+  }
   if (state.step === 5) {
     setBusy(true); showError();
     try {
       await createCase();
-      if (state.decision === 'information') return showInformationFinish();
+      if (state.decision === INFORMATION_ONLY_DECISION) return showInformationFinish();
     } catch (error) { showError(error.message); return; } finally { setBusy(false); }
   }
   if (state.step === 6) {
     setBusy(true); showError(); try { await startCheckout(); } catch (error) { showError(error.message); setBusy(false); } return;
   }
-  state.step += 1; render();
+  state.step += 1; renderStepChange();
 }
 
 function showInformationFinish() {
   state.step = 7; state.paymentStatus = 'not_applicable';
   $('#finish-title').textContent = 'Solicitud registrada';
   $('#finish-message').textContent = `Recibimos tus datos para enviarte más información sobre ${chosenProduct().name}.`;
-  $('#finish-status').textContent = 'Información solicitada'; $('#post-payment').hidden = true; render();
+  $('#finish-status').textContent = 'Información solicitada'; $('#post-payment').hidden = true; renderStepChange();
 }
 
 const ORDER_POLL_INTERVAL_MS = 1500;
@@ -246,7 +282,7 @@ function showOrder(order) {
     $('#finish-title').textContent = status === 'rejected' ? 'No pudimos procesar el pago' : 'El pago no fue aprobado'; $('#finish-message').textContent = 'La reserva no quedó confirmada. Tus datos y el pedido siguen registrados.'; $('#finish-status').textContent = status === 'rejected' ? 'Rechazado' : 'Cancelado'; $('#post-payment').hidden = true;
     $('#retry-payment').hidden = false;
   }
-  render();
+  renderStepChange();
 }
 
 function showVerifying() {
@@ -256,7 +292,7 @@ function showVerifying() {
   $('#finish-status').textContent = 'Confirmando';
   $('#post-payment').hidden = true;
   $('#retry-payment').hidden = true;
-  render();
+  renderStepChange();
 }
 
 function showStillVerifying(order) {
@@ -266,7 +302,7 @@ function showStillVerifying(order) {
   $('#finish-status').textContent = 'Verificación en curso';
   $('#post-payment').hidden = true;
   $('#retry-payment').hidden = true;
-  render();
+  renderStepChange();
 }
 
 async function fetchOrder(caseId) {
@@ -309,16 +345,24 @@ async function loadReturnedOrder() {
 }
 
 document.addEventListener('click', event => {
-  const weight = event.target.closest('[data-weight]'); if (weight) { state.dogWeightRange = weight.dataset.weight; render(); }
-  const need = event.target.closest('[data-product]'); if (need) { state.needSelected = need.dataset.product; render(); }
-  const related = event.target.closest('[data-related]'); if (related) { state.selectedProduct = related.dataset.related; state.productChanged = state.selectedProduct !== state.recommendedProduct; render(); }
+  const weight = event.target.closest('[data-weight]'); if (weight) { state.dogWeightRange = weight.dataset.weight; renderInlineSelection(); }
+  const need = event.target.closest('[data-product]'); if (need) { state.needSelected = need.dataset.product; renderInlineSelection(); }
+  const related = event.target.closest('[data-related]'); if (related) { state.selectedProduct = related.dataset.related; state.productChanged = state.selectedProduct !== state.recommendedProduct; renderInlineSelection(); }
 });
-$('#intent-options').addEventListener('change', event => { state.decision = event.target.value; render(); });
+$('#intent-options').addEventListener('change', event => { state.decision = event.target.value; renderInlineSelection(); });
 $('#country').addEventListener('change', event => { state.country = event.target.value; const match = COUNTRIES.find(item => item[0] === state.country); if (match?.[2]) state.countryCode = match[2]; $('#country-code').value = state.countryCode; saveState(); });
 $('#next').addEventListener('click', nextStep);
-$('#back').addEventListener('click', () => { if (!busy && state.step > 1) { state.step -= 1; render(); } });
+$('#back').addEventListener('click', () => { if (!busy && state.step > 1) { state.step -= 1; renderStepChange(); } });
 $('#restart').addEventListener('click', () => { history.replaceState({}, '', location.pathname); resetState(); });
-$('#retry-payment').addEventListener('click', () => { state.step = 6; history.replaceState({}, '', location.pathname); render(); });
+$('#retry-payment').addEventListener('click', () => { state.step = 6; history.replaceState({}, '', location.pathname); renderStepChange(); });
+
+window.addEventListener('pageshow', event => {
+  const hasReturnCaseId = new URLSearchParams(location.search).has('caseId');
+  if (!shouldRecoverCheckoutPage({ persisted: event.persisted, step: state.step, hasReturnCaseId })) return;
+  setBusy(false);
+  showError();
+  render();
+});
 
 buildStaticOptions();
 loadReturnedOrder().then(loaded => { if (!loaded) render(); });

@@ -2,6 +2,7 @@ import { getProduct } from './catalog.js';
 import { HttpError, cleanText } from './http.js';
 
 const STATUSES = new Set(['lead_created', 'checkout_created', 'pending', 'approved', 'rejected', 'cancelled', 'refunded']);
+const EDITABLE_PAYMENT_STATUSES = new Set(['not_started', 'checkout_created', 'rejected', 'cancelled']);
 
 export function validateCase(input) {
   const product = getProduct(input.selectedProduct);
@@ -28,6 +29,39 @@ export function validateCase(input) {
 export function validateStatus(status) {
   if (!STATUSES.has(status)) throw new HttpError(400, 'Estado inválido.');
   return status;
+}
+
+export function assertCaseUpdateAllowed(existing, record, requestedCaseId) {
+  if (!requestedCaseId || requestedCaseId !== existing.caseId) throw new HttpError(409, 'El caso no coincide con la solicitud guardada.');
+  if (record.recommendedProduct !== existing.recommendedProduct) throw new HttpError(409, 'La recomendación original no puede modificarse.');
+  if (!EDITABLE_PAYMENT_STATUSES.has(existing.paymentStatus)) throw new HttpError(409, 'El pedido ya no admite cambios de producto.');
+  return true;
+}
+
+// Determina si una resubmisión del caso representa una decisión NUEVA y
+// significativa (cambio de producto y/o de decisión de compra) o si es un
+// reenvío sin cambios reales (refresh, back, pageshow, rerender). Solo el
+// primer caso debe generar un evento de historial y disparar sincronización/
+// email. `existing` trae el snapshot actual (decision, selectedProduct);
+// nunca se compara contra el historial, solo contra el último estado.
+export function classifyIntentTransition(existing, record) {
+  const decisionChanged = existing.decision !== record.decision;
+  const productChanged = existing.selectedProduct !== record.selectedProduct;
+  if (!decisionChanged && !productChanged) return null;
+  const eventType = record.decision === 'purchase' ? 'purchase_intent_updated' : 'information_only_updated';
+  return { eventType, previousDecision: existing.decision, previousProduct: existing.selectedProduct };
+}
+
+// Traduce el eventType/decision técnico a las etiquetas comerciales que debe
+// leer un humano en el mail. caseStatus (columna `status`), currentIntent
+// (esto) y paymentStatus son tres conceptos separados: este helper solo
+// resuelve el segundo, sin tocar los otros dos.
+export function intentStatusLabels(eventType, decision) {
+  if (eventType === 'purchase_intent_unconfirmed') return { intentLabel: 'Intención de compra', paymentLabel: 'No confirmado' };
+  if (eventType === 'purchase_intent_updated') return { intentLabel: 'Intención de compra actualizada', paymentLabel: 'No confirmado' };
+  if (eventType === 'lead_without_purchase') return { intentLabel: 'Solicitud de información', paymentLabel: 'Sin pago' };
+  if (eventType === 'information_only_updated') return { intentLabel: 'Solicitud de información', paymentLabel: 'Sin pago' };
+  return { intentLabel: decision === 'purchase' ? 'Intención de compra' : 'Solicitud de información', paymentLabel: 'Sin pago' };
 }
 
 export function resolveAppsScriptConfig(env) {
