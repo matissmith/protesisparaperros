@@ -7,7 +7,7 @@ const PRODUCTS = {
   wheelchair: { name: 'Silla de ruedas', description: 'Devuelve movilidad cuando las patas traseras no sostienen o impulsan correctamente.', image: '../assets/img/evaluador/silla-ruedas.png', priceMin: 308000, priceMax: 308000, reservation: 77000, group: 'cart' },
   cart: { name: 'Carro ortopédico', description: 'Ofrece mayor sujeción y acompañamiento del cuerpo para desplazarse.', image: '../assets/img/evaluador/carro-ortopedico.png', priceMin: 462000, priceMax: 462000, reservation: 115500, group: 'cart' },
   orthosis: { name: 'Órtesis tipo bota Walker', description: 'Protege y estabiliza una pata o articulación mediante una configuración a medida.', image: '../assets/img/evaluador/ortesis.png', priceMin: 600000, priceMax: 1000000, reservation: 150000, group: 'orthosis' },
-  prosthesis: { name: 'Prótesis personalizada', description: 'Reemplaza la parte faltante de una extremidad con un dispositivo diseñado para el perro.', image: '../assets/img/evaluador/protesis.png', priceMin: 1500000, priceMax: 2500000, reservation: 225000, group: 'prosthesis' }
+  prosthesis: { name: 'Prótesis personalizada', description: 'Reemplaza la parte faltante de una extremidad con un dispositivo diseñado para el perro.', image: '../assets/img/evaluador/protesis-personalizada-ache-v2.png', priceMin: 1500000, priceMax: 2500000, reservation: 225000, group: 'prosthesis' }
 };
 
 const NEEDS = [
